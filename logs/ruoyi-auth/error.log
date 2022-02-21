@@ -1,0 +1,1 @@
+16:44:37.664 [http-nio-9200-exec-3] ERROR c.r.s.a.f.RemoteLogFallbackFactory - [create,25] - 日志服务调用失败:[503] during [POST] to [http://ruoyi-system/logininfor] [RemoteLogService#saveLogininfor(SysLogininfor,String)]: [Load balancer does not contain an instance for the service ruoyi-system]

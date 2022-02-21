@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.goods.mapper.TShippingReverseConfigMapper">
+    
+    <resultMap type="TShippingReverseConfig" id="TShippingReverseConfigResult">
+        <result property="reverseId"    column="reverse_id"    />
+        <result property="reverseStatus"    column="reverse_status"    />
+        <result property="shippingId"    column="shipping_id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="isDelete"    column="is_delete"    />
+    </resultMap>
+
+    <sql id="selectTShippingReverseConfigVo">
+        select reverse_id, reverse_status, shipping_id, create_time, is_delete from t_shipping_reverse_config
+    </sql>
+
+    <select id="selectTShippingReverseConfigList" parameterType="TShippingReverseConfig" resultMap="TShippingReverseConfigResult">
+        <include refid="selectTShippingReverseConfigVo"/>
+        <where>  
+            <if test="reverseStatus != null  and reverseStatus != ''"> and reverse_status = #{reverseStatus}</if>
+            <if test="shippingId != null "> and shipping_id = #{shippingId}</if>
+            <if test="isDelete != null "> and is_delete = #{isDelete}</if>
+        </where>
+    </select>
+    
+    <select id="selectTShippingReverseConfigByReverseId" parameterType="Long" resultMap="TShippingReverseConfigResult">
+        <include refid="selectTShippingReverseConfigVo"/>
+        where reverse_id = #{reverseId}
+    </select>
+        
+    <insert id="insertTShippingReverseConfig" parameterType="TShippingReverseConfig" useGeneratedKeys="true" keyProperty="reverseId">
+        insert into t_shipping_reverse_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="reverseStatus != null and reverseStatus != ''">reverse_status,</if>
+            <if test="shippingId != null">shipping_id,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="isDelete != null">is_delete,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="reverseStatus != null and reverseStatus != ''">#{reverseStatus},</if>
+            <if test="shippingId != null">#{shippingId},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="isDelete != null">#{isDelete},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTShippingReverseConfig" parameterType="TShippingReverseConfig">
+        update t_shipping_reverse_config
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="reverseStatus != null and reverseStatus != ''">reverse_status = #{reverseStatus},</if>
+            <if test="shippingId != null">shipping_id = #{shippingId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="isDelete != null">is_delete = #{isDelete},</if>
+        </trim>
+        where reverse_id = #{reverseId}
+    </update>
+
+    <delete id="deleteTShippingReverseConfigByReverseId" parameterType="Long">
+        delete from t_shipping_reverse_config where reverse_id = #{reverseId}
+    </delete>
+
+    <delete id="deleteTShippingReverseConfigByReverseIds" parameterType="String">
+        delete from t_shipping_reverse_config where reverse_id in 
+        <foreach item="reverseId" collection="array" open="(" separator="," close=")">
+            #{reverseId}
+        </foreach>
+    </delete>
+</mapper>

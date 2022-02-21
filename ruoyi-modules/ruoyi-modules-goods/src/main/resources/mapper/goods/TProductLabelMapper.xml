@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.goods.mapper.TProductLabelMapper">
+    
+    <resultMap type="TProductLabel" id="TProductLabelResult">
+        <result property="id"    column="id"    />
+        <result property="labelName"    column="label_name"    />
+        <result property="bak"    column="bak"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="isDel"    column="is_del"    />
+        <result property="version"    column="version"    />
+    </resultMap>
+
+    <sql id="selectTProductLabelVo">
+        select id, label_name, bak, create_time, update_time, is_del, version from t_product_label
+    </sql>
+
+    <select id="selectTProductLabelList" parameterType="TProductLabel" resultMap="TProductLabelResult">
+        <include refid="selectTProductLabelVo"/>
+        <where>  
+            <if test="labelName != null  and labelName != ''"> and label_name like concat('%', #{labelName}, '%')</if>
+            <if test="bak != null  and bak != ''"> and bak = #{bak}</if>
+            <if test="isDel != null "> and is_del = #{isDel}</if>
+            <if test="version != null "> and version = #{version}</if>
+        </where>
+    </select>
+    
+    <select id="selectTProductLabelById" parameterType="Long" resultMap="TProductLabelResult">
+        <include refid="selectTProductLabelVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTProductLabel" parameterType="TProductLabel" useGeneratedKeys="true" keyProperty="id">
+        insert into t_product_label
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="labelName != null and labelName != ''">label_name,</if>
+            <if test="bak != null">bak,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="isDel != null">is_del,</if>
+            <if test="version != null">version,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="labelName != null and labelName != ''">#{labelName},</if>
+            <if test="bak != null">#{bak},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="isDel != null">#{isDel},</if>
+            <if test="version != null">#{version},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTProductLabel" parameterType="TProductLabel">
+        update t_product_label
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="labelName != null and labelName != ''">label_name = #{labelName},</if>
+            <if test="bak != null">bak = #{bak},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="isDel != null">is_del = #{isDel},</if>
+            <if test="version != null">version = #{version},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTProductLabelById" parameterType="Long">
+        delete from t_product_label where id = #{id}
+    </delete>
+
+    <delete id="deleteTProductLabelByIds" parameterType="String">
+        delete from t_product_label where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

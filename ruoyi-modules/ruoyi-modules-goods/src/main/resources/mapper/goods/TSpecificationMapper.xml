@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.goods.mapper.TSpecificationMapper">
+    
+    <resultMap type="TSpecification" id="TSpecificationResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="options"    column="options"    />
+        <result property="productCategoryId"    column="product_category_id"    />
+        <result property="sort"    column="sort"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="version"    column="version"    />
+        <result property="isDel" column="is_del"/>
+    </resultMap>
+
+    <sql id="selectTSpecificationVo">
+        select id, name, options, product_category_id, sort, create_time, update_time, version,is_del from t_specification
+    </sql>
+
+    <select id="selectTSpecificationList" parameterType="TSpecification" resultMap="TSpecificationResult">
+        <include refid="selectTSpecificationVo"/>
+        <where>
+            is_del = 1
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="options != null  and options != ''"> and options = #{options}</if>
+            <if test="productCategoryId != null "> and product_category_id = #{productCategoryId}</if>
+            <if test="sort != null "> and sort = #{sort}</if>
+            <if test="version != null "> and version = #{version}</if>
+        </where>
+    </select>
+    
+    <select id="selectTSpecificationById" parameterType="Long" resultMap="TSpecificationResult">
+        <include refid="selectTSpecificationVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectTSpecificationByProductCategoryId" parameterType="Long" resultMap="TSpecificationResult">
+        <include refid="selectTSpecificationVo"/>
+        where product_category_id = #{productCategoryId}
+    </select>
+
+    <insert id="insertTSpecification" parameterType="TSpecification" useGeneratedKeys="true" keyProperty="id">
+        insert into t_specification
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="options != null and options != ''">options,</if>
+            <if test="productCategoryId != null">product_category_id,</if>
+            <if test="sort != null">sort,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="version != null">version,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="options != null and options != ''">#{options},</if>
+            <if test="productCategoryId != null">#{productCategoryId},</if>
+            <if test="sort != null">#{sort},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="version != null">#{version},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTSpecification" parameterType="TSpecification">
+        update t_specification
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="options != null and options != ''">options = #{options},</if>
+            <if test="productCategoryId != null">product_category_id = #{productCategoryId},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="version != null">version = #{version},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="deleteTSpecificationById" parameterType="Long">
+        update t_specification set is_del = 0 where id = #{id}
+    </update>
+
+    <update id="deleteTSpecificationByIds" parameterType="String">
+        update t_specification set is_del = 0 where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+</mapper>

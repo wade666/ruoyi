@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.goods.mapper.TSkuMapper">
+    
+    <resultMap type="TSku" id="TSkuResult">
+        <result property="id"    column="id"    />
+        <result property="productId"    column="product_id"    />
+        <result property="price"    column="price"    />
+        <result property="cost"    column="cost"    />
+        <result property="marketPrice"    column="market_price"    />
+        <result property="stock"    column="stock"    />
+        <result property="allocatedStock"    column="allocated_stock"    />
+        <result property="isDefault"    column="is_default"    />
+        <result property="specificationValues"    column="specification_values"    />
+        <result property="image"    column="image"    />
+        <result property="sn"    column="sn"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="version"    column="version"    />
+        <result property="weight"    column="weight"    />
+        <result property="exchangePoint"    column="exchange_point"    />
+        <result property="rewardPoint"    column="reward_point"    />
+        <result property="isSale"    column="is_sale"    />
+    </resultMap>
+
+    <sql id="selectTSkuVo">
+        select id, product_id, price, cost, market_price, stock, allocated_stock, is_default, specification_values, image, sn, create_time, update_time, version, weight, exchange_point, reward_point, is_sale from t_sku
+    </sql>
+
+    <select id="selectTSkuList" parameterType="TSku" resultMap="TSkuResult">
+        <include refid="selectTSkuVo"/>
+        <where>  
+            <if test="productId != null "> and product_id = #{productId}</if>
+            <if test="price != null "> and price = #{price}</if>
+            <if test="cost != null "> and cost = #{cost}</if>
+            <if test="marketPrice != null "> and market_price = #{marketPrice}</if>
+            <if test="stock != null "> and stock = #{stock}</if>
+            <if test="allocatedStock != null "> and allocated_stock = #{allocatedStock}</if>
+            <if test="isDefault != null "> and is_default = #{isDefault}</if>
+            <if test="specificationValues != null  and specificationValues != ''"> and specification_values = #{specificationValues}</if>
+            <if test="image != null  and image != ''"> and image = #{image}</if>
+            <if test="sn != null  and sn != ''"> and sn = #{sn}</if>
+            <if test="version != null "> and version = #{version}</if>
+            <if test="weight != null "> and weight = #{weight}</if>
+            <if test="exchangePoint != null "> and exchange_point = #{exchangePoint}</if>
+            <if test="rewardPoint != null "> and reward_point = #{rewardPoint}</if>
+            <if test="isSale != null "> and is_sale = #{isSale}</if>
+        </where>
+    </select>
+    
+    <select id="selectTSkuById" parameterType="Long" resultMap="TSkuResult">
+        <include refid="selectTSkuVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTSku" parameterType="TSku" useGeneratedKeys="true" keyProperty="id">
+        insert into t_sku
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="productId != null">product_id,</if>
+            <if test="price != null">price,</if>
+            <if test="cost != null">cost,</if>
+            <if test="marketPrice != null">market_price,</if>
+            <if test="stock != null">stock,</if>
+            <if test="allocatedStock != null">allocated_stock,</if>
+            <if test="isDefault != null">is_default,</if>
+            <if test="specificationValues != null and specificationValues != ''">specification_values,</if>
+            <if test="image != null and image != ''">image,</if>
+            <if test="sn != null">sn,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="version != null">version,</if>
+            <if test="weight != null">weight,</if>
+            <if test="exchangePoint != null">exchange_point,</if>
+            <if test="rewardPoint != null">reward_point,</if>
+            <if test="isSale != null">is_sale,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="productId != null">#{productId},</if>
+            <if test="price != null">#{price},</if>
+            <if test="cost != null">#{cost},</if>
+            <if test="marketPrice != null">#{marketPrice},</if>
+            <if test="stock != null">#{stock},</if>
+            <if test="allocatedStock != null">#{allocatedStock},</if>
+            <if test="isDefault != null">#{isDefault},</if>
+            <if test="specificationValues != null and specificationValues != ''">#{specificationValues},</if>
+            <if test="image != null and image != ''">#{image},</if>
+            <if test="sn != null">#{sn},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="version != null">#{version},</if>
+            <if test="weight != null">#{weight},</if>
+            <if test="exchangePoint != null">#{exchangePoint},</if>
+            <if test="rewardPoint != null">#{rewardPoint},</if>
+            <if test="isSale != null">#{isSale},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTSku" parameterType="TSku">
+        update t_sku
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="productId != null">product_id = #{productId},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="cost != null">cost = #{cost},</if>
+            <if test="marketPrice != null">market_price = #{marketPrice},</if>
+            <if test="stock != null">stock = #{stock},</if>
+            <if test="allocatedStock != null">allocated_stock = #{allocatedStock},</if>
+            <if test="isDefault != null">is_default = #{isDefault},</if>
+            <if test="specificationValues != null and specificationValues != ''">specification_values = #{specificationValues},</if>
+            <if test="image != null and image != ''">image = #{image},</if>
+            <if test="sn != null">sn = #{sn},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="version != null">version = #{version},</if>
+            <if test="weight != null">weight = #{weight},</if>
+            <if test="exchangePoint != null">exchange_point = #{exchangePoint},</if>
+            <if test="rewardPoint != null">reward_point = #{rewardPoint},</if>
+            <if test="isSale != null">is_sale = #{isSale},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTSkuById" parameterType="Long">
+        delete from t_sku where id = #{id}
+    </delete>
+
+    <delete id="deleteTSkuByIds" parameterType="String">
+        delete from t_sku where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

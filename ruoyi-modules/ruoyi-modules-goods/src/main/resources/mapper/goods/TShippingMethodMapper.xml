@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.goods.mapper.TShippingMethodMapper">
+    
+    <resultMap type="TShippingMethod" id="TShippingMethodResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="firstWeight"    column="first_weight"    />
+        <result property="continueWeight"    column="continue_weight"    />
+        <result property="defaultFirstPrice"    column="default_first_price"    />
+        <result property="defaultContinuePrice"    column="default_continue_price"    />
+        <result property="description"    column="description"    />
+        <result property="code"    column="code"    />
+        <result property="alipayCode"    column="alipay_code"    />
+        <result property="courierCode"    column="courier_code"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="version"    column="version"    />
+        <result property="orders"    column="orders"    />
+    </resultMap>
+
+    <sql id="selectTShippingMethodVo">
+        select id, name, first_weight, continue_weight, default_first_price, default_continue_price, description, code, alipay_code, courier_code, create_time, update_time, version, orders from t_shipping_method
+    </sql>
+
+    <select id="selectTShippingMethodList" parameterType="TShippingMethod" resultMap="TShippingMethodResult">
+        <include refid="selectTShippingMethodVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="firstWeight != null "> and first_weight = #{firstWeight}</if>
+            <if test="continueWeight != null "> and continue_weight = #{continueWeight}</if>
+            <if test="defaultFirstPrice != null "> and default_first_price = #{defaultFirstPrice}</if>
+            <if test="defaultContinuePrice != null "> and default_continue_price = #{defaultContinuePrice}</if>
+            <if test="description != null  and description != ''"> and description = #{description}</if>
+            <if test="code != null  and code != ''"> and code = #{code}</if>
+            <if test="alipayCode != null  and alipayCode != ''"> and alipay_code = #{alipayCode}</if>
+            <if test="courierCode != null  and courierCode != ''"> and courier_code = #{courierCode}</if>
+            <if test="version != null "> and version = #{version}</if>
+            <if test="orders != null "> and orders = #{orders}</if>
+        </where>
+        order by orders desc
+    </select>
+    
+    <select id="selectTShippingMethodById" parameterType="Long" resultMap="TShippingMethodResult">
+        <include refid="selectTShippingMethodVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTShippingMethod" parameterType="TShippingMethod" useGeneratedKeys="true" keyProperty="id">
+        insert into t_shipping_method
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="firstWeight != null">first_weight,</if>
+            <if test="continueWeight != null">continue_weight,</if>
+            <if test="defaultFirstPrice != null">default_first_price,</if>
+            <if test="defaultContinuePrice != null">default_continue_price,</if>
+            <if test="description != null">description,</if>
+            <if test="code != null and code != ''">code,</if>
+            <if test="alipayCode != null">alipay_code,</if>
+            <if test="courierCode != null and courierCode != ''">courier_code,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="version != null">version,</if>
+            <if test="orders != null">orders,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="firstWeight != null">#{firstWeight},</if>
+            <if test="continueWeight != null">#{continueWeight},</if>
+            <if test="defaultFirstPrice != null">#{defaultFirstPrice},</if>
+            <if test="defaultContinuePrice != null">#{defaultContinuePrice},</if>
+            <if test="description != null">#{description},</if>
+            <if test="code != null and code != ''">#{code},</if>
+            <if test="alipayCode != null">#{alipayCode},</if>
+            <if test="courierCode != null and courierCode != ''">#{courierCode},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="version != null">#{version},</if>
+            <if test="orders != null">#{orders},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTShippingMethod" parameterType="TShippingMethod">
+        update t_shipping_method
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="firstWeight != null">first_weight = #{firstWeight},</if>
+            <if test="continueWeight != null">continue_weight = #{continueWeight},</if>
+            <if test="defaultFirstPrice != null">default_first_price = #{defaultFirstPrice},</if>
+            <if test="defaultContinuePrice != null">default_continue_price = #{defaultContinuePrice},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="code != null and code != ''">code = #{code},</if>
+            <if test="alipayCode != null">alipay_code = #{alipayCode},</if>
+            <if test="courierCode != null and courierCode != ''">courier_code = #{courierCode},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="version != null">version = #{version},</if>
+            <if test="orders != null">orders = #{orders},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTShippingMethodById" parameterType="Long">
+        delete from t_shipping_method where id = #{id}
+    </delete>
+
+    <delete id="deleteTShippingMethodByIds" parameterType="String">
+        delete from t_shipping_method where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

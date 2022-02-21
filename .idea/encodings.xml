@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ruoyi-api" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ruoyi-api/ruoyi-api-system" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ruoyi-auth" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ruoyi-common" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ruoyi-common/ruoyi-common-core" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ruoyi-common/ruoyi-common-datascope" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ruoyi-common/ruoyi-common-datasource" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ruoyi-common/ruoyi-common-log" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ruoyi-common/ruoyi-common-redis" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ruoyi-common/ruoyi-common-security" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ruoyi-common/ruoyi-common-swagger" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ruoyi-gateway" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ruoyi-modules" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ruoyi-modules/ruoyi-file" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ruoyi-modules/ruoyi-gen" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ruoyi-modules/ruoyi-job" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ruoyi-modules/ruoyi-modules-goods" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ruoyi-modules/ruoyi-modules-goods/src/main/java/com/ruoyi/goods/domain/vo/TreeSelect.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ruoyi-modules/ruoyi-system" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ruoyi-visual" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ruoyi-visual/ruoyi-monitor" charset="UTF-8" />
+  </component>
+</project>

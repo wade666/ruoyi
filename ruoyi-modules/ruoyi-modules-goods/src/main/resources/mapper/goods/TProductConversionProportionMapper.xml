@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.goods.mapper.TProductConversionProportionMapper">
+    
+    <resultMap type="TProductConversionProportion" id="TProductConversionProportionResult">
+        <result property="conversionId"    column="conversion_id"    />
+        <result property="conversionProportion"    column="conversion_proportion"    />
+        <result property="specificationValues"    column="specification_values"    />
+        <result property="isDel"    column="is_del"    />
+    </resultMap>
+
+    <sql id="selectTProductConversionProportionVo">
+        select conversion_id, conversion_proportion, specification_values, is_del from t_product_conversion_proportion
+    </sql>
+
+    <select id="selectTProductConversionProportionList" parameterType="TProductConversionProportion" resultMap="TProductConversionProportionResult">
+        <include refid="selectTProductConversionProportionVo"/>
+        <where>  
+            <if test="conversionProportion != null "> and conversion_proportion = #{conversionProportion}</if>
+            <if test="specificationValues != null  and specificationValues != ''"> and specification_values = #{specificationValues}</if>
+            <if test="isDel != null "> and is_del = #{isDel}</if>
+        </where>
+    </select>
+    
+    <select id="selectTProductConversionProportionByConversionId" parameterType="Long" resultMap="TProductConversionProportionResult">
+        <include refid="selectTProductConversionProportionVo"/>
+        where conversion_id = #{conversionId}
+    </select>
+        
+    <insert id="insertTProductConversionProportion" parameterType="TProductConversionProportion" useGeneratedKeys="true" keyProperty="conversionId">
+        insert into t_product_conversion_proportion
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="conversionProportion != null">conversion_proportion,</if>
+            <if test="specificationValues != null and specificationValues != ''">specification_values,</if>
+            <if test="isDel != null">is_del,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="conversionProportion != null">#{conversionProportion},</if>
+            <if test="specificationValues != null and specificationValues != ''">#{specificationValues},</if>
+            <if test="isDel != null">#{isDel},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTProductConversionProportion" parameterType="TProductConversionProportion">
+        update t_product_conversion_proportion
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="conversionProportion != null">conversion_proportion = #{conversionProportion},</if>
+            <if test="specificationValues != null and specificationValues != ''">specification_values = #{specificationValues},</if>
+            <if test="isDel != null">is_del = #{isDel},</if>
+        </trim>
+        where conversion_id = #{conversionId}
+    </update>
+
+    <delete id="deleteTProductConversionProportionByConversionId" parameterType="Long">
+        delete from t_product_conversion_proportion where conversion_id = #{conversionId}
+    </delete>
+
+    <delete id="deleteTProductConversionProportionByConversionIds" parameterType="String">
+        delete from t_product_conversion_proportion where conversion_id in 
+        <foreach item="conversionId" collection="array" open="(" separator="," close=")">
+            #{conversionId}
+        </foreach>
+    </delete>
+</mapper>

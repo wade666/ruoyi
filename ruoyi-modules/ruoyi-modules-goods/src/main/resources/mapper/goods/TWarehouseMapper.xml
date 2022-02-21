@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.goods.mapper.TWarehouseMapper">
+    
+    <resultMap type="TWarehouse" id="TWarehouseResult">
+        <result property="id"    column="id"    />
+        <result property="warehouseName"    column="warehouse_name"    />
+        <result property="sysUserId"    column="sys_user_id"    />
+        <result property="contact"    column="contact"    />
+        <result property="address"    column="address"    />
+        <result property="phone"    column="phone"    />
+        <result property="memo"    column="memo"    />
+        <result property="isDefault"    column="is_default"    />
+        <result property="state"    column="state"    />
+        <result property="appKey"    column="app_key"    />
+        <result property="appSecret"    column="app_secret"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="version"    column="version"    />
+    </resultMap>
+
+    <sql id="selectTWarehouseVo">
+        select id, warehouse_name, sys_user_id, contact, address, phone, memo, is_default, state, app_key, app_secret, create_time, update_time, version from t_warehouse
+    </sql>
+
+    <select id="selectTWarehouseList" parameterType="TWarehouse" resultMap="TWarehouseResult">
+        <include refid="selectTWarehouseVo"/>
+        <where>  
+            <if test="warehouseName != null  and warehouseName != ''"> and warehouse_name like concat('%', #{warehouseName}, '%')</if>
+            <if test="sysUserId != null "> and sys_user_id = #{sysUserId}</if>
+            <if test="contact != null  and contact != ''"> and contact = #{contact}</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="memo != null  and memo != ''"> and memo = #{memo}</if>
+            <if test="isDefault != null "> and is_default = #{isDefault}</if>
+            <if test="state != null "> and state = #{state}</if>
+            <if test="appKey != null  and appKey != ''"> and app_key = #{appKey}</if>
+            <if test="appSecret != null  and appSecret != ''"> and app_secret = #{appSecret}</if>
+            <if test="version != null "> and version = #{version}</if>
+        </where>
+    </select>
+    
+    <select id="selectTWarehouseById" parameterType="Long" resultMap="TWarehouseResult">
+        <include refid="selectTWarehouseVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTWarehouse" parameterType="TWarehouse" useGeneratedKeys="true" keyProperty="id">
+        insert into t_warehouse
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="warehouseName != null and warehouseName != ''">warehouse_name,</if>
+            <if test="sysUserId != null">sys_user_id,</if>
+            <if test="contact != null">contact,</if>
+            <if test="address != null">address,</if>
+            <if test="phone != null">phone,</if>
+            <if test="memo != null">memo,</if>
+            <if test="isDefault != null">is_default,</if>
+            <if test="state != null">state,</if>
+            <if test="appKey != null">app_key,</if>
+            <if test="appSecret != null">app_secret,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="version != null">version,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="warehouseName != null and warehouseName != ''">#{warehouseName},</if>
+            <if test="sysUserId != null">#{sysUserId},</if>
+            <if test="contact != null">#{contact},</if>
+            <if test="address != null">#{address},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="memo != null">#{memo},</if>
+            <if test="isDefault != null">#{isDefault},</if>
+            <if test="state != null">#{state},</if>
+            <if test="appKey != null">#{appKey},</if>
+            <if test="appSecret != null">#{appSecret},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="version != null">#{version},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTWarehouse" parameterType="TWarehouse">
+        update t_warehouse
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="warehouseName != null and warehouseName != ''">warehouse_name = #{warehouseName},</if>
+            <if test="sysUserId != null">sys_user_id = #{sysUserId},</if>
+            <if test="contact != null">contact = #{contact},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="memo != null">memo = #{memo},</if>
+            <if test="isDefault != null">is_default = #{isDefault},</if>
+            <if test="state != null">state = #{state},</if>
+            <if test="appKey != null">app_key = #{appKey},</if>
+            <if test="appSecret != null">app_secret = #{appSecret},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="version != null">version = #{version},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTWarehouseById" parameterType="Long">
+        delete from t_warehouse where id = #{id}
+    </delete>
+
+    <delete id="deleteTWarehouseByIds" parameterType="String">
+        delete from t_warehouse where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.goods.mapper.TProductMapper">
+
+    <resultMap type="TProduct" id="TProductResult">
+        <result property="id" column="id"/>
+        <result property="sn" column="sn"/>
+        <result property="productName" column="product_name"/>
+        <result property="productImages" column="product_images"/>
+        <result property="image" column="image"/>
+        <result property="price" column="price"/>
+        <result property="vipPrice" column="vip_price"/>
+        <result property="productCategoryId" column="product_category_id"/>
+        <result property="unit" column="unit"/>
+        <result property="sort" column="sort"/>
+        <result property="sales" column="sales"/>
+        <result property="introduction" column="introduction"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="isDel" column="is_del"/>
+        <result property="caption" column="caption"/>
+        <result property="marketPrice" column="market_price"/>
+        <result property="isMarketable" column="is_marketable"/>
+        <result property="memo" column="memo"/>
+        <result property="seoTitle" column="seo_title"/>
+        <result property="keyword" column="keyword"/>
+        <result property="brandId" column="brand_id"/>
+        <result property="parameterValues" column="parameter_values"/>
+        <result property="specificationItems" column="specification_items"/>
+        <result property="version" column="version"/>
+        <result property="productType" column="product_type"/>
+        <result property="shippingMethodId" column="shipping_method_id"/>
+        <result property="warehouseId" column="warehouse_id"/>
+        <result property="projectId" column="project_id"/>
+        <collection property="skuList" ofType="com.ruoyi.goods.domain.TSku">
+            <result property="id"    column="ts_id"    />
+            <result property="productId"    column="ts_product_id"    />
+            <result property="price"    column="ts_price"    />
+            <result property="cost"    column="ts_cost"    />
+            <result property="marketPrice"    column="ts_market_price"    />
+            <result property="stock"    column="ts_stock"    />
+            <result property="allocatedStock"    column="ts_allocated_stock"    />
+            <result property="isDefault"    column="is_default"    />
+            <result property="specificationValues"    column="ts_specification_values"    />
+            <result property="image"    column="ts_image"    />
+            <result property="sn"    column="ts_sn"    />
+            <result property="createTime"    column="create_time"    />
+            <result property="updateTime"    column="update_time"    />
+            <result property="version"    column="version"    />
+            <result property="weight"    column="ts_weight"    />
+            <result property="exchangePoint"    column="ts_exchange_point"    />
+            <result property="rewardPoint"    column="ts_reward_point"    />
+            <result property="isSale"    column="ts_is_sale"    />
+        </collection>
+    </resultMap>
+
+    <sql id="selectTProductVo">
+        select id, sn, product_name, product_images, image, price, vip_price, product_category_id, unit, sort, sales,
+        introduction, create_time, update_time, is_del, caption, market_price, is_marketable, memo, seo_title, keyword,
+        brand_id, parameter_values, specification_items, version, product_type, shipping_method_id, warehouse_id,
+        project_id from t_product
+    </sql>
+    <sql id="selectTProductVoTwo">
+        select tp.id, tp.sn, tp.product_name, tp.product_images, tp.image, tp.price, tp.vip_price, tp.product_category_id, tp.unit, tp.sort, tp.sales,
+        tp.introduction, tp.create_time, tp.update_time, tp.is_del, tp.caption, tp.market_price, tp.is_marketable, tp.memo, tp.seo_title, tp.keyword,
+        tp.brand_id, tp.parameter_values, tp.specification_items, tp.version, tp.product_type, tp.shipping_method_id, tp.warehouse_id,tp.project_id,
+        ts.image ts_image,ts.specification_values ts_specification_values,ts.price ts_price,ts.sn ts_sn,ts.stock ts_stock
+        <!--
+         ts.id ts_id, ts.product_id ts_product_id, ts.price ts_price, ts.cost ts_cost, ts.market_price ts_market_price, ts.stock ts_stock, ts.allocated_stock ts_allocated_stock,
+        ts.specification_values ts_specification_values, ts.image ts_image, ts.sn ts_sn, ts.weight ts_weight,
+        ts.exchange_point ts_exchange_point, ts.reward_point ts_reward_point, ts.is_sale ts_is_sale
+        -->
+        from t_product tp left join t_sku ts on tp.id=ts.product_id
+    </sql>
+    <select id="selectTProductList" parameterType="TProduct" resultMap="TProductResult">
+        <include refid="selectTProductVoTwo"/>
+        <where>
+            tp.is_del = 1
+            <if test="sn != null  and sn != ''">and sn = #{sn}</if>
+            <if test="productName != null  and productName != ''">and product_name like concat('%', #{productName},
+                '%')
+            </if>
+            <if test="productImages != null  and productImages != ''">and product_images = #{productImages}</if>
+            <if test="image != null  and image != ''">and image = #{image}</if>
+            <if test="price != null ">and price = #{price}</if>
+            <if test="vipPrice != null ">and vip_price = #{vipPrice}</if>
+            <if test="productCategoryId != null ">and product_category_id = #{productCategoryId}</if>
+            <if test="unit != null  and unit != ''">and unit = #{unit}</if>
+            <if test="sort != null ">and sort = #{sort}</if>
+            <if test="sales != null ">and sales = #{sales}</if>
+            <if test="introduction != null  and introduction != ''">and introduction = #{introduction}</if>
+            <if test="isDel != null ">and is_del = #{isDel}</if>
+            <if test="caption != null  and caption != ''">and caption = #{caption}</if>
+            <if test="marketPrice != null ">and market_price = #{marketPrice}</if>
+            <if test="isMarketable != null ">and is_marketable = #{isMarketable}</if>
+            <if test="memo != null  and memo != ''">and memo = #{memo}</if>
+            <if test="seoTitle != null  and seoTitle != ''">and seo_title = #{seoTitle}</if>
+            <if test="keyword != null  and keyword != ''">and keyword = #{keyword}</if>
+            <if test="brandId != null ">and brand_id = #{brandId}</if>
+            <if test="parameterValues != null  and parameterValues != ''">and parameter_values = #{parameterValues}</if>
+            <if test="specificationItems != null  and specificationItems != ''">and specification_items =
+                #{specificationItems}
+            </if>
+            <if test="version != null ">and version = #{version}</if>
+            <if test="productType != null ">and product_type = #{productType}</if>
+            <if test="shippingMethodId != null ">and shipping_method_id = #{shippingMethodId}</if>
+            <if test="warehouseId != null ">and warehouse_id = #{warehouseId}</if>
+            <if test="projectId != null ">and project_id = #{projectId}</if>
+        </where>
+    </select>
+
+    <select id="selectTProductById" parameterType="Long" resultMap="TProductResult">
+        <include refid="selectTProductVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTProduct" parameterType="TProduct" useGeneratedKeys="true" keyProperty="id">
+        insert into t_product
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sn != null">sn,</if>
+            <if test="productName != null and productName != ''">product_name,</if>
+            <if test="productImages != null">product_images,</if>
+            <if test="image != null and image != ''">image,</if>
+            <if test="price != null">price,</if>
+            <if test="vipPrice != null">vip_price,</if>
+            <if test="productCategoryId != null">product_category_id,</if>
+            <if test="unit != null">unit,</if>
+            <if test="sort != null">sort,</if>
+            <if test="sales != null">sales,</if>
+            <if test="introduction != null">introduction,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="isDel != null">is_del,</if>
+            <if test="caption != null">caption,</if>
+            <if test="marketPrice != null">market_price,</if>
+            <if test="isMarketable != null">is_marketable,</if>
+            <if test="memo != null">memo,</if>
+            <if test="seoTitle != null">seo_title,</if>
+            <if test="keyword != null">keyword,</if>
+            <if test="brandId != null">brand_id,</if>
+            <if test="parameterValues != null">parameter_values,</if>
+            <if test="specificationItems != null">specification_items,</if>
+            <if test="version != null">version,</if>
+            <if test="productType != null">product_type,</if>
+            <if test="shippingMethodId != null">shipping_method_id,</if>
+            <if test="warehouseId != null">warehouse_id,</if>
+            <if test="projectId != null">project_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sn != null">#{sn},</if>
+            <if test="productName != null and productName != ''">#{productName},</if>
+            <if test="productImages != null">#{productImages},</if>
+            <if test="image != null and image != ''">#{image},</if>
+            <if test="price != null">#{price},</if>
+            <if test="vipPrice != null">#{vipPrice},</if>
+            <if test="productCategoryId != null">#{productCategoryId},</if>
+            <if test="unit != null">#{unit},</if>
+            <if test="sort != null">#{sort},</if>
+            <if test="sales != null">#{sales},</if>
+            <if test="introduction != null">#{introduction},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="isDel != null">#{isDel},</if>
+            <if test="caption != null">#{caption},</if>
+            <if test="marketPrice != null">#{marketPrice},</if>
+            <if test="isMarketable != null">#{isMarketable},</if>
+            <if test="memo != null">#{memo},</if>
+            <if test="seoTitle != null">#{seoTitle},</if>
+            <if test="keyword != null">#{keyword},</if>
+            <if test="brandId != null">#{brandId},</if>
+            <if test="parameterValues != null">#{parameterValues},</if>
+            <if test="specificationItems != null">#{specificationItems},</if>
+            <if test="version != null">#{version},</if>
+            <if test="productType != null">#{productType},</if>
+            <if test="shippingMethodId != null">#{shippingMethodId},</if>
+            <if test="warehouseId != null">#{warehouseId},</if>
+            <if test="projectId != null">#{projectId},</if>
+        </trim>
+    </insert>
+
+    <update id="updateTProduct" parameterType="TProduct">
+        update t_product
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="sn != null">sn = #{sn},</if>
+            <if test="productName != null and productName != ''">product_name = #{productName},</if>
+            <if test="productImages != null">product_images = #{productImages},</if>
+            <if test="image != null and image != ''">image = #{image},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="vipPrice != null">vip_price = #{vipPrice},</if>
+            <if test="productCategoryId != null">product_category_id = #{productCategoryId},</if>
+            <if test="unit != null">unit = #{unit},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="sales != null">sales = #{sales},</if>
+            <if test="introduction != null">introduction = #{introduction},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="isDel != null">is_del = #{isDel},</if>
+            <if test="caption != null">caption = #{caption},</if>
+            <if test="marketPrice != null">market_price = #{marketPrice},</if>
+            <if test="isMarketable != null">is_marketable = #{isMarketable},</if>
+            <if test="memo != null">memo = #{memo},</if>
+            <if test="seoTitle != null">seo_title = #{seoTitle},</if>
+            <if test="keyword != null">keyword = #{keyword},</if>
+            <if test="brandId != null">brand_id = #{brandId},</if>
+            <if test="parameterValues != null">parameter_values = #{parameterValues},</if>
+            <if test="specificationItems != null">specification_items = #{specificationItems},</if>
+            <if test="version != null">version = #{version},</if>
+            <if test="productType != null">product_type = #{productType},</if>
+            <if test="shippingMethodId != null">shipping_method_id = #{shippingMethodId},</if>
+            <if test="warehouseId != null">warehouse_id = #{warehouseId},</if>
+            <if test="projectId != null">project_id = #{projectId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="deleteTProductById" parameterType="Long">
+        update t_product set is_del = 0 where id = #{id}
+    </update>
+
+    <update id="deleteTProductByIds" parameterType="String">
+        update t_product set is_del = 0 where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+</mapper>
