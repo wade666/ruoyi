@@ -27,7 +27,6 @@ public class TShippingReverseConfig extends BaseEntity
     private Long shippingId;
 
     /** 是否删除 0否1是 */
-    @Excel(name = "是否删除 0否1是")
     private Integer isDelete;
 
     public void setReverseId(Long reverseId) 

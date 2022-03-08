@@ -43,7 +43,6 @@ public class TProductCategory extends BaseEntity {
     /**
      * 显示顺序
      */
-    @Excel(name = "显示顺序")
     private Integer orderNum;
 
     /**

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.goods.mapper.TWarehouseMapper">
-    
+
     <resultMap type="TWarehouse" id="TWarehouseResult">
         <result property="id"    column="id"    />
         <result property="warehouseName"    column="warehouse_name"    />
@@ -19,15 +19,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
         <result property="updateTime"    column="update_time"    />
         <result property="version"    column="version"    />
+        <result property="space"    column="space"    />
+        <result property="companyId"    column="company_id"    />
+        <result property="warehouseType"    column="warehouse_type"    />
+        <result property="parentId"    column="parent_id"    />
     </resultMap>
 
     <sql id="selectTWarehouseVo">
-        select id, warehouse_name, sys_user_id, contact, address, phone, memo, is_default, state, app_key, app_secret, create_time, update_time, version from t_warehouse
+        select id, warehouse_name, sys_user_id, contact, address, phone, memo, is_default, state, app_key, app_secret, create_time, update_time, version, space, company_id, warehouse_type, parent_id from t_warehouse
     </sql>
 
     <select id="selectTWarehouseList" parameterType="TWarehouse" resultMap="TWarehouseResult">
         <include refid="selectTWarehouseVo"/>
-        <where>  
+        <where>
             <if test="warehouseName != null  and warehouseName != ''"> and warehouse_name like concat('%', #{warehouseName}, '%')</if>
             <if test="sysUserId != null "> and sys_user_id = #{sysUserId}</if>
             <if test="contact != null  and contact != ''"> and contact = #{contact}</if>
@@ -39,14 +43,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="appKey != null  and appKey != ''"> and app_key = #{appKey}</if>
             <if test="appSecret != null  and appSecret != ''"> and app_secret = #{appSecret}</if>
             <if test="version != null "> and version = #{version}</if>
+            <if test="space != null "> and space = #{space}</if>
+            <if test="companyId != null "> and company_id = #{companyId}</if>
+            <if test="warehouseType != null "> and warehouse_type = #{warehouseType}</if>
+            <if test="parentId != null "> and parent_id = #{parentId}</if>
         </where>
     </select>
-    
+
     <select id="selectTWarehouseById" parameterType="Long" resultMap="TWarehouseResult">
         <include refid="selectTWarehouseVo"/>
         where id = #{id}
     </select>
-        
+
     <insert id="insertTWarehouse" parameterType="TWarehouse" useGeneratedKeys="true" keyProperty="id">
         insert into t_warehouse
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -63,7 +71,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">create_time,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="version != null">version,</if>
-         </trim>
+            <if test="space != null">space,</if>
+            <if test="companyId != null">company_id,</if>
+            <if test="warehouseType != null">warehouse_type,</if>
+            <if test="parentId != null">parent_id,</if>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="warehouseName != null and warehouseName != ''">#{warehouseName},</if>
             <if test="sysUserId != null">#{sysUserId},</if>
@@ -78,7 +90,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">#{createTime},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="version != null">#{version},</if>
-         </trim>
+            <if test="space != null">#{space},</if>
+            <if test="companyId != null">#{companyId},</if>
+            <if test="warehouseType != null">#{warehouseType},</if>
+            <if test="parentId != null">#{parentId},</if>
+        </trim>
     </insert>
 
     <update id="updateTWarehouse" parameterType="TWarehouse">
@@ -97,6 +113,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="version != null">version = #{version},</if>
+            <if test="space != null">space = #{space},</if>
+            <if test="companyId != null">company_id = #{companyId},</if>
+            <if test="warehouseType != null">warehouse_type = #{warehouseType},</if>
+            <if test="parentId != null">parent_id = #{parentId},</if>
         </trim>
         where id = #{id}
     </update>
@@ -106,9 +126,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteTWarehouseByIds" parameterType="String">
-        delete from t_warehouse where id in 
+        delete from t_warehouse where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
     </delete>
+    <select id="selectTWarehouseByParentId" parameterType="Long" resultMap="TWarehouseResult">
+        <include refid="selectTWarehouseVo"/>
+        where parent_id = #{parentId}
+    </select>
+    <update id="updateTWarehouseParent" parameterType="TWarehouse">
+        update t_warehouse
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="sysUserId != null">sys_user_id = #{sysUserId},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="phone != null">phone = #{phone},</if>
+        </trim>
+        where parent_id = #{parentId}
+    </update>
 </mapper>

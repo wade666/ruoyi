@@ -27,11 +27,9 @@ public class TProductLabel extends BaseEntity
     private String bak;
 
     /** 是否删除 0是1否 */
-    @Excel(name = "是否删除 0是1否")
     private Integer isDel;
 
     /** 版本号 */
-    @Excel(name = "版本号")
     private Integer version;
 
     public void setId(Long id) 

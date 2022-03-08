@@ -124,13 +124,11 @@ public class TProduct extends BaseEntity {
     /**
      * 冗余
      */
-    @Excel(name = "冗余")
     private String seoTitle;
 
     /**
      * 搜索关键词
      */
-    @Excel(name = "搜索关键词")
     private String keyword;
 
     /**
@@ -142,7 +140,6 @@ public class TProduct extends BaseEntity {
     /**
      * 参数值json-暂时保留字段目前不需要使用
      */
-    @Excel(name = "参数值json-暂时保留字段目前不需要使用")
     private String parameterValues;
 
     /**

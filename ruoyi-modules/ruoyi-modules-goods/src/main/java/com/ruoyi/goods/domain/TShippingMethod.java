@@ -44,11 +44,9 @@ public class TShippingMethod extends BaseEntity
     private String description;
 
     /** 代码用于阿里快递查询编码 */
-    @Excel(name = "代码用于阿里快递查询编码")
     private String code;
 
     /** 冗余支付宝订单中心编码如果做支付宝订单中心需要此字段 */
-    @Excel(name = "冗余支付宝订单中心编码如果做支付宝订单中心需要此字段")
     private String alipayCode;
 
     /** 快递助手物流编码 */
@@ -56,11 +54,9 @@ public class TShippingMethod extends BaseEntity
     private String courierCode;
 
     /** 版本号 */
-    @Excel(name = "版本号")
     private Integer version;
 
     /** 排序 */
-    @Excel(name = "排序")
     private Integer orders;
 
     public void setId(Long id) 

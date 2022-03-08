@@ -1,5 +1,6 @@
 package com.ruoyi.goods.domain;
 
+import java.math.BigDecimal;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.core.annotation.Excel;
@@ -7,9 +8,9 @@ import com.ruoyi.common.core.web.domain.BaseEntity;
 
 /**
  * 仓库对象 t_warehouse
- * 
+ *
  * @author ruoyi
- * @date 2022-02-12
+ * @date 2022-03-08
  */
 public class TWarehouse extends BaseEntity
 {
@@ -59,135 +60,189 @@ public class TWarehouse extends BaseEntity
     private String appSecret;
 
     /** 版本号 */
-    @Excel(name = "版本号")
     private Integer version;
 
-    public void setId(Long id) 
+    /** 面积（平方米） */
+    @Excel(name = "面积", readConverterExp = "平=方米")
+    private BigDecimal space;
+
+    /** 仓库所属公司id */
+    @Excel(name = "仓库所属公司id")
+    private Long companyId;
+
+    /** 仓库类型（1真实，2虚拟） */
+    @Excel(name = "仓库类型", readConverterExp = "1=真实，2虚拟")
+    private Integer warehouseType;
+
+    /** 仓库父id */
+    private Long parentId;
+
+    public void setId(Long id)
     {
         this.id = id;
     }
 
-    public Long getId() 
+    public Long getId()
     {
         return id;
     }
-    public void setWarehouseName(String warehouseName) 
+    public void setWarehouseName(String warehouseName)
     {
         this.warehouseName = warehouseName;
     }
 
-    public String getWarehouseName() 
+    public String getWarehouseName()
     {
         return warehouseName;
     }
-    public void setSysUserId(Long sysUserId) 
+    public void setSysUserId(Long sysUserId)
     {
         this.sysUserId = sysUserId;
     }
 
-    public Long getSysUserId() 
+    public Long getSysUserId()
     {
         return sysUserId;
     }
-    public void setContact(String contact) 
+    public void setContact(String contact)
     {
         this.contact = contact;
     }
 
-    public String getContact() 
+    public String getContact()
     {
         return contact;
     }
-    public void setAddress(String address) 
+    public void setAddress(String address)
     {
         this.address = address;
     }
 
-    public String getAddress() 
+    public String getAddress()
     {
         return address;
     }
-    public void setPhone(String phone) 
+    public void setPhone(String phone)
     {
         this.phone = phone;
     }
 
-    public String getPhone() 
+    public String getPhone()
     {
         return phone;
     }
-    public void setMemo(String memo) 
+    public void setMemo(String memo)
     {
         this.memo = memo;
     }
 
-    public String getMemo() 
+    public String getMemo()
     {
         return memo;
     }
-    public void setIsDefault(Integer isDefault) 
+    public void setIsDefault(Integer isDefault)
     {
         this.isDefault = isDefault;
     }
 
-    public Integer getIsDefault() 
+    public Integer getIsDefault()
     {
         return isDefault;
     }
-    public void setState(Integer state) 
+    public void setState(Integer state)
     {
         this.state = state;
     }
 
-    public Integer getState() 
+    public Integer getState()
     {
         return state;
     }
-    public void setAppKey(String appKey) 
+    public void setAppKey(String appKey)
     {
         this.appKey = appKey;
     }
 
-    public String getAppKey() 
+    public String getAppKey()
     {
         return appKey;
     }
-    public void setAppSecret(String appSecret) 
+    public void setAppSecret(String appSecret)
     {
         this.appSecret = appSecret;
     }
 
-    public String getAppSecret() 
+    public String getAppSecret()
     {
         return appSecret;
     }
-    public void setVersion(Integer version) 
+    public void setVersion(Integer version)
     {
         this.version = version;
     }
 
-    public Integer getVersion() 
+    public Integer getVersion()
     {
         return version;
+    }
+    public void setSpace(BigDecimal space)
+    {
+        this.space = space;
+    }
+
+    public BigDecimal getSpace()
+    {
+        return space;
+    }
+    public void setCompanyId(Long companyId)
+    {
+        this.companyId = companyId;
+    }
+
+    public Long getCompanyId()
+    {
+        return companyId;
+    }
+    public void setWarehouseType(Integer warehouseType)
+    {
+        this.warehouseType = warehouseType;
+    }
+
+    public Integer getWarehouseType()
+    {
+        return warehouseType;
+    }
+    public void setParentId(Long parentId)
+    {
+        this.parentId = parentId;
+    }
+
+    public Long getParentId()
+    {
+        return parentId;
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
-            .append("warehouseName", getWarehouseName())
-            .append("sysUserId", getSysUserId())
-            .append("contact", getContact())
-            .append("address", getAddress())
-            .append("phone", getPhone())
-            .append("memo", getMemo())
-            .append("isDefault", getIsDefault())
-            .append("state", getState())
-            .append("appKey", getAppKey())
-            .append("appSecret", getAppSecret())
-            .append("createTime", getCreateTime())
-            .append("updateTime", getUpdateTime())
-            .append("version", getVersion())
-            .toString();
+                .append("id", getId())
+                .append("warehouseName", getWarehouseName())
+                .append("sysUserId", getSysUserId())
+                .append("contact", getContact())
+                .append("address", getAddress())
+                .append("phone", getPhone())
+                .append("memo", getMemo())
+                .append("isDefault", getIsDefault())
+                .append("state", getState())
+                .append("appKey", getAppKey())
+                .append("appSecret", getAppSecret())
+                .append("createTime", getCreateTime())
+                .append("updateTime", getUpdateTime())
+                .append("version", getVersion())
+                .append("space", getSpace())
+                .append("companyId", getCompanyId())
+                .append("warehouseType", getWarehouseType())
+                .append("parentId", getParentId())
+                .toString();
     }
 }

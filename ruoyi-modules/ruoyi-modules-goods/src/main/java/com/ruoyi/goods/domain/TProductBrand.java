@@ -43,7 +43,6 @@ public class TProductBrand extends BaseEntity {
     /**
      * 显示顺序
      */
-    @Excel(name = "显示顺序")
     private Integer sortNum;
 
     /**

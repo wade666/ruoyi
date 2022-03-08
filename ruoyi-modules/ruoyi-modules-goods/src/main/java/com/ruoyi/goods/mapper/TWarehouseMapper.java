@@ -58,4 +58,17 @@ public interface TWarehouseMapper
      * @return 结果
      */
     public int deleteTWarehouseByIds(Long[] ids);
+    /**
+     * 查询仓库
+     * @param parentId 仓库主键
+     * @return 仓库
+     */
+    public List<TWarehouse> selectTWarehouseByParentId(Long parentId);
+    /**
+     * 修改仓库
+     * @param tWarehouse 仓库
+     * @return 结果
+     */
+    public int updateTWarehouseParent(TWarehouse tWarehouse);
+
 }

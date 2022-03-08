@@ -27,7 +27,6 @@ public class TProductConversionProportion extends BaseEntity
     private String specificationValues;
 
     /** 是否删除 0是1否 */
-    @Excel(name = "是否删除 0是1否")
     private Integer isDel;
 
     public void setConversionId(Long conversionId) 

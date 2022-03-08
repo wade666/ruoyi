@@ -58,4 +58,23 @@ public interface ITWarehouseService
      * @return 结果
      */
     public int deleteTWarehouseById(Long id);
+    /**
+     * 新增子仓库
+     * @param tWarehouse 仓库
+     * @return 结果
+     */
+    public int insertTWarehouseChild(TWarehouse tWarehouse);
+
+    /**
+     * 修改子仓库
+     * @param tWarehouse 仓库
+     * @return 结果
+     */
+    public int updateTWarehouseChild(TWarehouse tWarehouse);
+    /**
+     * 查询子仓库列表
+     * @param tWarehouse 仓库
+     * @return 仓库集合
+     */
+    public List<TWarehouse> selectTWarehouseListChild(TWarehouse tWarehouse);
 }

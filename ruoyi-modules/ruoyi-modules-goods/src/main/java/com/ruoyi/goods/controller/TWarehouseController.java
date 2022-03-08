@@ -102,4 +102,35 @@ public class TWarehouseController extends BaseController
     {
         return toAjax(tWarehouseService.deleteTWarehouseByIds(ids));
     }
+    /**
+     * 新增子仓库
+     */
+    @RequiresPermissions("goods:warehouse:add")
+    @Log(title = "仓库", businessType = BusinessType.INSERT)
+    @PostMapping("addChild")
+    public AjaxResult addChild(@RequestBody TWarehouse tWarehouse)
+    {
+        return toAjax(tWarehouseService.insertTWarehouseChild(tWarehouse));
+    }
+
+    /**
+     * 修改子仓库
+     */
+    @RequiresPermissions("goods:warehouse:edit")
+    @Log(title = "仓库", businessType = BusinessType.UPDATE)
+    @PutMapping("editChild")
+    public AjaxResult editChild(@RequestBody TWarehouse tWarehouse)
+    {
+        return toAjax(tWarehouseService.updateTWarehouseChild(tWarehouse));
+    }
+    /**
+     * 查询子仓库列表
+     */
+    @RequiresPermissions("goods:warehouse:list")
+    @GetMapping("/listChild")
+    public List<TWarehouse> listChild(TWarehouse tWarehouse)
+    {
+        List<TWarehouse> list = tWarehouseService.selectTWarehouseListChild(tWarehouse);
+        return list;
+    }
 }
