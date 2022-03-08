@@ -89,6 +89,8 @@
       <el-table-column label="联系人" align="center" prop="contact" />
       <el-table-column label="地址" align="center" prop="address" />
       <el-table-column label="手机" align="center" prop="phone" />
+      <el-table-column label="面积" align="center" prop="space" />
+      <el-table-column label="仓库所属公司id" align="center" prop="companyId" />
       <el-table-column label="是否默认" align="center" prop="isDefault" />
       <el-table-column label="状态" align="center" prop="state" />
       <el-table-column label="备注" align="center" prop="memo" />
@@ -139,6 +141,12 @@
         </el-form-item>
         <el-form-item label="手机" prop="phone">
           <el-input v-model="form.phone" placeholder="请输入手机" />
+        </el-form-item>
+        <el-form-item label="面积" prop="space">
+          <el-input v-model="form.space" placeholder="请输入面积" />
+        </el-form-item>
+        <el-form-item label="仓库所属公司id" prop="companyId">
+          <el-input v-model="form.companyId" placeholder="请输入仓库所属公司id" />
         </el-form-item>
         <el-form-item label="备注" prop="memo">
           <el-input v-model="form.memo" placeholder="请输入备注" />
