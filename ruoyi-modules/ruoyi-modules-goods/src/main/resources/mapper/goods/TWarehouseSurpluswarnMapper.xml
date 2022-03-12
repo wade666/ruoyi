@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.goods.mapper.TWarehouseSurpluswarnMapper">
+    
+    <resultMap type="TWarehouseSurpluswarn" id="TWarehouseSurpluswarnResult">
+        <result property="id"    column="id"    />
+        <result property="productId"    column="product_id"    />
+        <result property="warehouseId"    column="warehouse_id"    />
+        <result property="warnNum"    column="warn_num"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="version"    column="version"    />
+        <result property="productName"    column="product_name"    />
+        <result property="warehouseName"    column="warehouse_name"    />
+    </resultMap>
+
+    <sql id="selectTWarehouseSurpluswarnVo">
+        select id, product_id, warehouse_id, warn_num, create_time, update_time, version from t_warehouse_surpluswarn
+    </sql>
+
+    <select id="selectTWarehouseSurpluswarnList" parameterType="TWarehouseSurpluswarn" resultMap="TWarehouseSurpluswarnResult">
+        select s.id, s.product_id, s.warehouse_id, s.warn_num,p.product_name, w.warehouse_name from t_warehouse_surpluswarn s
+        left join t_product p on s.product_id=p.id left join t_warehouse w on s.warehouse_id=w.id
+        <where>  
+            <if test="productId != null "> and product_id = #{productId}</if>
+            <if test="warehouseId != null "> and warehouse_id = #{warehouseId}</if>
+            <if test="warnNum != null "> and warn_num = #{warnNum}</if>
+            <if test="version != null "> and version = #{version}</if>
+        </where>
+    </select>
+    
+    <select id="selectTWarehouseSurpluswarnById" parameterType="Long" resultMap="TWarehouseSurpluswarnResult">
+        <include refid="selectTWarehouseSurpluswarnVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTWarehouseSurpluswarn" parameterType="TWarehouseSurpluswarn" useGeneratedKeys="true" keyProperty="id">
+        insert into t_warehouse_surpluswarn
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="productId != null">product_id,</if>
+            <if test="warehouseId != null">warehouse_id,</if>
+            <if test="warnNum != null">warn_num,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="version != null">version,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="productId != null">#{productId},</if>
+            <if test="warehouseId != null">#{warehouseId},</if>
+            <if test="warnNum != null">#{warnNum},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="version != null">#{version},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTWarehouseSurpluswarn" parameterType="TWarehouseSurpluswarn">
+        update t_warehouse_surpluswarn
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="productId != null">product_id = #{productId},</if>
+            <if test="warehouseId != null">warehouse_id = #{warehouseId},</if>
+            <if test="warnNum != null">warn_num = #{warnNum},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="version != null">version = version +1,</if>
+        </trim>
+        where id = #{id} and version = #{version}
+    </update>
+
+    <delete id="deleteTWarehouseSurpluswarnById" parameterType="Long">
+        delete from t_warehouse_surpluswarn where id = #{id}
+    </delete>
+
+    <delete id="deleteTWarehouseSurpluswarnByIds" parameterType="String">
+        delete from t_warehouse_surpluswarn where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -149,11 +149,6 @@ public class TProduct extends BaseEntity {
     private String specificationItems;
 
     /**
-     * 版本号
-     */
-    private Integer version;
-
-    /**
      * 商品类型见枚举
      */
     @Excel(name = "商品类型见枚举")
@@ -355,14 +350,6 @@ public class TProduct extends BaseEntity {
 
     public String getSpecificationItems() {
         return specificationItems;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
-
-    public Integer getVersion() {
-        return version;
     }
 
     public void setProductType(Integer productType) {

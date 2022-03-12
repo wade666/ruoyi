@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.goods.mapper.TWarehouseSurpluscheckMapper">
+    
+    <resultMap type="TWarehouseSurpluscheck" id="TWarehouseSurpluscheckResult">
+        <result property="id"    column="id"    />
+        <result property="productId"    column="product_id"    />
+        <result property="warehouseId"    column="warehouse_id"    />
+        <result property="surplusNum"    column="surplus_num"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="bak"    column="bak"    />
+        <result property="productName"    column="product_name"    />
+        <result property="warehouseName"    column="warehouse_name"    />
+    </resultMap>
+
+    <sql id="selectTWarehouseSurpluscheckVo">
+        select id, product_id, warehouse_id, surplus_num, create_time, bak from t_warehouse_surpluscheck
+    </sql>
+
+    <select id="selectTWarehouseSurpluscheckList" parameterType="TWarehouseSurpluscheck" resultMap="TWarehouseSurpluscheckResult">
+        select s.id, s.product_id, s.warehouse_id, s.surplus_num, s.create_time, bak, p.product_name, w.warehouse_name from t_warehouse_surpluscheck s
+        left join t_product p on s.product_id=p.id left join t_warehouse w on s.warehouse_id=w.id
+        <where>  
+            <if test="productId != null "> and product_id = #{productId}</if>
+            <if test="warehouseId != null "> and warehouse_id = #{warehouseId}</if>
+            <if test="surplusNum != null "> and surplus_num = #{surplusNum}</if>
+            <if test="bak != null  and bak != ''"> and bak = #{bak}</if>
+        </where>
+    </select>
+    
+    <select id="selectTWarehouseSurpluscheckById" parameterType="Long" resultMap="TWarehouseSurpluscheckResult">
+        <include refid="selectTWarehouseSurpluscheckVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTWarehouseSurpluscheck" parameterType="TWarehouseSurpluscheck" useGeneratedKeys="true" keyProperty="id">
+        insert into t_warehouse_surpluscheck
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="productId != null">product_id,</if>
+            <if test="warehouseId != null">warehouse_id,</if>
+            <if test="surplusNum != null">surplus_num,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="bak != null">bak,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="productId != null">#{productId},</if>
+            <if test="warehouseId != null">#{warehouseId},</if>
+            <if test="surplusNum != null">#{surplusNum},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="bak != null">#{bak},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTWarehouseSurpluscheck" parameterType="TWarehouseSurpluscheck">
+        update t_warehouse_surpluscheck
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="productId != null">product_id = #{productId},</if>
+            <if test="warehouseId != null">warehouse_id = #{warehouseId},</if>
+            <if test="surplusNum != null">surplus_num = #{surplusNum},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="bak != null">bak = #{bak},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTWarehouseSurpluscheckById" parameterType="Long">
+        delete from t_warehouse_surpluscheck where id = #{id}
+    </delete>
+
+    <delete id="deleteTWarehouseSurpluscheckByIds" parameterType="String">
+        delete from t_warehouse_surpluscheck where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

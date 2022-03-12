@@ -29,9 +29,6 @@ public class TProductLabel extends BaseEntity
     /** 是否删除 0是1否 */
     private Integer isDel;
 
-    /** 版本号 */
-    private Integer version;
-
     public void setId(Long id) 
     {
         this.id = id;
@@ -67,15 +64,6 @@ public class TProductLabel extends BaseEntity
     public Integer getIsDel() 
     {
         return isDel;
-    }
-    public void setVersion(Integer version) 
-    {
-        this.version = version;
-    }
-
-    public Integer getVersion() 
-    {
-        return version;
     }
 
     @Override

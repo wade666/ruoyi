@@ -30,8 +30,8 @@ public class TWarehouseCompany extends BaseEntity
     @Excel(name = "备注")
     private String bak;
 
-    /** 版本号 */
-    private Integer version;
+    /** 公司类型*/
+    private String companyTypeName;
 
     public void setCompanyId(Long companyId) 
     {
@@ -69,14 +69,13 @@ public class TWarehouseCompany extends BaseEntity
     {
         return bak;
     }
-    public void setVersion(Integer version) 
-    {
-        this.version = version;
+
+    public String getCompanyTypeName() {
+        return companyTypeName;
     }
 
-    public Integer getVersion() 
-    {
-        return version;
+    public void setCompanyTypeName(String companyTypeName) {
+        this.companyTypeName = companyTypeName;
     }
 
     @Override

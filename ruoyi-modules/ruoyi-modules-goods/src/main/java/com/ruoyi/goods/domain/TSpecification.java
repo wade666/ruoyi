@@ -34,9 +34,6 @@ public class TSpecification extends BaseEntity
     @Excel(name = "排序")
     private Integer sort;
 
-    /** 版本号 */
-    private Integer version;
-
     /**
      * 是否删除，0是1否
      */
@@ -86,15 +83,6 @@ public class TSpecification extends BaseEntity
     public Integer getSort() 
     {
         return sort;
-    }
-    public void setVersion(Integer version) 
-    {
-        this.version = version;
-    }
-
-    public Integer getVersion() 
-    {
-        return version;
     }
 
     public Integer getIsDel() {

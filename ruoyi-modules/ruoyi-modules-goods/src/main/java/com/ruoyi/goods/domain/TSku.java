@@ -59,9 +59,6 @@ public class TSku extends BaseEntity
     @Excel(name = "sku编号全局唯一")
     private String sn;
 
-    /** 版本号 */
-    private Integer version;
-
     /** 重量 */
     @Excel(name = "重量")
     private BigDecimal weight;
@@ -177,15 +174,7 @@ public class TSku extends BaseEntity
     {
         return sn;
     }
-    public void setVersion(Integer version) 
-    {
-        this.version = version;
-    }
 
-    public Integer getVersion() 
-    {
-        return version;
-    }
     public void setWeight(BigDecimal weight) 
     {
         this.weight = weight;

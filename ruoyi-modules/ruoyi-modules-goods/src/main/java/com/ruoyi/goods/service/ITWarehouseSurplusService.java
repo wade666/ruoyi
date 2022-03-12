@@ -1,0 +1,61 @@
+package com.ruoyi.goods.service;
+
+import java.util.List;
+import com.ruoyi.goods.domain.TWarehouseSurplus;
+
+/**
+ * 库存Service接口
+ * 
+ * @author ruoyi
+ * @date 2022-03-08
+ */
+public interface ITWarehouseSurplusService 
+{
+    /**
+     * 查询库存
+     * 
+     * @param surplusId 库存主键
+     * @return 库存
+     */
+    public TWarehouseSurplus selectTWarehouseSurplusBySurplusId(Long surplusId);
+
+    /**
+     * 查询库存列表
+     * 
+     * @param tWarehouseSurplus 库存
+     * @return 库存集合
+     */
+    public List<TWarehouseSurplus> selectTWarehouseSurplusList(TWarehouseSurplus tWarehouseSurplus);
+
+    /**
+     * 新增库存
+     * 
+     * @param tWarehouseSurplus 库存
+     * @return 结果
+     */
+    public int insertTWarehouseSurplus(TWarehouseSurplus tWarehouseSurplus);
+
+    /**
+     * 修改库存
+     * 
+     * @param tWarehouseSurplus 库存
+     * @return 结果
+     */
+    public int updateTWarehouseSurplus(TWarehouseSurplus tWarehouseSurplus);
+
+    /**
+     * 批量删除库存
+     * 
+     * @param surplusIds 需要删除的库存主键集合
+     * @return 结果
+     */
+    public int deleteTWarehouseSurplusBySurplusIds(Long[] surplusIds);
+
+    /**
+     * 删除库存信息
+     * 
+     * @param surplusId 库存主键
+     * @return 结果
+     */
+    public int deleteTWarehouseSurplusBySurplusId(Long surplusId);
+}

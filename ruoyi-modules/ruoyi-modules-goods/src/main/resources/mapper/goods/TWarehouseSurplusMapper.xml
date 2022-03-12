@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.goods.mapper.TWarehouseSurplusMapper">
+    
+    <resultMap type="TWarehouseSurplus" id="TWarehouseSurplusResult">
+        <result property="surplusId"    column="surplus_id"    />
+        <result property="productId"    column="product_id"    />
+        <result property="productCode"    column="product_code"    />
+        <result property="batchCode"    column="batch_code"    />
+        <result property="warehouseId"    column="warehouse_id"    />
+        <result property="surplusNum"    column="surplus_num"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="version"    column="version"    />
+        <result property="productName"    column="product_name"    />
+        <result property="warehouseName"    column="warehouse_name"    />
+        <result property="warnNum"    column="warn_num"    />
+    </resultMap>
+
+    <sql id="selectTWarehouseSurplusVo">
+        select surplus_id, product_id, product_code, batch_code, warehouse_id, surplus_num, create_time, update_time, version from t_warehouse_surplus
+    </sql>
+
+    <select id="selectTWarehouseSurplusList" parameterType="TWarehouseSurplus" resultMap="TWarehouseSurplusResult">
+        select s.surplus_id, s.product_id, s.product_code, s.batch_code, s.warehouse_id, s.surplus_num,p.product_name, w.warehouse_name,ws.warn_num from t_warehouse_surplus s
+        left join t_product p on s.product_id=p.id left join t_warehouse w on s.warehouse_id=w.id
+        left join t_warehouse_surpluswarn ws on s.product_id=ws.product_id and s.warehouse_id=ws.warehouse_id
+        <where>  
+            <if test="productId != null "> and product_id = #{productId}</if>
+            <if test="productCode != null "> and product_code = #{productCode}</if>
+            <if test="batchCode != null "> and batch_code = #{batchCode}</if>
+            <if test="warehouseId != null "> and warehouse_id = #{warehouseId}</if>
+            <if test="surplusNum != null "> and surplus_num = #{surplusNum}</if>
+            <if test="version != null "> and version = #{version}</if>
+        </where>
+    </select>
+    
+    <select id="selectTWarehouseSurplusBySurplusId" parameterType="Long" resultMap="TWarehouseSurplusResult">
+        <include refid="selectTWarehouseSurplusVo"/>
+        where surplus_id = #{surplusId}
+    </select>
+        
+    <insert id="insertTWarehouseSurplus" parameterType="TWarehouseSurplus" useGeneratedKeys="true" keyProperty="surplusId">
+        insert into t_warehouse_surplus
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="productId != null">product_id,</if>
+            <if test="productCode != null">product_code,</if>
+            <if test="batchCode != null">batch_code,</if>
+            <if test="warehouseId != null">warehouse_id,</if>
+            <if test="surplusNum != null">surplus_num,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="version != null">version,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="productId != null">#{productId},</if>
+            <if test="productCode != null">#{productCode},</if>
+            <if test="batchCode != null">#{batchCode},</if>
+            <if test="warehouseId != null">#{warehouseId},</if>
+            <if test="surplusNum != null">#{surplusNum},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="version != null">#{version},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTWarehouseSurplus" parameterType="TWarehouseSurplus">
+        update t_warehouse_surplus
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="productId != null">product_id = #{productId},</if>
+            <if test="productCode != null">product_code = #{productCode},</if>
+            <if test="batchCode != null">batch_code = #{batchCode},</if>
+            <if test="warehouseId != null">warehouse_id = #{warehouseId},</if>
+            <if test="surplusNum != null">surplus_num = #{surplusNum},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="version != null">version = version +1,</if>
+        </trim>
+        where surplus_id = #{surplusId} and version = #{version}
+    </update>
+
+    <delete id="deleteTWarehouseSurplusBySurplusId" parameterType="Long">
+        delete from t_warehouse_surplus where surplus_id = #{surplusId}
+    </delete>
+
+    <delete id="deleteTWarehouseSurplusBySurplusIds" parameterType="String">
+        delete from t_warehouse_surplus where surplus_id in 
+        <foreach item="surplusId" collection="array" open="(" separator="," close=")">
+            #{surplusId}
+        </foreach>
+    </delete>
+</mapper>

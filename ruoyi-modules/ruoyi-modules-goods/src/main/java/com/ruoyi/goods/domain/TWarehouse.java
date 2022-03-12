@@ -59,9 +59,6 @@ public class TWarehouse extends BaseEntity
     @Excel(name = "快递助手appSecret")
     private String appSecret;
 
-    /** 版本号 */
-    private Integer version;
-
     /** 面积（平方米） */
     @Excel(name = "面积", readConverterExp = "平=方米")
     private BigDecimal space;
@@ -76,6 +73,13 @@ public class TWarehouse extends BaseEntity
 
     /** 仓库父id */
     private Long parentId;
+
+    /** 仓库所属公司名 */
+    private String companyName;
+    /** 是否默认*/
+    private String isDefaultName;
+    /** 状态*/
+    private String stateName;
 
     public void setId(Long id)
     {
@@ -176,15 +180,7 @@ public class TWarehouse extends BaseEntity
     {
         return appSecret;
     }
-    public void setVersion(Integer version)
-    {
-        this.version = version;
-    }
 
-    public Integer getVersion()
-    {
-        return version;
-    }
     public void setSpace(BigDecimal space)
     {
         this.space = space;
@@ -220,6 +216,30 @@ public class TWarehouse extends BaseEntity
     public Long getParentId()
     {
         return parentId;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getIsDefaultName() {
+        return isDefaultName;
+    }
+
+    public void setIsDefaultName(String isDefaultName) {
+        this.isDefaultName = isDefaultName;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 
     @Override

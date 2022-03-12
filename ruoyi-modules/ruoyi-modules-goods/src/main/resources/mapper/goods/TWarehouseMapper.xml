@@ -23,6 +23,7 @@
         <result property="companyId"    column="company_id"    />
         <result property="warehouseType"    column="warehouse_type"    />
         <result property="parentId"    column="parent_id"    />
+        <result property="companyName"    column="company_name"    />
     </resultMap>
 
     <sql id="selectTWarehouseVo">
@@ -30,7 +31,8 @@
     </sql>
 
     <select id="selectTWarehouseList" parameterType="TWarehouse" resultMap="TWarehouseResult">
-        <include refid="selectTWarehouseVo"/>
+        select id, warehouse_name, sys_user_id, contact, address, phone, memo, (case is_default when 0 then '是' when 1 then '否' end) isDefaultName, (case state when 0 then '禁用' when 1 then '正常' end) stateName, app_key, app_secret, space, w.company_id, warehouse_type, parent_id,company_name from t_warehouse w
+        left join t_warehouse_company c on w.company_id=c.company_id
         <where>
             <if test="warehouseName != null  and warehouseName != ''"> and warehouse_name like concat('%', #{warehouseName}, '%')</if>
             <if test="sysUserId != null "> and sys_user_id = #{sysUserId}</if>
@@ -112,13 +114,13 @@
             <if test="appSecret != null">app_secret = #{appSecret},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
-            <if test="version != null">version = #{version},</if>
+            <if test="version != null">version = version +1,</if>
             <if test="space != null">space = #{space},</if>
             <if test="companyId != null">company_id = #{companyId},</if>
             <if test="warehouseType != null">warehouse_type = #{warehouseType},</if>
             <if test="parentId != null">parent_id = #{parentId},</if>
         </trim>
-        where id = #{id}
+        where id = #{id} and version = #{version}
     </update>
 
     <delete id="deleteTWarehouseById" parameterType="Long">
@@ -141,6 +143,7 @@
             <if test="sysUserId != null">sys_user_id = #{sysUserId},</if>
             <if test="address != null">address = #{address},</if>
             <if test="phone != null">phone = #{phone},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
         </trim>
         where parent_id = #{parentId}
     </update>

@@ -74,6 +74,8 @@ public class TWarehouseServiceImpl implements ITWarehouseService
         house.setSysUserId(tWarehouse.getSysUserId());
         house.setAddress(tWarehouse.getAddress());
         house.setPhone(tWarehouse.getPhone());
+        house.setParentId(tWarehouse.getId());
+        house.setUpdateTime(DateUtils.getNowDate());
         tWarehouseMapper.updateTWarehouseParent(house);
         tWarehouse.setUpdateTime(DateUtils.getNowDate());
         return tWarehouseMapper.updateTWarehouse(tWarehouse);

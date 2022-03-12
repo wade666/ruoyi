@@ -53,9 +53,6 @@ public class TShippingMethod extends BaseEntity
     @Excel(name = "快递助手物流编码")
     private String courierCode;
 
-    /** 版本号 */
-    private Integer version;
-
     /** 排序 */
     private Integer orders;
 
@@ -149,15 +146,7 @@ public class TShippingMethod extends BaseEntity
     {
         return courierCode;
     }
-    public void setVersion(Integer version) 
-    {
-        this.version = version;
-    }
 
-    public Integer getVersion() 
-    {
-        return version;
-    }
     public void setOrders(Integer orders) 
     {
         this.orders = orders;

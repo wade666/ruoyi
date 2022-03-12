@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.goods.mapper.TWarehouseSurplusdetailsMapper">
+    
+    <resultMap type="TWarehouseSurplusdetails" id="TWarehouseSurplusdetailsResult">
+        <result property="id"    column="id"    />
+        <result property="productId"    column="product_id"    />
+        <result property="productCode"    column="product_code"    />
+        <result property="warehouseId"    column="warehouse_id"    />
+        <result property="price"    column="price"    />
+        <result property="makertCode"    column="makert_code"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="surplusType"    column="surplus_type"    />
+        <result property="detailType"    column="detail_type"    />
+        <result property="bak"    column="bak"    />
+        <result property="productName"    column="product_name"    />
+        <result property="warehouseName"    column="warehouse_name"    />
+    </resultMap>
+
+    <sql id="selectTWarehouseSurplusdetailsVo">
+        select id, product_id, product_code, warehouse_id, price, makert_code, create_time, surplus_type, detail_type, bak from t_warehouse_surplusdetails
+    </sql>
+
+    <select id="selectTWarehouseSurplusdetailsList" parameterType="TWarehouseSurplusdetails" resultMap="TWarehouseSurplusdetailsResult">
+        select s.id, s.product_id, s.product_code, s.warehouse_id, s.price, s.makert_code, (case s.surplus_type when 1 then '入库' when 2 then '出库' end) surplusTypeName, (case s.detail_type when 1 then '生产入库' when 2 then '调拨入库' when 3 then '售后入库' when 4 then '其他入库' when 5 then '采购入库' when 6 then '销售出库' when 7 then '调拨出库' when 8 then '其他出库' end) detailTypeName, s.bak,p.product_name, w.warehouse_name from t_warehouse_surplusdetails s
+        left join t_product p on s.product_id=p.id left join t_warehouse w on s.warehouse_id=w.id
+        <where>  
+            <if test="productId != null "> and product_id = #{productId}</if>
+            <if test="productCode != null "> and product_code = #{productCode}</if>
+            <if test="warehouseId != null "> and warehouse_id = #{warehouseId}</if>
+            <if test="price != null "> and price = #{price}</if>
+            <if test="makertCode != null "> and makert_code = #{makertCode}</if>
+            <if test="surplusType != null "> and surplus_type = #{surplusType}</if>
+            <if test="detailType != null "> and detail_type = #{detailType}</if>
+            <if test="bak != null  and bak != ''"> and bak = #{bak}</if>
+        </where>
+    </select>
+    
+    <select id="selectTWarehouseSurplusdetailsById" parameterType="Long" resultMap="TWarehouseSurplusdetailsResult">
+        <include refid="selectTWarehouseSurplusdetailsVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTWarehouseSurplusdetails" parameterType="TWarehouseSurplusdetails" useGeneratedKeys="true" keyProperty="id">
+        insert into t_warehouse_surplusdetails
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="productId != null">product_id,</if>
+            <if test="productCode != null">product_code,</if>
+            <if test="warehouseId != null">warehouse_id,</if>
+            <if test="price != null">price,</if>
+            <if test="makertCode != null">makert_code,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="surplusType != null">surplus_type,</if>
+            <if test="detailType != null">detail_type,</if>
+            <if test="bak != null">bak,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="productId != null">#{productId},</if>
+            <if test="productCode != null">#{productCode},</if>
+            <if test="warehouseId != null">#{warehouseId},</if>
+            <if test="price != null">#{price},</if>
+            <if test="makertCode != null">#{makertCode},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="surplusType != null">#{surplusType},</if>
+            <if test="detailType != null">#{detailType},</if>
+            <if test="bak != null">#{bak},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTWarehouseSurplusdetails" parameterType="TWarehouseSurplusdetails">
+        update t_warehouse_surplusdetails
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="productId != null">product_id = #{productId},</if>
+            <if test="productCode != null">product_code = #{productCode},</if>
+            <if test="warehouseId != null">warehouse_id = #{warehouseId},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="makertCode != null">makert_code = #{makertCode},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="surplusType != null">surplus_type = #{surplusType},</if>
+            <if test="detailType != null">detail_type = #{detailType},</if>
+            <if test="bak != null">bak = #{bak},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTWarehouseSurplusdetailsById" parameterType="Long">
+        delete from t_warehouse_surplusdetails where id = #{id}
+    </delete>
+
+    <delete id="deleteTWarehouseSurplusdetailsByIds" parameterType="String">
+        delete from t_warehouse_surplusdetails where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
