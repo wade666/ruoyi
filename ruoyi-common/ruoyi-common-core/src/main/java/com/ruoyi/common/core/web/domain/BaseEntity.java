@@ -38,6 +38,15 @@ public class BaseEntity implements Serializable
     /** 请求参数 */
     private Map<String, Object> params;
 
+    /**
+     * 商品名称
+     */
+    private String productName;
+    /** 仓库名 */
+    private String warehouseName;
+    /** 版本号 */
+    private Integer version;
+
     public String getSearchValue()
     {
         return searchValue;
@@ -110,5 +119,29 @@ public class BaseEntity implements Serializable
     public void setParams(Map<String, Object> params)
     {
         this.params = params;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getWarehouseName() {
+        return warehouseName;
+    }
+
+    public void setWarehouseName(String warehouseName) {
+        this.warehouseName = warehouseName;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 }
