@@ -26,16 +26,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectTWarehouseSurplusdetailsList" parameterType="TWarehouseSurplusdetails" resultMap="TWarehouseSurplusdetailsResult">
         select s.id, s.product_id, s.product_code, s.warehouse_id, s.price, s.makert_code, (case s.surplus_type when 1 then '入库' when 2 then '出库' end) surplusTypeName, (case s.detail_type when 1 then '生产入库' when 2 then '调拨入库' when 3 then '售后入库' when 4 then '其他入库' when 5 then '采购入库' when 6 then '销售出库' when 7 then '调拨出库' when 8 then '其他出库' end) detailTypeName, s.bak,p.product_name, w.warehouse_name from t_warehouse_surplusdetails s
         left join t_product p on s.product_id=p.id left join t_warehouse w on s.warehouse_id=w.id
-        <where>  
-            <if test="productId != null "> and product_id = #{productId}</if>
-            <if test="productCode != null "> and product_code = #{productCode}</if>
-            <if test="warehouseId != null "> and warehouse_id = #{warehouseId}</if>
-            <if test="price != null "> and price = #{price}</if>
-            <if test="makertCode != null "> and makert_code = #{makertCode}</if>
-            <if test="surplusType != null "> and surplus_type = #{surplusType}</if>
-            <if test="detailType != null "> and detail_type = #{detailType}</if>
-            <if test="bak != null  and bak != ''"> and bak = #{bak}</if>
-        </where>
+        left join sys_user u on u.user_id= w.sys_user_id
+        left join sys_dept d on u.dept_id = d.dept_id
+        where u.del_flag = '0'
+        <if test="productId != null "> and product_id = #{productId}</if>
+        <if test="productCode != null "> and product_code = #{productCode}</if>
+        <if test="warehouseId != null "> and warehouse_id = #{warehouseId}</if>
+        <if test="price != null "> and price = #{price}</if>
+        <if test="makertCode != null "> and makert_code = #{makertCode}</if>
+        <if test="surplusType != null "> and surplus_type = #{surplusType}</if>
+        <if test="detailType != null "> and detail_type = #{detailType}</if>
+        <if test="bak != null  and bak != ''"> and bak = #{bak}</if>
+        ${params.dataScope}
+
     </select>
     
     <select id="selectTWarehouseSurplusdetailsById" parameterType="Long" resultMap="TWarehouseSurplusdetailsResult">

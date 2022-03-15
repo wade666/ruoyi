@@ -71,4 +71,9 @@ public interface TWarehouseMapper
      */
     public int updateTWarehouseParent(TWarehouse tWarehouse);
 
+    /**
+     * 根据sysUserId查询仓库
+     */
+    List<Long> selectTWarehouseBySysUserId(Long sysUserId);
+
 }

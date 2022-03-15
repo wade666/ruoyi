@@ -1,6 +1,11 @@
 package com.ruoyi.goods.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import com.ruoyi.common.datascope.annotation.DataScope;
+import com.ruoyi.common.security.utils.SecurityUtils;
+import com.ruoyi.goods.mapper.TWarehouseMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.goods.mapper.TWarehousePurchaseMapper;
@@ -18,6 +23,8 @@ public class TWarehousePurchaseServiceImpl implements ITWarehousePurchaseService
 {
     @Autowired
     private TWarehousePurchaseMapper tWarehousePurchaseMapper;
+    @Autowired
+    private TWarehouseMapper tWarehouseMapper;
 
     /**
      * 查询采购申请
@@ -38,9 +45,19 @@ public class TWarehousePurchaseServiceImpl implements ITWarehousePurchaseService
      * @return 采购申请
      */
     @Override
+    @DataScope(deptAlias = "d", userAlias = "u")
     public List<TWarehousePurchase> selectTWarehousePurchaseList(TWarehousePurchase tWarehousePurchase)
     {
-        return tWarehousePurchaseMapper.selectTWarehousePurchaseList(tWarehousePurchase);
+        List<TWarehousePurchase> list = new ArrayList<>();
+        //本人及部门的采购单
+        if(tWarehousePurchase.getQueryType()!= null && tWarehousePurchase.getQueryType() == 1){
+            list = tWarehousePurchaseMapper.selectTWarehousePurchaseList(tWarehousePurchase);
+        }
+        //仓库下面的采购单
+        if(tWarehousePurchase.getQueryType()!= null && tWarehousePurchase.getQueryType() == 2){
+            list = tWarehousePurchaseMapper.selectTWarehousePurchaseListBySysUserId(tWarehousePurchase);
+        }
+        return list;
     }
 
     /**
@@ -52,6 +69,7 @@ public class TWarehousePurchaseServiceImpl implements ITWarehousePurchaseService
     @Override
     public int insertTWarehousePurchase(TWarehousePurchase tWarehousePurchase)
     {
+        tWarehousePurchase.setSysUserId(SecurityUtils.getUserId());
         return tWarehousePurchaseMapper.insertTWarehousePurchase(tWarehousePurchase);
     }
 

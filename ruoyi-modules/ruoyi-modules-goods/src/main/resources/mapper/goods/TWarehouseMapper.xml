@@ -31,25 +31,27 @@
     </sql>
 
     <select id="selectTWarehouseList" parameterType="TWarehouse" resultMap="TWarehouseResult">
-        select id, warehouse_name, sys_user_id, contact, address, phone, memo, (case is_default when 0 then '是' when 1 then '否' end) isDefaultName, (case state when 0 then '禁用' when 1 then '正常' end) stateName, app_key, app_secret, space, w.company_id, warehouse_type, parent_id,company_name from t_warehouse w
+        select w.id, w.warehouse_name, w.sys_user_id, w.contact, w.address, w.phone, w.memo, (case w.is_default when 0 then '是' when 1 then '否' end) isDefaultName, (case w.state when 0 then '禁用' when 1 then '正常' end) stateName, w.app_key, w.app_secret, w.space, w.company_id, w.warehouse_type, w.parent_id,c.company_name,u.nick_name nickName from t_warehouse w
         left join t_warehouse_company c on w.company_id=c.company_id
-        <where>
-            <if test="warehouseName != null  and warehouseName != ''"> and warehouse_name like concat('%', #{warehouseName}, '%')</if>
-            <if test="sysUserId != null "> and sys_user_id = #{sysUserId}</if>
-            <if test="contact != null  and contact != ''"> and contact = #{contact}</if>
-            <if test="address != null  and address != ''"> and address = #{address}</if>
-            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
-            <if test="memo != null  and memo != ''"> and memo = #{memo}</if>
-            <if test="isDefault != null "> and is_default = #{isDefault}</if>
-            <if test="state != null "> and state = #{state}</if>
-            <if test="appKey != null  and appKey != ''"> and app_key = #{appKey}</if>
-            <if test="appSecret != null  and appSecret != ''"> and app_secret = #{appSecret}</if>
-            <if test="version != null "> and version = #{version}</if>
-            <if test="space != null "> and space = #{space}</if>
-            <if test="companyId != null "> and company_id = #{companyId}</if>
-            <if test="warehouseType != null "> and warehouse_type = #{warehouseType}</if>
-            <if test="parentId != null "> and parent_id = #{parentId}</if>
-        </where>
+        left join sys_user u on u.user_id= w.sys_user_id
+        left join sys_dept d on u.dept_id = d.dept_id
+        where u.del_flag = '0'
+        <if test="warehouseName != null  and warehouseName != ''"> and warehouse_name like concat('%', #{warehouseName}, '%')</if>
+        <if test="sysUserId != null "> and sys_user_id = #{sysUserId}</if>
+        <if test="contact != null  and contact != ''"> and contact = #{contact}</if>
+        <if test="address != null  and address != ''"> and address = #{address}</if>
+        <if test="phone != null  and phone != ''"> and w.phone = #{phone}</if>
+        <if test="memo != null  and memo != ''"> and memo = #{memo}</if>
+        <if test="isDefault != null "> and is_default = #{isDefault}</if>
+        <if test="state != null "> and w.state = #{state}</if>
+        <if test="appKey != null  and appKey != ''"> and app_key = #{appKey}</if>
+        <if test="appSecret != null  and appSecret != ''"> and app_secret = #{appSecret}</if>
+        <if test="version != null "> and version = #{version}</if>
+        <if test="space != null "> and space = #{space}</if>
+        <if test="companyId != null "> and company_id = #{companyId}</if>
+        <if test="warehouseType != null "> and warehouse_type = #{warehouseType}</if>
+        <if test="parentId != null "> and w.parent_id = #{parentId}</if>
+        ${params.dataScope}
     </select>
 
     <select id="selectTWarehouseById" parameterType="Long" resultMap="TWarehouseResult">
@@ -147,4 +149,7 @@
         </trim>
         where parent_id = #{parentId}
     </update>
+    <select id="selectTWarehouseBySysUserId" parameterType="Long" resultType="Long">
+        select id from t_warehouse where sys_user_id = #{sysUserId}
+    </select>
 </mapper>

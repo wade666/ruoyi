@@ -2,7 +2,6 @@ package com.ruoyi.goods.mapper;
 
 import java.util.List;
 import com.ruoyi.goods.domain.TWarehousePurchase;
-
 /**
  * 采购申请Mapper接口
  * 
@@ -26,6 +25,10 @@ public interface TWarehousePurchaseMapper
      * @return 采购申请集合
      */
     public List<TWarehousePurchase> selectTWarehousePurchaseList(TWarehousePurchase tWarehousePurchase);
+    /**
+     * 查询采购申请列表,仓库管理员
+     */
+    public List<TWarehousePurchase> selectTWarehousePurchaseListBySysUserId(TWarehousePurchase tWarehousePurchase);
 
     /**
      * 新增采购申请

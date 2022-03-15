@@ -53,6 +53,12 @@ public class TWarehousePurchase extends BaseEntity
     /** 审核状态*/
     private String applyStateName;
 
+    /** 采购人id */
+    @Excel(name = "采购人id")
+    private Long sysUserId;
+    /** 查询类型 1查本人 2查仓库 */
+    private Integer queryType;
+
     public void setId(Long id) 
     {
         this.id = id;
@@ -134,6 +140,22 @@ public class TWarehousePurchase extends BaseEntity
         this.applyStateName = applyStateName;
     }
 
+    public Long getSysUserId() {
+        return sysUserId;
+    }
+
+    public void setSysUserId(Long sysUserId) {
+        this.sysUserId = sysUserId;
+    }
+
+    public Integer getQueryType() {
+        return queryType;
+    }
+
+    public void setQueryType(Integer queryType) {
+        this.queryType = queryType;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -146,6 +168,7 @@ public class TWarehousePurchase extends BaseEntity
             .append("realNum", getRealNum())
             .append("applyState", getApplyState())
             .append("remark", getRemark())
+            .append("sysUserId", getSysUserId())
             .toString();
     }
 }

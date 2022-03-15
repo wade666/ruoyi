@@ -2,6 +2,7 @@ package com.ruoyi.goods.service.impl;
 
 import java.util.List;
 import com.ruoyi.common.core.utils.DateUtils;
+import com.ruoyi.common.datascope.annotation.DataScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.goods.mapper.TWarehouseSurpluscheckMapper;
@@ -39,6 +40,7 @@ public class TWarehouseSurpluscheckServiceImpl implements ITWarehouseSurpluschec
      * @return 库存盘点
      */
     @Override
+    @DataScope(deptAlias = "d", userAlias = "u")
     public List<TWarehouseSurpluscheck> selectTWarehouseSurpluscheckList(TWarehouseSurpluscheck tWarehouseSurpluscheck)
     {
         return tWarehouseSurpluscheckMapper.selectTWarehouseSurpluscheckList(tWarehouseSurpluscheck);

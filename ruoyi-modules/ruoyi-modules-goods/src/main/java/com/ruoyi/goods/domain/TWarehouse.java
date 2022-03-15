@@ -80,6 +80,8 @@ public class TWarehouse extends BaseEntity
     private String isDefaultName;
     /** 状态*/
     private String stateName;
+    /** 用户昵称*/
+    private String nickName;
 
     public void setId(Long id)
     {
@@ -240,6 +242,14 @@ public class TWarehouse extends BaseEntity
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
     @Override

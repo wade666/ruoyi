@@ -1,9 +1,9 @@
 package com.ruoyi.goods.service.impl;
 
 import java.util.List;
-
 import com.ruoyi.common.core.exception.ServiceException;
 import com.ruoyi.common.core.utils.DateUtils;
+import com.ruoyi.common.datascope.annotation.DataScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.goods.mapper.TWarehouseMapper;
@@ -41,6 +41,7 @@ public class TWarehouseServiceImpl implements ITWarehouseService
      * @return 仓库
      */
     @Override
+    @DataScope(deptAlias = "d", userAlias = "u")
     public List<TWarehouse> selectTWarehouseList(TWarehouse tWarehouse)
     {
         tWarehouse.setParentId(0L);
