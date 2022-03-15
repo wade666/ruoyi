@@ -66,7 +66,7 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="序号" align="center" prop="companyId" />
       <el-table-column label="仓库所属公司名" align="center" prop="companyName" />
-      <el-table-column label="公司类型，1分销商，2供应商，3客户" align="center" prop="companyType" />
+      <el-table-column label="公司类型" align="center" prop="companyTypeName" />
       <el-table-column label="备注" align="center" prop="bak" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -102,7 +102,7 @@
         <el-form-item label="仓库所属公司名" prop="companyName">
           <el-input v-model="form.companyName" placeholder="请输入仓库所属公司名" />
         </el-form-item>
-        <el-form-item label="公司类型，1分销商，2供应商，3客户" prop="companyType">
+        <el-form-item label="公司类型" prop="companyType">
           <el-input v-model="form.companyType" placeholder="请输入公司类型" />
         </el-form-item>
         <el-form-item label="备注" prop="bak">

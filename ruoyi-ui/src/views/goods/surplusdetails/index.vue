@@ -1,28 +1,10 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="仓库名" prop="warehouseName">
+      <el-form-item label="商品id" prop="productId">
         <el-input
-          v-model="queryParams.warehouseName"
-          placeholder="请输入仓库名"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="联系人" prop="contact">
-        <el-input
-          v-model="queryParams.contact"
-          placeholder="请输入联系人"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="手机" prop="phone">
-        <el-input
-          v-model="queryParams.phone"
-          placeholder="请输入手机"
+          v-model="queryParams.productId"
+          placeholder="请输入商品id"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
@@ -42,7 +24,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['goods:warehouse:add']"
+          v-hasPermi="['goods:surplusdetails:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -53,10 +35,9 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['goods:warehouse:edit']"
+          v-hasPermi="['goods:surplusdetails:edit']"
         >修改</el-button>
       </el-col>
-      <!--
       <el-col :span="1.5">
         <el-button
           type="danger"
@@ -65,9 +46,8 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['goods:warehouse:remove']"
+          v-hasPermi="['goods:surplusdetails:remove']"
         >删除</el-button>
-        -->
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -76,24 +56,25 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['goods:warehouse:export']"
+          v-hasPermi="['goods:surplusdetails:export']"
         >导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
-    <el-table v-loading="loading" :data="warehouseList" @selection-change="handleSelectionChange">
+
+    <el-table v-loading="loading" :data="surplusdetailsList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="主键id" align="center" prop="id" />
+      <el-table-column label="商品id" align="center" prop="productId" />
+      <el-table-column label="商品名" align="center" prop="productName" />
+      <el-table-column label="商品编码id" align="center" prop="productCode" />
+      <el-table-column label="仓库id" align="center" prop="warehouseId" />
       <el-table-column label="仓库名" align="center" prop="warehouseName" />
-      <el-table-column label="仓库管理员" align="center" prop="nickName" />
-      <el-table-column label="联系人" align="center" prop="contact" />
-      <el-table-column label="地址" align="center" prop="address" />
-      <el-table-column label="手机" align="center" prop="phone" />
-      <el-table-column label="面积（平方米）" align="center" prop="space" />
-      <el-table-column label="仓库所属公司" align="center" prop="companyName" />
-      <el-table-column label="是否默认" align="center" prop="isDefaultName" />
-      <el-table-column label="状态" align="center" prop="stateName" />
-      <el-table-column label="备注" align="center" prop="memo" />
+      <el-table-column label="价格" align="center" prop="price" />
+      <el-table-column label="厂家编码" align="center" prop="makertCode" />
+      <el-table-column label="出入库类型" align="center" prop="surplusTypeName" />
+      <el-table-column label="出入库详情" align="center" prop="detailTypeName" />
+      <el-table-column label="备注" align="center" prop="bak" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -101,17 +82,15 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['goods:warehouse:edit']"
+            v-hasPermi="['goods:surplusdetails:edit']"
           >修改</el-button>
-          <!--
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['goods:warehouse:remove']"
+            v-hasPermi="['goods:surplusdetails:remove']"
           >删除</el-button>
-          -->
         </template>
       </el-table-column>
     </el-table>
@@ -124,44 +103,26 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改仓库对话框 -->
+    <!-- 添加或修改出入库明细对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="仓库名" prop="warehouseName">
-          <el-input v-model="form.warehouseName" placeholder="请输入仓库名" />
+        <el-form-item label="商品id" prop="productId">
+          <el-input v-model="form.productId" placeholder="请输入商品id" />
         </el-form-item>
-        <el-form-item label="管理员" prop="sysUserId">
-          <el-input v-model="form.sysUserId" placeholder="请输入仓库管理员" />
+        <el-form-item label="商品编码id" prop="productCode">
+          <el-input v-model="form.productCode" placeholder="请输入商品编码id" />
         </el-form-item>
-        <el-form-item label="联系人" prop="contact">
-          <el-input v-model="form.contact" placeholder="请输入联系人" />
+        <el-form-item label="仓库id" prop="warehouseId">
+          <el-input v-model="form.warehouseId" placeholder="请输入仓库id" />
         </el-form-item>
-        <el-form-item label="地址" prop="address">
-          <el-input v-model="form.address" placeholder="请输入地址" />
+        <el-form-item label="价格" prop="price">
+          <el-input v-model="form.price" placeholder="请输入价格" />
         </el-form-item>
-        <el-form-item label="手机" prop="phone">
-          <el-input v-model="form.phone" placeholder="请输入手机" />
+        <el-form-item label="厂家编码" prop="makertCode">
+          <el-input v-model="form.makertCode" placeholder="请输入厂家编码" />
         </el-form-item>
-        <el-form-item label="面积" prop="space">
-          <el-input v-model="form.space" placeholder="请输入面积" />
-        </el-form-item>
-        <el-form-item label="仓库所属公司id" prop="companyId">
-          <el-input v-model="form.companyId" placeholder="请输入仓库所属公司id" />
-        </el-form-item>
-        <el-form-item label="备注" prop="memo">
-          <el-input v-model="form.memo" placeholder="请输入备注" />
-        </el-form-item>
-        <el-form-item label="是否默认 0是1否" prop="isDefault">
-          <el-input v-model="form.isDefault" placeholder="请输入是否默认 0是1否" />
-        </el-form-item>
-        <el-form-item label="状态 0禁用 1正常" prop="state">
-          <el-input v-model="form.state" placeholder="请输入状态 0禁用 1正常" />
-        </el-form-item>
-        <el-form-item label="快递助手appKey" prop="appKey">
-          <el-input v-model="form.appKey" placeholder="请输入快递助手appKey" />
-        </el-form-item>
-        <el-form-item label="快递助手appSecret" prop="appSecret">
-          <el-input v-model="form.appSecret" placeholder="请输入快递助手appSecret" />
+        <el-form-item label="备注" prop="bak">
+          <el-input v-model="form.bak" placeholder="请输入备注" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -173,10 +134,10 @@
 </template>
 
 <script>
-import { listWarehouse, getWarehouse, delWarehouse, addWarehouse, updateWarehouse } from "@/api/goods/warehouse";
+import { listSurplusdetails, getSurplusdetails, delSurplusdetails, addSurplusdetails, updateSurplusdetails } from "@/api/goods/surplusdetails";
 
 export default {
-  name: "Warehouse",
+  name: "Surplusdetails",
   data() {
     return {
       // 遮罩层
@@ -191,8 +152,8 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 仓库表格数据
-      warehouseList: [],
+      // 出入库明细表格数据
+      surplusdetailsList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -201,26 +162,39 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        warehouseName: null,
-        sysUserId: null,
-        contact: null,
-        address: null,
-        phone: null,
-        memo: null,
-        isDefault: null,
-        state: null,
-        appKey: null,
-        appSecret: null
+        productId: null,
+        productCode: null,
+        warehouseId: null,
+        price: null,
+        makertCode: null,
+        surplusType: null,
+        detailType: null,
+        bak: null
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
-        warehouseName: [
-          { required: true, message: "仓库名不能为空", trigger: "blur" }
+        productId: [
+          { required: true, message: "商品id不能为空", trigger: "blur" }
         ],
-        sysUserId: [
-          { required: true, message: "仓库管理员不能为空", trigger: "blur" }
+        productCode: [
+          { required: true, message: "商品编码id不能为空", trigger: "blur" }
+        ],
+        warehouseId: [
+          { required: true, message: "仓库id不能为空", trigger: "blur" }
+        ],
+        price: [
+          { required: true, message: "价格不能为空", trigger: "blur" }
+        ],
+        makertCode: [
+          { required: true, message: "厂家编码不能为空", trigger: "blur" }
+        ],
+        surplusType: [
+          { required: true, message: "出入库类型不能为空", trigger: "change" }
+        ],
+        detailType: [
+          { required: true, message: "出入库详情不能为空", trigger: "change" }
         ],
       }
     };
@@ -229,11 +203,11 @@ export default {
     this.getList();
   },
   methods: {
-    /** 查询仓库列表 */
+    /** 查询出入库明细列表 */
     getList() {
       this.loading = true;
-      listWarehouse(this.queryParams).then(response => {
-        this.warehouseList = response.rows;
+      listSurplusdetails(this.queryParams).then(response => {
+        this.surplusdetailsList = response.rows;
         this.total = response.total;
         this.loading = false;
       });
@@ -247,18 +221,15 @@ export default {
     reset() {
       this.form = {
         id: null,
-        warehouseName: null,
-        sysUserId: null,
-        contact: null,
-        address: null,
-        phone: null,
-        memo: null,
-        isDefault: null,
-        state: null,
-        appKey: null,
-        appSecret: null,
+        productId: null,
+        productCode: null,
+        warehouseId: null,
+        price: null,
+        makertCode: null,
         createTime: null,
-        updateTime: null
+        surplusType: null,
+        detailType: null,
+        bak: null
       };
       this.resetForm("form");
     },
@@ -282,16 +253,16 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加仓库";
+      this.title = "添加出入库明细";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
       const id = row.id || this.ids
-      getWarehouse(id).then(response => {
+      getSurplusdetails(id).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改仓库";
+        this.title = "修改出入库明细";
       });
     },
     /** 提交按钮 */
@@ -299,13 +270,13 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.id != null) {
-            updateWarehouse(this.form).then(response => {
+            updateSurplusdetails(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addWarehouse(this.form).then(response => {
+            addSurplusdetails(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -317,8 +288,8 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
-      this.$modal.confirm('是否确认删除仓库编号为"' + ids + '"的数据项？').then(function() {
-        return delWarehouse(ids);
+      this.$modal.confirm('是否确认删除出入库明细编号为"' + ids + '"的数据项？').then(function() {
+        return delSurplusdetails(ids);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
@@ -326,9 +297,9 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('goods/warehouse/export', {
+      this.download('goods/surplusdetails/export', {
         ...this.queryParams
-      }, `warehouse_${new Date().getTime()}.xlsx`)
+      }, `surplusdetails_${new Date().getTime()}.xlsx`)
     }
   }
 };
