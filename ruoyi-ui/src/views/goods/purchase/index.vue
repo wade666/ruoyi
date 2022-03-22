@@ -1,19 +1,19 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="商品id" prop="productId">
+      <el-form-item label="仓库id" prop="warehouseId">
         <el-input
-          v-model="queryParams.productId"
-          placeholder="请输入商品id"
+          v-model="queryParams.warehouseId"
+          placeholder="请输入仓库id"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="仓库id" prop="warehouseId">
+      <el-form-item label="供货商id" prop="supplierId">
         <el-input
-          v-model="queryParams.warehouseId"
-          placeholder="请输入仓库id"
+          v-model="queryParams.supplierId"
+          placeholder="请输入供货商id"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
@@ -92,19 +92,12 @@
     <el-table v-loading="loading" :data="purchaseList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="主键id" align="center" prop="id" />
-      <el-table-column label="商品id" align="center" prop="productId" />
-      <el-table-column label="商品名" align="center" prop="productName" />
-      <el-table-column label="仓库id" align="center" prop="warehouseId" />
       <el-table-column label="仓库名" align="center" prop="warehouseName" />
-      <el-table-column label="采购价格" align="center" prop="applyPrice" />
-      <el-table-column label="采购数量" align="center" prop="applyNum" />
-      <el-table-column label="入库数量" align="center" prop="realNum" />
-      <el-table-column label="采购时间" align="center" prop="applyTime" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.applyTime, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
+      <el-table-column label="供货商" align="center" prop="supplierName" />
       <el-table-column label="审核状态" align="center" prop="applyStateName" />
+      <el-table-column label="预付款(元)" align="center" prop="deposit" />
+      <el-table-column label="创建人" align="center" prop="createBy" />
+      <el-table-column label="审核流程" align="center" prop="checkStep" />
       <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -143,11 +136,14 @@
         <el-form-item label="仓库id" prop="warehouseId">
           <el-input v-model="form.warehouseId" placeholder="请输入仓库id" />
         </el-form-item>
+        <el-form-item label="供货商id" prop="supplierId">
+          <el-input v-model="form.supplierId" placeholder="请输入供货商id" />
+        </el-form-item>
         <el-form-item label="采购数量" prop="applyNum">
           <el-input v-model="form.applyNum" placeholder="请输入采购数量" />
         </el-form-item>
-        <el-form-item label="采购价格" prop="applyPrice">
-          <el-input v-model="form.applyPrice" placeholder="请输入采购价格" />
+        <el-form-item label="采购总价" prop="applyPrice">
+          <el-input v-model="form.applyPrice" placeholder="请输入采购总价" />
         </el-form-item>
         <el-form-item label="采购时间" prop="applyTime">
           <el-date-picker clearable size="small"
@@ -157,11 +153,31 @@
             placeholder="选择采购时间">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="入库数量" prop="realNum">
-          <el-input v-model="form.realNum" placeholder="请输入入库数量" />
+        <el-form-item label="预计到货时间" prop="arriveTime">
+          <el-date-picker clearable size="small"
+            v-model="form.arriveTime"
+            type="date"
+            value-format="yyyy-MM-dd"
+            placeholder="选择预计到货时间">
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="预付款(元)" prop="deposit">
+          <el-input v-model="form.deposit" placeholder="请输入预付款(元)" />
+        </el-form-item>
+        <el-form-item label="待入库数量" prop="realNum">
+          <el-input v-model="form.realNum" placeholder="请输入待入库数量" />
+        </el-form-item>
+        <el-form-item label="已入库数量" prop="alreadyNum">
+          <el-input v-model="form.alreadyNum" placeholder="请输入已入库数量" />
+        </el-form-item>
+        <el-form-item label="货号" prop="goodsCode">
+          <el-input v-model="form.goodsCode" placeholder="请输入货号" />
         </el-form-item>
         <el-form-item label="审核状态" prop="applyState">
           <el-input v-model="form.applyState" placeholder="请输入审核状态" />
+        </el-form-item>
+        <el-form-item label="采购人id" prop="sysUserId">
+          <el-input v-model="form.sysUserId" placeholder="请输入采购人id" />
         </el-form-item>
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" placeholder="请输入备注" />
@@ -206,6 +222,7 @@ export default {
         pageSize: 10,
         productId: null,
         warehouseId: null,
+        supplierId: null,
         applyNum: null,
         applyPrice: null,
         applyTime: null,
@@ -222,11 +239,14 @@ export default {
         warehouseId: [
           { required: true, message: "仓库id不能为空", trigger: "blur" }
         ],
+        supplierId: [
+          { required: true, message: "供货商id不能为空", trigger: "blur" }
+        ],
         applyNum: [
           { required: true, message: "采购数量不能为空", trigger: "blur" }
         ],
         applyPrice: [
-          { required: true, message: "采购价格不能为空", trigger: "blur" }
+          { required: true, message: "采购总价不能为空", trigger: "blur" }
         ],
       }
     };
@@ -255,6 +275,7 @@ export default {
         id: null,
         productId: null,
         warehouseId: null,
+        supplierId: null,
         applyNum: null,
         applyPrice: null,
         applyTime: null,
