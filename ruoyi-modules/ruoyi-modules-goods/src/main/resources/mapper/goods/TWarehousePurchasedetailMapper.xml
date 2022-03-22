@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.goods.mapper.TWarehousePurchasedetailMapper">
+    
+    <resultMap type="TWarehousePurchasedetail" id="TWarehousePurchasedetailResult">
+        <result property="id"    column="id"    />
+        <result property="purchaseId"    column="purchase_id"    />
+        <result property="productId"    column="product_id"    />
+        <result property="applyNum"    column="apply_num"    />
+        <result property="applyPrice"    column="apply_price"    />
+        <result property="applyTime"    column="apply_time"    />
+        <result property="arriveTime"    column="arrive_time"    />
+        <result property="realNum"    column="real_num"    />
+        <result property="alreadyNum"    column="already_num"    />
+        <result property="goodsCode"    column="goods_code"    />
+        <result property="version"    column="version"    />
+        <result property="remark"    column="remark"    />
+        <result property="delFlag"    column="del_flag"    />
+    </resultMap>
+
+    <sql id="selectTWarehousePurchasedetailVo">
+        select id, purchase_id, product_id, apply_num, apply_price, apply_time, arrive_time, real_num, already_num, goods_code, version, remark, del_flag from t_warehouse_purchasedetail
+    </sql>
+
+    <select id="selectTWarehousePurchasedetailList" parameterType="TWarehousePurchasedetail" resultMap="TWarehousePurchasedetailResult">
+        <include refid="selectTWarehousePurchasedetailVo"/>
+        <where>  
+            <if test="purchaseId != null "> and purchase_id = #{purchaseId}</if>
+            <if test="productId != null "> and product_id = #{productId}</if>
+            <if test="applyNum != null "> and apply_num = #{applyNum}</if>
+            <if test="applyPrice != null "> and apply_price = #{applyPrice}</if>
+            <if test="applyTime != null "> and apply_time = #{applyTime}</if>
+            <if test="arriveTime != null "> and arrive_time = #{arriveTime}</if>
+            <if test="realNum != null "> and real_num = #{realNum}</if>
+            <if test="alreadyNum != null "> and already_num = #{alreadyNum}</if>
+            <if test="goodsCode != null  and goodsCode != ''"> and goods_code = #{goodsCode}</if>
+            <if test="version != null "> and version = #{version}</if>
+        </where>
+    </select>
+    
+    <select id="selectTWarehousePurchasedetailById" parameterType="Long" resultMap="TWarehousePurchasedetailResult">
+        <include refid="selectTWarehousePurchasedetailVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTWarehousePurchasedetail" parameterType="TWarehousePurchasedetail" useGeneratedKeys="true" keyProperty="id">
+        insert into t_warehouse_purchasedetail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="purchaseId != null">purchase_id,</if>
+            <if test="productId != null">product_id,</if>
+            <if test="applyNum != null">apply_num,</if>
+            <if test="applyPrice != null">apply_price,</if>
+            <if test="applyTime != null">apply_time,</if>
+            <if test="arriveTime != null">arrive_time,</if>
+            <if test="realNum != null">real_num,</if>
+            <if test="alreadyNum != null">already_num,</if>
+            <if test="goodsCode != null">goods_code,</if>
+            <if test="version != null">version,</if>
+            <if test="remark != null">remark,</if>
+            <if test="delFlag != null">del_flag,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="purchaseId != null">#{purchaseId},</if>
+            <if test="productId != null">#{productId},</if>
+            <if test="applyNum != null">#{applyNum},</if>
+            <if test="applyPrice != null">#{applyPrice},</if>
+            <if test="applyTime != null">#{applyTime},</if>
+            <if test="arriveTime != null">#{arriveTime},</if>
+            <if test="realNum != null">#{realNum},</if>
+            <if test="alreadyNum != null">#{alreadyNum},</if>
+            <if test="goodsCode != null">#{goodsCode},</if>
+            <if test="version != null">#{version},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTWarehousePurchasedetail" parameterType="TWarehousePurchasedetail">
+        update t_warehouse_purchasedetail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="purchaseId != null">purchase_id = #{purchaseId},</if>
+            <if test="productId != null">product_id = #{productId},</if>
+            <if test="applyNum != null">apply_num = #{applyNum},</if>
+            <if test="applyPrice != null">apply_price = #{applyPrice},</if>
+            <if test="applyTime != null">apply_time = #{applyTime},</if>
+            <if test="arriveTime != null">arrive_time = #{arriveTime},</if>
+            <if test="realNum != null">real_num = #{realNum},</if>
+            <if test="alreadyNum != null">already_num = #{alreadyNum},</if>
+            <if test="goodsCode != null">goods_code = #{goodsCode},</if>
+            <if test="version != null">version = #{version},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTWarehousePurchasedetailById" parameterType="Long">
+        delete from t_warehouse_purchasedetail where id = #{id}
+    </delete>
+
+    <delete id="deleteTWarehousePurchasedetailByIds" parameterType="String">
+        delete from t_warehouse_purchasedetail where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

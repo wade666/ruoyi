@@ -2,15 +2,24 @@ package com.ruoyi.goods.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import com.ruoyi.common.core.exception.ServiceException;
+import com.ruoyi.common.core.utils.DateUtils;
+import com.ruoyi.common.core.utils.StringUtils;
 import com.ruoyi.common.datascope.annotation.DataScope;
 import com.ruoyi.common.security.utils.SecurityUtils;
-import com.ruoyi.goods.mapper.TWarehouseMapper;
+import com.ruoyi.goods.domain.TPurchaseReviewer;
+import com.ruoyi.goods.domain.TWarehousePurchasedetail;
+import com.ruoyi.goods.domain.TWarehousePurchaserecord;
+import com.ruoyi.goods.domain.vo.DictType;
+import com.ruoyi.goods.mapper.*;
+import com.ruoyi.goods.mapper.TWarehousePurchaserecordMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ruoyi.goods.mapper.TWarehousePurchaseMapper;
 import com.ruoyi.goods.domain.TWarehousePurchase;
 import com.ruoyi.goods.service.ITWarehousePurchaseService;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 采购申请Service业务层处理
@@ -24,7 +33,11 @@ public class TWarehousePurchaseServiceImpl implements ITWarehousePurchaseService
     @Autowired
     private TWarehousePurchaseMapper tWarehousePurchaseMapper;
     @Autowired
-    private TWarehouseMapper tWarehouseMapper;
+    private TWarehousePurchasedetailMapper tWarehousePurchasedetailMapper;
+    @Autowired
+    private TPurchaseReviewerMapper tPurchaseReviewerMapper;
+    @Autowired
+    private TWarehousePurchaserecordMapper tWarehousePurchaserecordMapper;
 
     /**
      * 查询采购申请
@@ -67,21 +80,103 @@ public class TWarehousePurchaseServiceImpl implements ITWarehousePurchaseService
      * @return 结果
      */
     @Override
+    @Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.REQUIRED)
     public int insertTWarehousePurchase(TWarehousePurchase tWarehousePurchase)
     {
+        setCheckStep(tWarehousePurchase);
         tWarehousePurchase.setSysUserId(SecurityUtils.getUserId());
-        return tWarehousePurchaseMapper.insertTWarehousePurchase(tWarehousePurchase);
+        tWarehousePurchase.setCreateBy(SecurityUtils.getUsername());
+        tWarehousePurchase.setCreateTime(DateUtils.getNowDate());
+        int count = tWarehousePurchaseMapper.insertTWarehousePurchase(tWarehousePurchase);
+        List<TWarehousePurchasedetail> detailList = tWarehousePurchase.getDetailList();
+        if(detailList != null && detailList.size()>0){
+            for(TWarehousePurchasedetail detail : detailList){
+                detail.setPurchaseId(tWarehousePurchase.getId());
+                tWarehousePurchasedetailMapper.insertTWarehousePurchasedetail(detail);
+            }
+        }
+        return count;
     }
-
+    public void setCheckStep(TWarehousePurchase tWarehousePurchase){
+        TPurchaseReviewer reviewer = new TPurchaseReviewer();
+        reviewer.setCheckType(DictType.CHECKTYPE_PURCHASE);
+        List<TPurchaseReviewer> list = tPurchaseReviewerMapper.selectTPurchaseReviewerList(reviewer);
+        String checkStep = "";
+        String checkIds = "";
+        if(list == null || list.size() == 0){
+            throw new ServiceException("请先到系统配置采购审核人");
+        }
+        for (TPurchaseReviewer domain : list) {
+            checkStep = checkStep + domain.getUserName() + "—";
+            checkIds = checkIds + domain.getCheckUserId() + ",";
+        }
+        tWarehousePurchase.setNowCheckId(list.get(0).getCheckUserId());
+        checkStep = checkStep.substring(0,checkStep.lastIndexOf("—"));
+        tWarehousePurchase.setCheckStep(checkStep);
+        checkIds = checkIds.substring(0,checkIds.lastIndexOf(","));
+        tWarehousePurchase.setCheckIds(checkIds);
+        tWarehousePurchase.setCheckIndex(0);
+        tWarehousePurchase.setApplyState(1);//1 审核中
+    }
     /**
-     * 修改采购申请
-     * 
-     * @param tWarehousePurchase 采购申请
-     * @return 结果
+     * 修改采购申请-拒绝时可修改
      */
     @Override
     public int updateTWarehousePurchase(TWarehousePurchase tWarehousePurchase)
     {
+        setCheckStep(tWarehousePurchase);
+        tWarehousePurchase.setUpdateTime(DateUtils.getNowDate());
+        int count = tWarehousePurchaseMapper.updateTWarehousePurchase(tWarehousePurchase);
+        List<TWarehousePurchasedetail> detailList = tWarehousePurchase.getDetailList();
+        if(detailList != null && detailList.size()>0){
+            for(TWarehousePurchasedetail detail : detailList){
+                tWarehousePurchasedetailMapper.updateTWarehousePurchasedetail(detail);
+            }
+        }
+        return count;
+    }
+    /**
+     * 采购申请审核
+     */
+    @Override
+    public int updateTWarehousePurchaseCheck(TWarehousePurchase tWarehousePurchase)
+    {
+        String bak = "";
+        Integer state = null;
+        TWarehousePurchase tWarehouse = selectTWarehousePurchaseById(tWarehousePurchase.getId());
+        if(tWarehouse == null){
+            throw new ServiceException("记录不存在");
+        }
+        if(tWarehousePurchase.getApplyState() != null && tWarehousePurchase.getApplyState() == 2){
+            bak = "审核通过";
+            String [] ids = tWarehouse.getCheckIds().split(",");
+            int index = tWarehouse.getCheckIndex()+1;
+            if(index < ids.length){
+                tWarehousePurchase.setNowCheckId(Long.valueOf(ids[index]));
+                tWarehousePurchase.setCheckIndex(index);
+            }
+            if(index == ids.length){
+                tWarehousePurchase.setNowCheckId(null);
+                //最后一个审核人并且同意
+                state = 2;
+            }
+        }
+        if(tWarehousePurchase.getApplyState() != null && tWarehousePurchase.getApplyState() == 3){
+            bak = "审核拒绝";
+            state = 3;
+        }
+        if(StringUtils.isEmpty(tWarehousePurchase.getRemark())){
+            tWarehousePurchase.setRemark(SecurityUtils.getUsername()+ bak);
+        }
+        tWarehousePurchase.setApplyState(state);
+        tWarehousePurchase.setUpdateTime(DateUtils.getNowDate());
+        TWarehousePurchaserecord record = new TWarehousePurchaserecord();
+        record.setPurchaseId(tWarehousePurchase.getId());
+        record.setCheckOper(bak);
+        record.setSysUserId(SecurityUtils.getUserId());
+        record.setCreateTime(DateUtils.getNowDate());
+        record.setRemark(tWarehousePurchase.getRemark());
+        tWarehousePurchaserecordMapper.insertTWarehousePurchaserecord(record);
         return tWarehousePurchaseMapper.updateTWarehousePurchase(tWarehousePurchase);
     }
 
@@ -107,5 +202,11 @@ public class TWarehousePurchaseServiceImpl implements ITWarehousePurchaseService
     public int deleteTWarehousePurchaseById(Long id)
     {
         return tWarehousePurchaseMapper.deleteTWarehousePurchaseById(id);
+    }
+
+    @Override
+    public List<TWarehousePurchase> checkList(TWarehousePurchase tWarehousePurchase) {
+        tWarehousePurchase.setNowCheckId(SecurityUtils.getUserId());
+        return tWarehousePurchaseMapper.checkList(tWarehousePurchase);
     }
 }

@@ -30,16 +30,25 @@ public class TProductController extends BaseController {
     private ITProductService tProductService;
 
     /**
-     * 查询商品列表
+     * 查询商品列表-数据权限-所有
      */
     @RequiresPermissions("goods:product:list")
-    @GetMapping("/list")
+    @GetMapping("/listByProject")
     public TableDataInfo list(TProduct tProduct) {
         startPage();
         List<TProduct> list = tProductService.selectTProductList(tProduct);
         return getDataTable(list);
     }
-
+    /**
+     * 查询商品列表-数据权限-动态
+     */
+    @RequiresPermissions("goods:product:list")
+    @GetMapping("/list")
+    public TableDataInfo listByProject(TProduct tProduct) {
+        startPage();
+        List<TProduct> list = tProductService.selectTProductListByProject(tProduct);
+        return getDataTable(list);
+    }
     /**
      * 导出商品列表
      */

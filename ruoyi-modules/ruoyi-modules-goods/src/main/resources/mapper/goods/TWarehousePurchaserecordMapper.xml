@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.goods.mapper.TWarehousePurchaserecordMapper">
+    
+    <resultMap type="TWarehousePurchaserecord" id="TWarehousePurchaserecordResult">
+        <result property="id"    column="id"    />
+        <result property="purchaseId"    column="purchase_id"    />
+        <result property="checkOper"    column="check_oper"    />
+        <result property="sysUserId"    column="sys_user_id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectTWarehousePurchaserecordVo">
+        select id, purchase_id, check_oper, sys_user_id, create_time, remark from t_warehouse_purchaserecord
+    </sql>
+
+    <select id="selectTWarehousePurchaserecordList" parameterType="TWarehousePurchaserecord" resultMap="TWarehousePurchaserecordResult">
+        <include refid="selectTWarehousePurchaserecordVo"/>
+        <where>  
+            <if test="purchaseId != null "> and purchase_id = #{purchaseId}</if>
+            <if test="checkOper != null  and checkOper != ''"> and check_oper = #{checkOper}</if>
+            <if test="sysUserId != null "> and sys_user_id = #{sysUserId}</if>
+        </where>
+    </select>
+    
+    <select id="selectTWarehousePurchaserecordById" parameterType="Long" resultMap="TWarehousePurchaserecordResult">
+        <include refid="selectTWarehousePurchaserecordVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTWarehousePurchaserecord" parameterType="TWarehousePurchaserecord" useGeneratedKeys="true" keyProperty="id">
+        insert into t_warehouse_purchaserecord
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="purchaseId != null">purchase_id,</if>
+            <if test="checkOper != null">check_oper,</if>
+            <if test="sysUserId != null">sys_user_id,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="purchaseId != null">#{purchaseId},</if>
+            <if test="checkOper != null">#{checkOper},</if>
+            <if test="sysUserId != null">#{sysUserId},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTWarehousePurchaserecord" parameterType="TWarehousePurchaserecord">
+        update t_warehouse_purchaserecord
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="purchaseId != null">purchase_id = #{purchaseId},</if>
+            <if test="checkOper != null">check_oper = #{checkOper},</if>
+            <if test="sysUserId != null">sys_user_id = #{sysUserId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTWarehousePurchaserecordById" parameterType="Long">
+        delete from t_warehouse_purchaserecord where id = #{id}
+    </delete>
+
+    <delete id="deleteTWarehousePurchaserecordByIds" parameterType="String">
+        delete from t_warehouse_purchaserecord where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

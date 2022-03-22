@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.goods.mapper.TPurchaseReviewerMapper">
+    
+    <resultMap type="TPurchaseReviewer" id="TPurchaseReviewerResult">
+        <result property="id"    column="id"    />
+        <result property="checkLevel"    column="check_level"    />
+        <result property="checkType"    column="check_type"    />
+        <result property="checkRole"    column="check_role"    />
+        <result property="checkUserId"    column="check_user_id"    />
+        <result property="refuseLevel"    column="refuse_level"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="version"    column="version"    />
+        <result property="remark"    column="remark"    />
+        <result property="userName"    column="user_name"    />
+        <result property="nickName"    column="nick_name"    />
+    </resultMap>
+
+    <sql id="selectTPurchaseReviewerVo">
+        select id, check_level, check_type, check_role, check_user_id, refuse_level, create_time, version, remark from t_purchase_reviewer
+    </sql>
+
+    <select id="selectTPurchaseReviewerList" parameterType="TPurchaseReviewer" resultMap="TPurchaseReviewerResult">
+        select r.id, r.check_level,r.check_type, r.check_role, r.check_user_id, r.refuse_level, r.create_time, r.version, r.remark,u.user_name,u.nick_name from t_purchase_reviewer r
+        left join sys_user u on r.check_user_id = u.user_id
+        where check_type = #{checkType}
+        order by r.check_level
+    </select>
+    
+    <select id="selectTPurchaseReviewerById" parameterType="Long" resultMap="TPurchaseReviewerResult">
+        <include refid="selectTPurchaseReviewerVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTPurchaseReviewer" parameterType="TPurchaseReviewer" useGeneratedKeys="true" keyProperty="id">
+        insert into t_purchase_reviewer
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="checkLevel != null">check_level,</if>
+            <if test="checkType != null">check_type,</if>
+            <if test="checkRole != null">check_role,</if>
+            <if test="checkUserId != null">check_user_id,</if>
+            <if test="refuseLevel != null">refuse_level,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="version != null">version,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="checkLevel != null">#{checkLevel},</if>
+            <if test="checkType != null">#{checkType},</if>
+            <if test="checkRole != null">#{checkRole},</if>
+            <if test="checkUserId != null">#{checkUserId},</if>
+            <if test="refuseLevel != null">#{refuseLevel},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="version != null">#{version},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTPurchaseReviewer" parameterType="TPurchaseReviewer">
+        update t_purchase_reviewer
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="checkLevel != null">check_level = #{checkLevel},</if>
+            <if test="checkType != null">check_type = #{checkType},</if>
+            <if test="checkRole != null">check_role = #{checkRole},</if>
+            <if test="checkUserId != null">check_user_id = #{checkUserId},</if>
+            <if test="refuseLevel != null">refuse_level = #{refuseLevel},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="version != null">version = #{version},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTPurchaseReviewerById" parameterType="Long">
+        delete from t_purchase_reviewer where id = #{id}
+    </delete>
+
+    <delete id="deleteTPurchaseReviewerByIds" parameterType="String">
+        delete from t_purchase_reviewer where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectByCheckUserId" parameterType="Long" resultMap="TPurchaseReviewerResult">
+        <include refid="selectTPurchaseReviewerVo"/>
+        where check_user_id = #{userId}
+    </select>
+
+    <select id="selectByNextLevel" parameterType="Integer" resultMap="TPurchaseReviewerResult">
+        <include refid="selectTPurchaseReviewerVo"/>
+        where check_level = #{nextLevel}
+    </select>
+</mapper>

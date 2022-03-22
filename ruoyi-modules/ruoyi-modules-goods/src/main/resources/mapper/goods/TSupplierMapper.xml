@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.goods.mapper.TSupplierMapper">
+    
+    <resultMap type="TSupplier" id="TSupplierResult">
+        <result property="id"    column="id"    />
+        <result property="supplierCode"    column="supplier_code"    />
+        <result property="supplierName"    column="supplier_name"    />
+        <result property="website"    column="website"    />
+        <result property="startPay"    column="start_pay"    />
+        <result property="provinceCode"    column="province_code"    />
+        <result property="cityCode"    column="city_code"    />
+        <result property="areaCode"    column="area_code"    />
+        <result property="address"    column="address"    />
+        <result property="postalCode"    column="postal_code"    />
+        <result property="contactName"    column="contact_name"    />
+        <result property="contactPhone"    column="contact_phone"    />
+        <result property="fixedTel"    column="fixed_tel"    />
+        <result property="taxNum"    column="tax_num"    />
+        <result property="bankName"    column="bank_name"    />
+        <result property="bankAccount"    column="bank_account"    />
+        <result property="arrears"    column="arrears"    />
+        <result property="supplierState"    column="supplier_state"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="version"    column="version"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectTSupplierVo">
+        select id, supplier_code, supplier_name, website, start_pay, province_code, city_code, area_code, address, postal_code, contact_name, contact_phone, fixed_tel, tax_num, bank_name, bank_account, arrears, supplier_state, create_by, create_time, update_time, version, remark from t_supplier
+    </sql>
+
+    <select id="selectTSupplierList" parameterType="TSupplier" resultMap="TSupplierResult">
+        <include refid="selectTSupplierVo"/>
+        <where>  
+            <if test="supplierCode != null  and supplierCode != ''"> and supplier_code = #{supplierCode}</if>
+            <if test="supplierName != null  and supplierName != ''"> and supplier_name like concat('%', #{supplierName}, '%')</if>
+            <if test="website != null  and website != ''"> and website = #{website}</if>
+            <if test="startPay != null "> and start_pay = #{startPay}</if>
+            <if test="provinceCode != null "> and province_code = #{provinceCode}</if>
+            <if test="cityCode != null "> and city_code = #{cityCode}</if>
+            <if test="areaCode != null "> and area_code = #{areaCode}</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="postalCode != null "> and postal_code = #{postalCode}</if>
+            <if test="contactName != null  and contactName != ''"> and contact_name like concat('%', #{contactName}, '%')</if>
+            <if test="contactPhone != null  and contactPhone != ''"> and contact_phone = #{contactPhone}</if>
+            <if test="fixedTel != null  and fixedTel != ''"> and fixed_tel = #{fixedTel}</if>
+            <if test="taxNum != null  and taxNum != ''"> and tax_num = #{taxNum}</if>
+            <if test="bankName != null  and bankName != ''"> and bank_name like concat('%', #{bankName}, '%')</if>
+            <if test="bankAccount != null  and bankAccount != ''"> and bank_account = #{bankAccount}</if>
+            <if test="arrears != null "> and arrears = #{arrears}</if>
+            <if test="supplierState != null "> and supplier_state = #{supplierState}</if>
+            <if test="version != null "> and version = #{version}</if>
+        </where>
+    </select>
+    
+    <select id="selectTSupplierById" parameterType="Long" resultMap="TSupplierResult">
+        <include refid="selectTSupplierVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTSupplier" parameterType="TSupplier" useGeneratedKeys="true" keyProperty="id">
+        insert into t_supplier
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="supplierCode != null and supplierCode != ''">supplier_code,</if>
+            <if test="supplierName != null and supplierName != ''">supplier_name,</if>
+            <if test="website != null">website,</if>
+            <if test="startPay != null">start_pay,</if>
+            <if test="provinceCode != null">province_code,</if>
+            <if test="cityCode != null">city_code,</if>
+            <if test="areaCode != null">area_code,</if>
+            <if test="address != null">address,</if>
+            <if test="postalCode != null">postal_code,</if>
+            <if test="contactName != null">contact_name,</if>
+            <if test="contactPhone != null">contact_phone,</if>
+            <if test="fixedTel != null">fixed_tel,</if>
+            <if test="taxNum != null">tax_num,</if>
+            <if test="bankName != null">bank_name,</if>
+            <if test="bankAccount != null">bank_account,</if>
+            <if test="arrears != null">arrears,</if>
+            <if test="supplierState != null">supplier_state,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="version != null">version,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="supplierCode != null and supplierCode != ''">#{supplierCode},</if>
+            <if test="supplierName != null and supplierName != ''">#{supplierName},</if>
+            <if test="website != null">#{website},</if>
+            <if test="startPay != null">#{startPay},</if>
+            <if test="provinceCode != null">#{provinceCode},</if>
+            <if test="cityCode != null">#{cityCode},</if>
+            <if test="areaCode != null">#{areaCode},</if>
+            <if test="address != null">#{address},</if>
+            <if test="postalCode != null">#{postalCode},</if>
+            <if test="contactName != null">#{contactName},</if>
+            <if test="contactPhone != null">#{contactPhone},</if>
+            <if test="fixedTel != null">#{fixedTel},</if>
+            <if test="taxNum != null">#{taxNum},</if>
+            <if test="bankName != null">#{bankName},</if>
+            <if test="bankAccount != null">#{bankAccount},</if>
+            <if test="arrears != null">#{arrears},</if>
+            <if test="supplierState != null">#{supplierState},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="version != null">#{version},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTSupplier" parameterType="TSupplier">
+        update t_supplier
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="supplierCode != null and supplierCode != ''">supplier_code = #{supplierCode},</if>
+            <if test="supplierName != null and supplierName != ''">supplier_name = #{supplierName},</if>
+            <if test="website != null">website = #{website},</if>
+            <if test="startPay != null">start_pay = #{startPay},</if>
+            <if test="provinceCode != null">province_code = #{provinceCode},</if>
+            <if test="cityCode != null">city_code = #{cityCode},</if>
+            <if test="areaCode != null">area_code = #{areaCode},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="postalCode != null">postal_code = #{postalCode},</if>
+            <if test="contactName != null">contact_name = #{contactName},</if>
+            <if test="contactPhone != null">contact_phone = #{contactPhone},</if>
+            <if test="fixedTel != null">fixed_tel = #{fixedTel},</if>
+            <if test="taxNum != null">tax_num = #{taxNum},</if>
+            <if test="bankName != null">bank_name = #{bankName},</if>
+            <if test="bankAccount != null">bank_account = #{bankAccount},</if>
+            <if test="arrears != null">arrears = #{arrears},</if>
+            <if test="supplierState != null">supplier_state = #{supplierState},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="version != null">version = #{version},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTSupplierById" parameterType="Long">
+        delete from t_supplier where id = #{id}
+    </delete>
+
+    <delete id="deleteTSupplierByIds" parameterType="String">
+        delete from t_supplier where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

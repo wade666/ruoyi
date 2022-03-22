@@ -2,6 +2,8 @@ package com.ruoyi.goods.domain;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -21,115 +23,142 @@ public class TWarehousePurchase extends BaseEntity
     /** 主键id */
     private Long id;
 
-    /** 商品id */
-    @Excel(name = "商品id")
-    private Long productId;
-
     /** 仓库id */
     @Excel(name = "仓库id")
     private Long warehouseId;
+    private String warehouseName;
 
-    /** 采购数量 */
-    @Excel(name = "采购数量")
-    private Integer applyNum;
+    /** 供货商id */
+    @Excel(name = "供货商id")
+    private Long supplierId;
+    private String supplierName;
 
-    /** 采购价格 */
-    @Excel(name = "采购价格")
-    private BigDecimal applyPrice;
-
-    /** 采购时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "采购时间", width = 30, dateFormat = "yyyy-MM-dd")
-    private Date applyTime;
-
-    /** 入库数量 */
-    @Excel(name = "入库数量")
-    private Integer realNum;
-
-    /** 审核状态（1待审核 2通过 3拒绝 4完成） */
-    @Excel(name = "审核状态", readConverterExp = "1=待审核,2=通过,3=拒绝,4=完成")
+    /** 审核状态（0待提交 1审核中 2审核通过 3审核拒绝） */
+    @Excel(name = "审核状态", readConverterExp = "0=待提交,1=审核中,2=审核通过,3=审核拒绝")
     private Integer applyState;
-
-    /** 审核状态*/
     private String applyStateName;
 
     /** 采购人id */
     @Excel(name = "采购人id")
     private Long sysUserId;
+
+    /** 当前审核人id */
+    private Long nowCheckId;
+
+    /** 审核人流程 */
+    @Excel(name = "审核人流程")
+    private String checkStep;
+
+    /** 审核人ids */
+    private String checkIds;
+
+    /** 当前审核人数组下标 */
+    private Integer checkIndex;
+
+    /** 版本号 */
+    private Integer version;
+
     /** 查询类型 1查本人 2查仓库 */
     private Integer queryType;
 
-    public void setId(Long id) 
+    /** 审核人账户 */
+    private String userName;
+
+    /** 删除标志（1代表存在 2代表删除） */
+    private Integer delFlag;
+
+    /** 预付款,元 */
+    @Excel(name = "预付款,元")
+    private BigDecimal deposit;
+
+    /** 采购详情 */
+    private List<TWarehousePurchasedetail> detailList;
+
+    public List<TWarehousePurchasedetail> getDetailList() {
+        return detailList;
+    }
+
+    public void setDetailList(List<TWarehousePurchasedetail> detailList) {
+        this.detailList = detailList;
+    }
+
+    public BigDecimal getDeposit() {
+        return deposit;
+    }
+
+    public void setDeposit(BigDecimal deposit) {
+        this.deposit = deposit;
+    }
+
+    public Integer getDelFlag() {
+        return delFlag;
+    }
+    public void setDelFlag(Integer delFlag) {
+        this.delFlag = delFlag;
+    }
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getCheckIds() {
+        return checkIds;
+    }
+
+    public void setCheckIds(String checkIds) {
+        this.checkIds = checkIds;
+    }
+
+    public Integer getCheckIndex() {
+        return checkIndex;
+    }
+
+    public void setCheckIndex(Integer checkIndex) {
+        this.checkIndex = checkIndex;
+    }
+
+    public void setId(Long id)
     {
         this.id = id;
     }
 
-    public Long getId() 
+    public Long getId()
     {
         return id;
     }
-    public void setProductId(Long productId) 
-    {
-        this.productId = productId;
-    }
-
-    public Long getProductId() 
-    {
-        return productId;
-    }
-    public void setWarehouseId(Long warehouseId) 
-    {
-        this.warehouseId = warehouseId;
-    }
-
-    public Long getWarehouseId() 
+    public Long getWarehouseId()
     {
         return warehouseId;
     }
-    public void setApplyNum(Integer applyNum) 
+    public void setSupplierId(Long supplierId)
     {
-        this.applyNum = applyNum;
+        this.supplierId = supplierId;
     }
 
-    public Integer getApplyNum() 
-    {
-        return applyNum;
-    }
-    public void setApplyPrice(BigDecimal applyPrice) 
-    {
-        this.applyPrice = applyPrice;
-    }
-
-    public BigDecimal getApplyPrice() 
-    {
-        return applyPrice;
-    }
-    public void setApplyTime(Date applyTime) 
-    {
-        this.applyTime = applyTime;
-    }
-
-    public Date getApplyTime() 
-    {
-        return applyTime;
-    }
-    public void setRealNum(Integer realNum) 
-    {
-        this.realNum = realNum;
-    }
-
-    public Integer getRealNum() 
-    {
-        return realNum;
-    }
-    public void setApplyState(Integer applyState) 
-    {
-        this.applyState = applyState;
-    }
-
-    public Integer getApplyState() 
+    public Integer getApplyState()
     {
         return applyState;
+    }
+    public void setSysUserId(Long sysUserId)
+    {
+        this.sysUserId = sysUserId;
+    }
+
+    public Long getSysUserId()
+    {
+        return sysUserId;
+    }
+    public void setVersion(Integer version)
+    {
+        this.version = version;
+    }
+
+    public Integer getVersion()
+    {
+        return version;
     }
 
     public String getApplyStateName() {
@@ -140,14 +169,6 @@ public class TWarehousePurchase extends BaseEntity
         this.applyStateName = applyStateName;
     }
 
-    public Long getSysUserId() {
-        return sysUserId;
-    }
-
-    public void setSysUserId(Long sysUserId) {
-        this.sysUserId = sysUserId;
-    }
-
     public Integer getQueryType() {
         return queryType;
     }
@@ -155,20 +176,66 @@ public class TWarehousePurchase extends BaseEntity
     public void setQueryType(Integer queryType) {
         this.queryType = queryType;
     }
+    @Override
+    public String getWarehouseName() {
+        return warehouseName;
+    }
+
+    @Override
+    public void setWarehouseName(String warehouseName) {
+        this.warehouseName = warehouseName;
+    }
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
+    }
+
+    public Long getNowCheckId() {
+        return nowCheckId;
+    }
+
+    public void setNowCheckId(Long nowCheckId) {
+        this.nowCheckId = nowCheckId;
+    }
+
+    public String getCheckStep() {
+        return checkStep;
+    }
+
+    public void setCheckStep(String checkStep) {
+        this.checkStep = checkStep;
+    }
+
+    public void setWarehouseId(Long warehouseId) {
+        this.warehouseId = warehouseId;
+    }
+
+    public Long getSupplierId() {
+        return supplierId;
+    }
+
+    public void setApplyState(Integer applyState) {
+        this.applyState = applyState;
+    }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
-            .append("productId", getProductId())
-            .append("warehouseId", getWarehouseId())
-            .append("applyNum", getApplyNum())
-            .append("applyPrice", getApplyPrice())
-            .append("applyTime", getApplyTime())
-            .append("realNum", getRealNum())
-            .append("applyState", getApplyState())
-            .append("remark", getRemark())
-            .append("sysUserId", getSysUserId())
-            .toString();
+                .append("id", getId())
+                .append("warehouseId", getWarehouseId())
+                .append("applyState", getApplyState())
+                .append("sysUserId", getSysUserId())
+                .append("createBy", getCreateBy())
+                .append("nowCheckId", getNowCheckId())
+                .append("checkStep", getCheckStep())
+                .append("createTime", getCreateTime())
+                .append("updateTime", getUpdateTime())
+                .append("version", getVersion())
+                .append("remark", getRemark())
+                .toString();
     }
 }

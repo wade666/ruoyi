@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.goods.mapper.TProjectDeptMapper">
+    
+    <resultMap type="TProjectDept" id="TProjectDeptResult">
+        <result property="id"    column="id"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectTProjectDeptVo">
+        select id, project_id, dept_id, create_by, create_time from t_project_dept
+    </sql>
+
+    <select id="selectTProjectDeptList" parameterType="TProjectDept" resultMap="TProjectDeptResult">
+        <include refid="selectTProjectDeptVo"/>
+        <where>  
+            <if test="projectId != null "> and project_id = #{projectId}</if>
+            <if test="deptId != null "> and dept_id = #{deptId}</if>
+        </where>
+    </select>
+    
+    <select id="selectTProjectDeptById" parameterType="Long" resultMap="TProjectDeptResult">
+        <include refid="selectTProjectDeptVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTProjectDept" parameterType="TProjectDept" useGeneratedKeys="true" keyProperty="id">
+        insert into t_project_dept
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">project_id,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">#{projectId},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTProjectDept" parameterType="TProjectDept">
+        update t_project_dept
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectId != null">project_id = #{projectId},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTProjectDeptById" parameterType="Long">
+        delete from t_project_dept where id = #{id}
+    </delete>
+
+    <delete id="deleteTProjectDeptByIds" parameterType="String">
+        delete from t_project_dept where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <delete id="deleteTProjectDeptByProjectId" parameterType="Long">
+        delete from t_project_dept where project_id = #{projectId}
+    </delete>
+    <select id="selectDeptIdByProjectId" parameterType="Long" resultType="Long">
+        select dept_id from t_project_dept where project_id = #{projectId}
+    </select>
+</mapper>

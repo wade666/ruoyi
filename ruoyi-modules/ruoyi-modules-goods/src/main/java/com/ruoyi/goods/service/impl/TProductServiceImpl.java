@@ -2,7 +2,10 @@ package com.ruoyi.goods.service.impl;
 
 import java.util.List;
 
+import com.alibaba.fastjson.JSON;
 import com.ruoyi.common.core.utils.DateUtils;
+import com.ruoyi.common.datascope.annotation.DataScope;
+import com.ruoyi.common.security.utils.SecurityUtils;
 import com.ruoyi.goods.domain.TProduct;
 import com.ruoyi.goods.mapper.TProductMapper;
 import com.ruoyi.goods.service.ITProductService;
@@ -32,7 +35,7 @@ public class TProductServiceImpl implements ITProductService {
     }
 
     /**
-     * 查询商品列表
+     * 查询商品列表-数据权限-所有
      *
      * @param tProduct 商品
      * @return 商品
@@ -41,7 +44,14 @@ public class TProductServiceImpl implements ITProductService {
     public List<TProduct> selectTProductList(TProduct tProduct) {
         return tProductMapper.selectTProductList(tProduct);
     }
-
+    /**
+     * 查询商品列表-数据权限-动态
+     */
+    @Override
+    public List<TProduct> selectTProductListByProject(TProduct tProduct) {
+        tProduct.setUserId(SecurityUtils.getUserId());
+        return tProductMapper.selectTProductListByProject(tProduct);
+    }
     /**
      * 新增商品
      *

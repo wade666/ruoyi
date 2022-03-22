@@ -97,7 +97,7 @@ public class TWarehousePurchaseController extends BaseController
      */
     @RequiresPermissions("goods:purchase:remove")
     @Log(title = "采购申请", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{ids}")
+	@PutMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
     {
         return toAjax(tWarehousePurchaseService.deleteTWarehousePurchaseByIds(ids));

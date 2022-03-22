@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.goods.mapper.TProjectMapper">
+    
+    <resultMap type="TProject" id="TProjectResult">
+        <result property="id"    column="id"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="projectDetail"    column="project_detail"    />
+        <result property="projectState"    column="project_state"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="version"    column="version"    />
+        <result property="remark"    column="remark"    />
+        <result property="projectStateName"    column="projectStateName"    />
+        <collection property="deptNameList" ofType="com.ruoyi.goods.domain.TProjectDept">
+            <result property="deptId"    column="dept_id"    />
+            <result property="deptName"    column="dept_name"    />
+        </collection>
+    </resultMap>
+
+    <sql id="selectTProjectVo">
+        select id, project_name, project_detail, project_state,(case project_state when 1 then '正常' when 2 then '禁用' end) projectStateName, create_by, create_time, update_time, version, remark from t_project
+    </sql>
+
+    <select id="selectTProjectList" parameterType="TProject" resultMap="TProjectResult">
+        select p.id, p.project_name, p.project_detail, p.project_state,(case p.project_state when 1 then '正常' when 2 then '禁用' end) projectStateName, p.create_by, p.create_time, p.update_time, p.remark,sd.dept_name from t_project p
+        left join t_project_dept d on p.id = d.project_id
+        left join sys_dept sd on sd.dept_id = d.dept_id
+        <where>  
+            <if test="projectName != null  and projectName != ''"> and p.project_name like concat('%', #{projectName}, '%')</if>
+            <if test="projectDetail != null  and projectDetail != ''"> and p.project_detail = #{projectDetail}</if>
+            <if test="projectState != null "> and p.project_state = #{projectState}</if>
+        </where>
+    </select>
+    
+    <select id="selectTProjectById" parameterType="Long" resultMap="TProjectResult">
+        <include refid="selectTProjectVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTProject" parameterType="TProject" useGeneratedKeys="true" keyProperty="id">
+        insert into t_project
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectName != null and projectName != ''">project_name,</if>
+            <if test="projectDetail != null">project_detail,</if>
+            <if test="projectState != null">project_state,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="version != null">version,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectName != null and projectName != ''">#{projectName},</if>
+            <if test="projectDetail != null">#{projectDetail},</if>
+            <if test="projectState != null">#{projectState},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="version != null">#{version},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTProject" parameterType="TProject">
+        update t_project
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectName != null and projectName != ''">project_name = #{projectName},</if>
+            <if test="projectDetail != null">project_detail = #{projectDetail},</if>
+            <if test="projectState != null">project_state = #{projectState},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="version != null">version = #{version},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTProjectById" parameterType="Long">
+        delete from t_project where id = #{id}
+    </delete>
+
+    <delete id="deleteTProjectByIds" parameterType="String">
+        delete from t_project where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

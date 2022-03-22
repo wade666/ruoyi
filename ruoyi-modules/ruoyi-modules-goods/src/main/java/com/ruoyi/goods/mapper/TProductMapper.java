@@ -20,13 +20,16 @@ public interface TProductMapper {
     public TProduct selectTProductById(Long id);
 
     /**
-     * 查询商品列表
+     * 查询商品列表-数据权限-所有
      *
      * @param tProduct 商品
      * @return 商品集合
      */
     public List<TProduct> selectTProductList(TProduct tProduct);
-
+    /**
+     * 查询商品列表-数据权限-动态
+     */
+    public List<TProduct> selectTProductListByProject(TProduct tProduct);
     /**
      * 新增商品
      *

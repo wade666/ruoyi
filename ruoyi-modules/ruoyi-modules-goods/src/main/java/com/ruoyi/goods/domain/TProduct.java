@@ -175,6 +175,10 @@ public class TProduct extends BaseEntity {
      * sku列表
      */
     private List<TSku> skuList;
+    /**
+     * 用户id
+     */
+    private Long userId;
 
     public void setId(Long id) {
         this.id = id;
@@ -390,6 +394,14 @@ public class TProduct extends BaseEntity {
 
     public void setSkuList(List<TSku> skuList) {
         this.skuList = skuList;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     @Override

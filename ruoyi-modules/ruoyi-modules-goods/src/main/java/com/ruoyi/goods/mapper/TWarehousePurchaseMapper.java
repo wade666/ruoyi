@@ -61,4 +61,8 @@ public interface TWarehousePurchaseMapper
      * @return 结果
      */
     public int deleteTWarehousePurchaseByIds(Long[] ids);
+    /**
+     * 查询采购审核列表
+     */
+    List<TWarehousePurchase> checkList(TWarehousePurchase tWarehousePurchase);
 }

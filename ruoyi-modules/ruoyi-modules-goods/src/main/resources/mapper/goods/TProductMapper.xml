@@ -67,50 +67,36 @@
         tp.introduction, tp.create_time, tp.update_time, tp.is_del, tp.caption, tp.market_price, tp.is_marketable, tp.memo, tp.seo_title, tp.keyword,
         tp.brand_id, tp.parameter_values, tp.specification_items, tp.version, tp.product_type, tp.shipping_method_id, tp.warehouse_id,tp.project_id,
         ts.image ts_image,ts.specification_values ts_specification_values,ts.price ts_price,ts.sn ts_sn,ts.stock ts_stock
-        <!--
-         ts.id ts_id, ts.product_id ts_product_id, ts.price ts_price, ts.cost ts_cost, ts.market_price ts_market_price, ts.stock ts_stock, ts.allocated_stock ts_allocated_stock,
-        ts.specification_values ts_specification_values, ts.image ts_image, ts.sn ts_sn, ts.weight ts_weight,
-        ts.exchange_point ts_exchange_point, ts.reward_point ts_reward_point, ts.is_sale ts_is_sale
-        -->
-        from t_product tp left join t_sku ts on tp.id=ts.product_id
+        from t_product tp
     </sql>
     <select id="selectTProductList" parameterType="TProduct" resultMap="TProductResult">
-        <include refid="selectTProductVoTwo"/>
+        <include refid="selectTProductVoTwo"/> left join t_sku ts on tp.id=ts.product_id
         <where>
             tp.is_del = 1
-            <if test="sn != null  and sn != ''">and sn = #{sn}</if>
-            <if test="productName != null  and productName != ''">and product_name like concat('%', #{productName},
-                '%')
-            </if>
-            <if test="productImages != null  and productImages != ''">and product_images = #{productImages}</if>
-            <if test="image != null  and image != ''">and image = #{image}</if>
-            <if test="price != null ">and price = #{price}</if>
-            <if test="vipPrice != null ">and vip_price = #{vipPrice}</if>
-            <if test="productCategoryId != null ">and product_category_id = #{productCategoryId}</if>
-            <if test="unit != null  and unit != ''">and unit = #{unit}</if>
-            <if test="sort != null ">and sort = #{sort}</if>
-            <if test="sales != null ">and sales = #{sales}</if>
-            <if test="introduction != null  and introduction != ''">and introduction = #{introduction}</if>
-            <if test="isDel != null ">and is_del = #{isDel}</if>
-            <if test="caption != null  and caption != ''">and caption = #{caption}</if>
-            <if test="marketPrice != null ">and market_price = #{marketPrice}</if>
-            <if test="isMarketable != null ">and is_marketable = #{isMarketable}</if>
-            <if test="memo != null  and memo != ''">and memo = #{memo}</if>
-            <if test="seoTitle != null  and seoTitle != ''">and seo_title = #{seoTitle}</if>
-            <if test="keyword != null  and keyword != ''">and keyword = #{keyword}</if>
-            <if test="brandId != null ">and brand_id = #{brandId}</if>
-            <if test="parameterValues != null  and parameterValues != ''">and parameter_values = #{parameterValues}</if>
-            <if test="specificationItems != null  and specificationItems != ''">and specification_items =
-                #{specificationItems}
-            </if>
-            <if test="version != null ">and version = #{version}</if>
-            <if test="productType != null ">and product_type = #{productType}</if>
-            <if test="shippingMethodId != null ">and shipping_method_id = #{shippingMethodId}</if>
-            <if test="warehouseId != null ">and warehouse_id = #{warehouseId}</if>
-            <if test="projectId != null ">and project_id = #{projectId}</if>
+            <if test="sn != null  and sn != ''">and tp.sn = #{sn}</if>
+            <if test="productName != null  and productName != ''">and tp.product_name like concat('%', #{productName},'%')</if>
+            <if test="keyword != null  and keyword != ''">and tp.keyword = #{keyword}</if>
+            <if test="brandId != null ">and tp.brand_id = #{brandId}</if>
+            <if test="productType != null ">and tp.product_type = #{productType}</if>
+            <if test="warehouseId != null ">and tp.warehouse_id = #{warehouseId}</if>
+            <if test="projectId != null ">and tp.project_id = #{projectId}</if>
         </where>
     </select>
-
+    <select id="selectTProductListByProject" parameterType="TProduct" resultMap="TProductResult">
+      <include refid="selectTProductVoTwo"/>
+      left join t_sku ts on tp.id=ts.product_id
+      left join t_project_dept pd on tp.project_id= pd.project_id
+      left join sys_dept d on d.dept_id= pd.dept_id
+      left join sys_user u on u.dept_id=d.dept_id
+      where tp.is_del = 1 and u.user_id=#{userId}
+        <if test="sn != null  and sn != ''">and tp.sn = #{sn}</if>
+        <if test="productName != null  and productName != ''">and tp.product_name like concat('%', #{productName},'%')</if>
+        <if test="keyword != null  and keyword != ''">and tp.keyword = #{keyword}</if>
+        <if test="brandId != null ">and tp.brand_id = #{brandId}</if>
+        <if test="productType != null ">and tp.product_type = #{productType}</if>
+        <if test="warehouseId != null ">and tp.warehouse_id = #{warehouseId}</if>
+        <if test="projectId != null ">and tp.project_id = #{projectId}</if>
+    </select>
     <select id="selectTProductById" parameterType="Long" resultMap="TProductResult">
         <include refid="selectTProductVo"/>
         where id = #{id}
