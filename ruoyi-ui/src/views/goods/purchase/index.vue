@@ -95,6 +95,7 @@
       <el-table-column label="仓库名" align="center" prop="warehouseName" />
       <el-table-column label="供货商" align="center" prop="supplierName" />
       <el-table-column label="审核状态" align="center" prop="applyStateName" />
+      <el-table-column label="订单状态" align="center" prop="intoStateName" />
       <el-table-column label="预付款(元)" align="center" prop="deposit" />
       <el-table-column label="创建人" align="center" prop="createBy" />
       <el-table-column label="审核流程" align="center" prop="checkStep" />
@@ -170,8 +171,8 @@
         <el-form-item label="已入库数量" prop="alreadyNum">
           <el-input v-model="form.alreadyNum" placeholder="请输入已入库数量" />
         </el-form-item>
-        <el-form-item label="货号" prop="goodsCode">
-          <el-input v-model="form.goodsCode" placeholder="请输入货号" />
+        <el-form-item label="批次号" prop="goodsCode">
+          <el-input v-model="form.goodsCode" placeholder="请输入批次号" />
         </el-form-item>
         <el-form-item label="审核状态" prop="applyState">
           <el-input v-model="form.applyState" placeholder="请输入审核状态" />

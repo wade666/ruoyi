@@ -1,37 +1,37 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="商品id" prop="productId">
-        <el-input
-          v-model="queryParams.productId"
-          placeholder="请输入商品id"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="商品编码id" prop="productCode">
-        <el-input
-          v-model="queryParams.productCode"
-          placeholder="请输入商品编码id"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="批次号" prop="batchCode">
-        <el-input
-          v-model="queryParams.batchCode"
-          placeholder="请输入批次号"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="仓库id" prop="warehouseId">
         <el-input
           v-model="queryParams.warehouseId"
           placeholder="请输入仓库id"
+          clearable
+          size="small"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="供货商id" prop="supplierId">
+        <el-input
+          v-model="queryParams.supplierId"
+          placeholder="请输入供货商id"
+          clearable
+          size="small"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="审核状态" prop="applyState">
+        <el-input
+          v-model="queryParams.applyState"
+          placeholder="请输入审核状态"
+          clearable
+          size="small"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="查询类型" prop="queryType">
+        <el-input
+          v-model="queryParams.queryType"
+          placeholder="查询类型：1查本人 2查仓库"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
@@ -51,7 +51,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['goods:surplus:add']"
+          v-hasPermi="['goods:purchaseinto:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -62,7 +62,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['goods:surplus:edit']"
+          v-hasPermi="['goods:purchaseinto:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -73,7 +73,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['goods:surplus:remove']"
+          v-hasPermi="['goods:purchaseinto:remove']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -83,22 +83,23 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['goods:surplus:export']"
+          v-hasPermi="['goods:purchaseinto:export']"
         >导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="surplusList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="purchaseintoList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="库存id" align="center" prop="surplusId" />
-      <el-table-column label="商品id" align="center" prop="productId" />
-      <el-table-column label="商品名" align="center" prop="productName" />
-      <el-table-column label="商品编码id" align="center" prop="productCode" />
-      <el-table-column label="批次号" align="center" prop="batchCode" />
-      <el-table-column label="仓库id" align="center" prop="warehouseId" />
+      <el-table-column label="主键id" align="center" prop="id" />
       <el-table-column label="仓库名" align="center" prop="warehouseName" />
-      <el-table-column label="库存数" align="center" prop="surplusNum" />
+      <el-table-column label="供货商" align="center" prop="supplierName" />
+      <el-table-column label="审核状态" align="center" prop="applyStateName" />
+      <el-table-column label="采购入库人id" align="center" prop="sysUserId" />
+      <el-table-column label="当前审核人id" align="center" prop="nowCheckId" />
+      <el-table-column label="审核人流程" align="center" prop="checkStep" />
+      <el-table-column label="付款金额(元)" align="center" prop="payMoney" />
+      <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -106,14 +107,14 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['goods:surplus:edit']"
+            v-hasPermi="['goods:purchaseinto:edit']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['goods:surplus:remove']"
+            v-hasPermi="['goods:purchaseinto:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -127,23 +128,35 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改库存对话框 -->
+    <!-- 添加或修改采购入库单对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="商品id" prop="productId">
-          <el-input v-model="form.productId" placeholder="请输入商品id" />
-        </el-form-item>
-        <el-form-item label="商品编码id" prop="productCode">
-          <el-input v-model="form.productCode" placeholder="请输入商品编码id" />
-        </el-form-item>
-        <el-form-item label="批次号" prop="batchCode">
-          <el-input v-model="form.batchCode" placeholder="请输入批次号" />
-        </el-form-item>
         <el-form-item label="仓库id" prop="warehouseId">
           <el-input v-model="form.warehouseId" placeholder="请输入仓库id" />
         </el-form-item>
-        <el-form-item label="库存数" prop="surplusNum">
-          <el-input v-model="form.surplusNum" placeholder="请输入库存数" />
+        <el-form-item label="供货商id" prop="supplierId">
+          <el-input v-model="form.supplierId" placeholder="请输入供货商id" />
+        </el-form-item>
+        <el-form-item label="审核状态" prop="applyState">
+          <el-input v-model="form.applyState" placeholder="请输入审核状态" />
+        </el-form-item>
+        <el-form-item label="采购入库人id" prop="sysUserId">
+          <el-input v-model="form.sysUserId" placeholder="请输入采购入库人id" />
+        </el-form-item>
+        <el-form-item label="当前审核人id" prop="nowCheckId">
+          <el-input v-model="form.nowCheckId" placeholder="请输入当前审核人id" />
+        </el-form-item>
+        <el-form-item label="审核人流程" prop="checkStep">
+          <el-input v-model="form.checkStep" placeholder="请输入审核人流程" />
+        </el-form-item>
+        <el-form-item label="审核人ids" prop="checkIds">
+          <el-input v-model="form.checkIds" placeholder="请输入审核人ids" />
+        </el-form-item>
+        <el-form-item label="付款金额(元)" prop="payMoney">
+          <el-input v-model="form.payMoney" placeholder="请输入付款金额(元)" />
+        </el-form-item>
+        <el-form-item label="备注" prop="remark">
+          <el-input v-model="form.remark" placeholder="请输入备注" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -155,10 +168,10 @@
 </template>
 
 <script>
-import { listSurplus, getSurplus, delSurplus, addSurplus, updateSurplus } from "@/api/goods/surplus";
+import { listPurchaseinto, getPurchaseinto, delPurchaseinto, addPurchaseinto, updatePurchaseinto } from "@/api/goods/purchaseinto";
 
 export default {
-  name: "Surplus",
+  name: "Purchaseinto",
   data() {
     return {
       // 遮罩层
@@ -173,8 +186,8 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 库存表格数据
-      surplusList: [],
+      // 采购入库单表格数据
+      purchaseintoList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -183,31 +196,29 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        productId: null,
-        productCode: null,
-        batchCode: null,
         warehouseId: null,
-        surplusNum: null,
-        version: null
+        supplierId: null,
+        applyState: null,
+        sysUserId: null,
+        nowCheckId: null,
+        checkStep: null,
+        checkIds: null,
+        checkIndex: null,
+        payMoney: null,
+        version: null,
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
-        productId: [
-          { required: true, message: "商品id不能为空", trigger: "blur" }
-        ],
-        productCode: [
-          { required: true, message: "商品编码id不能为空", trigger: "blur" }
-        ],
-        batchCode: [
-          { required: true, message: "批次号不能为空", trigger: "blur" }
-        ],
         warehouseId: [
           { required: true, message: "仓库id不能为空", trigger: "blur" }
         ],
-        surplusNum: [
-          { required: true, message: "库存数不能为空", trigger: "blur" }
+        supplierId: [
+          { required: true, message: "供货商id不能为空", trigger: "blur" }
+        ],
+        sysUserId: [
+          { required: true, message: "采购入库人id不能为空", trigger: "blur" }
         ],
       }
     };
@@ -216,11 +227,11 @@ export default {
     this.getList();
   },
   methods: {
-    /** 查询库存列表 */
+    /** 查询采购入库单列表 */
     getList() {
       this.loading = true;
-      listSurplus(this.queryParams).then(response => {
-        this.surplusList = response.rows;
+      listPurchaseinto(this.queryParams).then(response => {
+        this.purchaseintoList = response.rows;
         this.total = response.total;
         this.loading = false;
       });
@@ -233,15 +244,22 @@ export default {
     // 表单重置
     reset() {
       this.form = {
-        surplusId: null,
-        productId: null,
-        productCode: null,
-        batchCode: null,
+        id: null,
         warehouseId: null,
-        surplusNum: null,
+        supplierId: null,
+        applyState: null,
+        sysUserId: null,
+        nowCheckId: null,
+        checkStep: null,
+        checkIds: null,
+        checkIndex: null,
+        payMoney: null,
+        createBy: null,
         createTime: null,
         updateTime: null,
-        version: null
+        version: null,
+        remark: null,
+        delFlag: null
       };
       this.resetForm("form");
     },
@@ -257,7 +275,7 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.surplusId)
+      this.ids = selection.map(item => item.id)
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
@@ -265,30 +283,30 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加库存";
+      this.title = "添加采购入库单";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const surplusId = row.surplusId || this.ids
-      getSurplus(surplusId).then(response => {
+      const id = row.id || this.ids
+      getPurchaseinto(id).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改库存";
+        this.title = "修改采购入库单";
       });
     },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          if (this.form.surplusId != null) {
-            updateSurplus(this.form).then(response => {
+          if (this.form.id != null) {
+            updatePurchaseinto(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addSurplus(this.form).then(response => {
+            addPurchaseinto(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -299,9 +317,9 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const surplusIds = row.surplusId || this.ids;
-      this.$modal.confirm('是否确认删除库存编号为"' + surplusIds + '"的数据项？').then(function() {
-        return delSurplus(surplusIds);
+      const ids = row.id || this.ids;
+      this.$modal.confirm('是否确认删除采购入库单编号为"' + ids + '"的数据项？').then(function() {
+        return delPurchaseinto(ids);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
@@ -309,11 +327,10 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('goods/surplus/export', {
+      this.download('goods/purchaseinto/export', {
         ...this.queryParams
-      }, `surplus_${new Date().getTime()}.xlsx`)
+      }, `purchaseinto_${new Date().getTime()}.xlsx`)
     }
   }
 };
 </script>
-
