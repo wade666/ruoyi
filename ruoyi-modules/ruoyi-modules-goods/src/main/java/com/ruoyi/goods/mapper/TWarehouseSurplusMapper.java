@@ -58,4 +58,8 @@ public interface TWarehouseSurplusMapper
      * @return 结果
      */
     public int deleteTWarehouseSurplusBySurplusIds(Long[] surplusIds);
+    /**
+     * 查询累计入库数
+     */
+    int selectSumSurplus(TWarehouseSurplus tWarehouseSurplus);
 }

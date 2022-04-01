@@ -65,4 +65,8 @@ public interface TWarehousePurchaseMapper
      * 查询采购审核列表
      */
     List<TWarehousePurchase> checkList(TWarehousePurchase tWarehousePurchase);
+    /**
+     * 采购申请审核
+     */
+    public int updateTWarehousePurchaseCheck(TWarehousePurchase tWarehousePurchase);
 }

@@ -11,10 +11,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="sysUserId"    column="sys_user_id"    />
         <result property="createTime"    column="create_time"    />
         <result property="remark"    column="remark"    />
+        <result property="checkType"    column="check_type"    />
     </resultMap>
 
     <sql id="selectTWarehousePurchaserecordVo">
-        select id, purchase_id, check_oper, sys_user_id, create_time, remark from t_warehouse_purchaserecord
+        select id, purchase_id, check_oper, sys_user_id, create_time, remark, check_type from t_warehouse_purchaserecord
     </sql>
 
     <select id="selectTWarehousePurchaserecordList" parameterType="TWarehousePurchaserecord" resultMap="TWarehousePurchaserecordResult">
@@ -23,6 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="purchaseId != null "> and purchase_id = #{purchaseId}</if>
             <if test="checkOper != null  and checkOper != ''"> and check_oper = #{checkOper}</if>
             <if test="sysUserId != null "> and sys_user_id = #{sysUserId}</if>
+            <if test="checkType != null "> and check_type = #{checkType}</if>
         </where>
     </select>
     
@@ -39,6 +41,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="sysUserId != null">sys_user_id,</if>
             <if test="createTime != null">create_time,</if>
             <if test="remark != null">remark,</if>
+            <if test="checkType != null">check_type,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="purchaseId != null">#{purchaseId},</if>
@@ -46,6 +49,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="sysUserId != null">#{sysUserId},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="remark != null">#{remark},</if>
+            <if test="checkType != null">#{checkType},</if>
          </trim>
     </insert>
 
@@ -57,6 +61,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="sysUserId != null">sys_user_id = #{sysUserId},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="remark != null">remark = #{remark},</if>
+            <if test="checkType != null">check_type = #{checkType},</if>
         </trim>
         where id = #{id}
     </update>

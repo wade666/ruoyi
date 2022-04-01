@@ -2,6 +2,7 @@ package com.ruoyi.goods.service;
 
 import java.util.List;
 import com.ruoyi.goods.domain.TWarehousePurchase;
+import com.ruoyi.goods.domain.TWarehousePurchaserecord;
 
 /**
  * 采购申请Service接口
@@ -68,7 +69,10 @@ public interface ITWarehousePurchaseService
      */
     public int updateTWarehousePurchaseCheck(TWarehousePurchase tWarehousePurchase);
 
-
+    /**
+     * 采购审核记录列表
+     */
+    public List<TWarehousePurchaserecord> selectTWarehousePurchaseCheckList(TWarehousePurchase tWarehousePurchase);
 
 
 }

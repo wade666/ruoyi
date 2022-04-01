@@ -1,6 +1,7 @@
 package com.ruoyi.goods.domain;
 
 import java.math.BigDecimal;
+import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.core.annotation.Excel;
@@ -12,6 +13,7 @@ import com.ruoyi.common.core.web.domain.BaseEntity;
  * @author ruoyi
  * @date 2022-03-08
  */
+@Data
 public class TWarehouseSurplusdetails extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
@@ -25,7 +27,7 @@ public class TWarehouseSurplusdetails extends BaseEntity
 
     /** 商品编码id */
     @Excel(name = "商品编码id")
-    private Long productCode;
+    private String sn;
 
     /** 仓库id */
     @Excel(name = "仓库id")
@@ -37,7 +39,7 @@ public class TWarehouseSurplusdetails extends BaseEntity
 
     /** 厂家编码 */
     @Excel(name = "厂家编码")
-    private Long makertCode;
+    private Long supplierId;
 
     /** 出入库类型（1入库，2出库） */
     @Excel(name = "出入库类型", readConverterExp = "1=入库，2出库")
@@ -56,113 +58,27 @@ public class TWarehouseSurplusdetails extends BaseEntity
     /** 出入库详情*/
     private String detailTypeName;
 
-    public void setId(Long id) 
-    {
-        this.id = id;
-    }
+    /** 采购入库单详情id */
+    @Excel(name = "采购入库单详情id")
+    private Long purchaseintodetailId;
 
-    public Long getId() 
-    {
-        return id;
-    }
-    public void setProductId(Long productId) 
-    {
-        this.productId = productId;
-    }
+    /** 数量 */
+    @Excel(name = "数量")
+    private Integer arriveNum;
 
-    public Long getProductId() 
-    {
-        return productId;
-    }
-    public void setProductCode(Long productCode) 
-    {
-        this.productCode = productCode;
-    }
-
-    public Long getProductCode() 
-    {
-        return productCode;
-    }
-    public void setWarehouseId(Long warehouseId) 
-    {
-        this.warehouseId = warehouseId;
-    }
-
-    public Long getWarehouseId() 
-    {
-        return warehouseId;
-    }
-    public void setPrice(BigDecimal price) 
-    {
-        this.price = price;
-    }
-
-    public BigDecimal getPrice() 
-    {
-        return price;
-    }
-    public void setMakertCode(Long makertCode) 
-    {
-        this.makertCode = makertCode;
-    }
-
-    public Long getMakertCode() 
-    {
-        return makertCode;
-    }
-    public void setSurplusType(Integer surplusType) 
-    {
-        this.surplusType = surplusType;
-    }
-
-    public Integer getSurplusType() 
-    {
-        return surplusType;
-    }
-    public void setDetailType(Integer detailType) 
-    {
-        this.detailType = detailType;
-    }
-
-    public Integer getDetailType() 
-    {
-        return detailType;
-    }
-    public void setBak(String bak) 
-    {
-        this.bak = bak;
-    }
-
-    public String getBak() 
-    {
-        return bak;
-    }
-
-    public String getSurplusTypeName() {
-        return surplusTypeName;
-    }
-
-    public void setSurplusTypeName(String surplusTypeName) {
-        this.surplusTypeName = surplusTypeName;
-    }
-
-    public String getDetailTypeName() {
-        return detailTypeName;
-    }
-
-    public void setDetailTypeName(String detailTypeName) {
-        this.detailTypeName = detailTypeName;
-    }
+    /** 批次号 */
+    @Excel(name = "批次号")
+    private String batchCode;
 
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("id", getId())
             .append("productId", getProductId())
-            .append("productCode", getProductCode())
+            .append("sn", getSn())
             .append("warehouseId", getWarehouseId())
             .append("price", getPrice())
-            .append("makertCode", getMakertCode())
+            .append("supplierId", getSupplierId())
             .append("createTime", getCreateTime())
             .append("surplusType", getSurplusType())
             .append("detailType", getDetailType())

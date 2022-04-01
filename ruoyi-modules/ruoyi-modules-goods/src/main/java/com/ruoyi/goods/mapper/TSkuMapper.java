@@ -58,4 +58,9 @@ public interface TSkuMapper
      * @return 结果
      */
     public int deleteTSkuByIds(Long[] ids);
+
+    /**
+     * 根据product_id查询商品sn
+     */
+    TSku selectSku(TSku tSku);
 }

@@ -54,7 +54,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectTSkuVo"/>
         where id = #{id}
     </select>
-        
+    <select id="selectSku" parameterType="TSku" resultMap="TSkuResult">
+        <include refid="selectTSkuVo"/>
+        where product_id = #{productId} and specification_values = #{specificationValues}
+    </select>
     <insert id="insertTSku" parameterType="TSku" useGeneratedKeys="true" keyProperty="id">
         insert into t_sku
         <trim prefix="(" suffix=")" suffixOverrides=",">

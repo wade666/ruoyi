@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.goods.mapper.TWarehouseDispatchMapper">
+    
+    <resultMap type="TWarehouseDispatch" id="TWarehouseDispatchResult">
+        <result property="id"    column="id"    />
+        <result property="dispatchNo"    column="dispatch_no"    />
+        <result property="fromWarehouseId"    column="from_warehouse_id"    />
+        <result property="toWarehouseId"    column="to_warehouse_id"    />
+        <result property="dispatchType"    column="dispatch_type"    />
+        <result property="dispatchState"    column="dispatch_state"    />
+        <result property="createUserId"    column="create_user_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="dispatchTypeName"    column="dispatchTypeName"    />
+        <result property="dispatchStateName"    column="dispatchStateName"    />
+        <result property="fromWarehouseName"    column="from_warehouse_name"    />
+        <result property="toWarehouseName"    column="to_warehouse_name"    />
+        <collection property="detailList" ofType="com.ruoyi.goods.domain.TWarehouseDispatchdetail">
+            <result property="id"    column="detailId"    />
+            <result property="dispatchNo"    column="dNo"    />
+            <result property="batchCode"    column="batch_code"    />
+            <result property="sn"    column="sn"    />
+            <result property="productName"    column="product_name"    />
+            <result property="specificationValues"    column="specification_values"    />
+            <result property="unit"    column="unit"    />
+            <result property="num"    column="num"    />
+            <result property="unitPrice"    column="unit_price"    />
+            <result property="totalPrice"    column="total_price"    />
+            <result property="remark"    column="remark"    />
+        </collection>
+    </resultMap>
+
+    <sql id="selectTWarehouseDispatchVo">
+        select id, dispatch_no, from_warehouse_id, to_warehouse_id, dispatch_type, dispatch_state, create_user_id, create_by, create_time, update_time, remark, del_flag from t_warehouse_dispatch
+    </sql>
+
+    <select id="selectTWarehouseDispatchList" parameterType="TWarehouseDispatch" resultMap="TWarehouseDispatchResult">
+        select wd.id, wd.dispatch_no, wd.from_warehouse_id,(select warehouse_name from t_warehouse tw where tw.id = wd.from_warehouse_id) from_warehouse_name, wd.to_warehouse_id, (select warehouse_name from t_warehouse tw where tw.id = wd.to_warehouse_id) to_warehouse_name, (case wd.dispatch_type when 1 then '实际调拨' when 2 then '虚拟调拨' end) dispatchTypeName, (case wd.dispatch_state when 1 then '待处理' when 2 then '处理中' when 3 then '已完成' end) dispatchStateName, wd.create_user_id, wd.create_by, wd.create_time, wd.update_time, wd.remark, del_flag, we.id detailId, we.dispatch_no dNo, we.batch_code, we.sn, we.product_name, we.specification_values, we.unit, we.num, we.unit_price, we.total_price
+        from t_warehouse_dispatch wd left join t_warehouse_dispatchdetail we on wd.dispatch_no=we.dispatch_no
+        <where>  
+            <if test="dispatchNo != null "> and wd.dispatch_no = #{dispatchNo}</if>
+            <if test="fromWarehouseId != null "> and wd.from_warehouse_id = #{fromWarehouseId}</if>
+            <if test="toWarehouseId != null "> and wd.to_warehouse_id = #{toWarehouseId}</if>
+            <if test="dispatchType != null "> and wd.dispatch_type = #{dispatchType}</if>
+            <if test="dispatchState != null "> and wd.dispatch_state = #{dispatchState}</if>
+            <if test="createUserId != null "> and wd.create_user_id = #{createUserId}</if>
+            <if test="delFlag != null "> and wd.del_flag = #{delFlag}</if>
+        </where>
+    </select>
+    
+    <select id="selectTWarehouseDispatchById" parameterType="Long" resultMap="TWarehouseDispatchResult">
+        <include refid="selectTWarehouseDispatchVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTWarehouseDispatch" parameterType="TWarehouseDispatch" useGeneratedKeys="true" keyProperty="id">
+        insert into t_warehouse_dispatch
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dispatchNo != null">dispatch_no,</if>
+            <if test="fromWarehouseId != null">from_warehouse_id,</if>
+            <if test="toWarehouseId != null">to_warehouse_id,</if>
+            <if test="dispatchType != null">dispatch_type,</if>
+            <if test="dispatchState != null">dispatch_state,</if>
+            <if test="createUserId != null">create_user_id,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+            <if test="delFlag != null">del_flag,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dispatchNo != null">#{dispatchNo},</if>
+            <if test="fromWarehouseId != null">#{fromWarehouseId},</if>
+            <if test="toWarehouseId != null">#{toWarehouseId},</if>
+            <if test="dispatchType != null">#{dispatchType},</if>
+            <if test="dispatchState != null">#{dispatchState},</if>
+            <if test="createUserId != null">#{createUserId},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTWarehouseDispatch" parameterType="TWarehouseDispatch">
+        update t_warehouse_dispatch
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="fromWarehouseId != null">from_warehouse_id = #{fromWarehouseId},</if>
+            <if test="toWarehouseId != null">to_warehouse_id = #{toWarehouseId},</if>
+            <if test="dispatchType != null">dispatch_type = #{dispatchType},</if>
+            <if test="dispatchState != null">dispatch_state = #{dispatchState},</if>
+            <if test="createUserId != null">create_user_id = #{createUserId},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="deleteTWarehouseDispatchById" parameterType="Long">
+        update t_warehouse_dispatch set del_flag = '2' where id = #{id}
+    </update>
+
+    <update id="deleteTWarehouseDispatchByIds" parameterType="String">
+        update t_warehouse_dispatch set del_flag = '2' where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+    <update id="updateTWarehouseDispatchByDispatchNo" parameterType="TWarehouseDispatch">
+        update t_warehouse_dispatch
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="fromWarehouseId != null">from_warehouse_id = #{fromWarehouseId},</if>
+            <if test="toWarehouseId != null">to_warehouse_id = #{toWarehouseId},</if>
+            <if test="dispatchType != null">dispatch_type = #{dispatchType},</if>
+            <if test="dispatchState != null">dispatch_state = #{dispatchState},</if>
+            <if test="createUserId != null">create_user_id = #{createUserId},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+        </trim>
+        where dispatch_no = #{dispatchNo}
+    </update>
+</mapper>

@@ -3,6 +3,8 @@ package com.ruoyi.goods.controller;
 import java.util.List;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ruoyi.goods.domain.TWarehousePurchaserecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -101,5 +103,15 @@ public class TWarehousePurchaseController extends BaseController
     public AjaxResult remove(@PathVariable Long[] ids)
     {
         return toAjax(tWarehousePurchaseService.deleteTWarehousePurchaseByIds(ids));
+    }
+    /**
+     * 采购审核记录列表
+     */
+    @RequiresPermissions("goods:purchase:list")
+    @GetMapping("/checkList")
+    public AjaxResult checkList(TWarehousePurchase tWarehousePurchase)
+    {
+        List<TWarehousePurchaserecord> list = tWarehousePurchaseService.selectTWarehousePurchaseCheckList(tWarehousePurchase);
+        return AjaxResult.success(list);
     }
 }

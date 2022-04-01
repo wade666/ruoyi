@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.goods.mapper.TWarehouseDispatchdetailMapper">
+    
+    <resultMap type="TWarehouseDispatchdetail" id="TWarehouseDispatchdetailResult">
+        <result property="id"    column="id"    />
+        <result property="dispatchNo"    column="dispatch_no"    />
+        <result property="batchCode"    column="batch_code"    />
+        <result property="sn"    column="sn"    />
+        <result property="productName"    column="product_name"    />
+        <result property="specificationValues"    column="specification_values"    />
+        <result property="unit"    column="unit"    />
+        <result property="num"    column="num"    />
+        <result property="unitPrice"    column="unit_price"    />
+        <result property="totalPrice"    column="total_price"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectTWarehouseDispatchdetailVo">
+        select id, dispatch_no, batch_code, sn, product_name, specification_values, unit, num, unit_price, total_price, remark from t_warehouse_dispatchdetail
+    </sql>
+
+    <select id="selectTWarehouseDispatchdetailList" parameterType="TWarehouseDispatchdetail" resultMap="TWarehouseDispatchdetailResult">
+        <include refid="selectTWarehouseDispatchdetailVo"/>
+        <where>  
+            <if test="dispatchNo != null "> and dispatch_no = #{dispatchNo}</if>
+            <if test="batchCode != null  and batchCode != ''"> and batch_code = #{batchCode}</if>
+            <if test="sn != null  and sn != ''"> and sn = #{sn}</if>
+            <if test="productName != null  and productName != ''"> and product_name like concat('%', #{productName}, '%')</if>
+            <if test="specificationValues != null  and specificationValues != ''"> and specification_values = #{specificationValues}</if>
+            <if test="unit != null  and unit != ''"> and unit = #{unit}</if>
+            <if test="num != null "> and num = #{num}</if>
+            <if test="unitPrice != null "> and unit_price = #{unitPrice}</if>
+            <if test="totalPrice != null "> and total_price = #{totalPrice}</if>
+        </where>
+    </select>
+    
+    <select id="selectTWarehouseDispatchdetailById" parameterType="Long" resultMap="TWarehouseDispatchdetailResult">
+        <include refid="selectTWarehouseDispatchdetailVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTWarehouseDispatchdetail" parameterType="TWarehouseDispatchdetail" useGeneratedKeys="true" keyProperty="id">
+        insert into t_warehouse_dispatchdetail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dispatchNo != null">dispatch_no,</if>
+            <if test="batchCode != null and batchCode != ''">batch_code,</if>
+            <if test="sn != null">sn,</if>
+            <if test="productName != null and productName != ''">product_name,</if>
+            <if test="specificationValues != null and specificationValues != ''">specification_values,</if>
+            <if test="unit != null">unit,</if>
+            <if test="num != null">num,</if>
+            <if test="unitPrice != null">unit_price,</if>
+            <if test="totalPrice != null">total_price,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dispatchNo != null">#{dispatchNo},</if>
+            <if test="batchCode != null and batchCode != ''">#{batchCode},</if>
+            <if test="sn != null">#{sn},</if>
+            <if test="productName != null and productName != ''">#{productName},</if>
+            <if test="specificationValues != null and specificationValues != ''">#{specificationValues},</if>
+            <if test="unit != null">#{unit},</if>
+            <if test="num != null">#{num},</if>
+            <if test="unitPrice != null">#{unitPrice},</if>
+            <if test="totalPrice != null">#{totalPrice},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTWarehouseDispatchdetail" parameterType="TWarehouseDispatchdetail">
+        update t_warehouse_dispatchdetail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="dispatchNo != null">dispatch_no = #{dispatchNo},</if>
+            <if test="batchCode != null and batchCode != ''">batch_code = #{batchCode},</if>
+            <if test="sn != null">sn = #{sn},</if>
+            <if test="productName != null and productName != ''">product_name = #{productName},</if>
+            <if test="specificationValues != null and specificationValues != ''">specification_values = #{specificationValues},</if>
+            <if test="unit != null">unit = #{unit},</if>
+            <if test="num != null">num = #{num},</if>
+            <if test="unitPrice != null">unit_price = #{unitPrice},</if>
+            <if test="totalPrice != null">total_price = #{totalPrice},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTWarehouseDispatchdetailById" parameterType="Long">
+        delete from t_warehouse_dispatchdetail where id = #{id}
+    </delete>
+
+    <delete id="deleteTWarehouseDispatchdetailByIds" parameterType="String">
+        delete from t_warehouse_dispatchdetail where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -7,7 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="TWarehouseSurplus" id="TWarehouseSurplusResult">
         <result property="surplusId"    column="surplus_id"    />
         <result property="productId"    column="product_id"    />
-        <result property="productCode"    column="product_code"    />
+        <result property="sn"    column="sn"    />
         <result property="batchCode"    column="batch_code"    />
         <result property="warehouseId"    column="warehouse_id"    />
         <result property="surplusNum"    column="surplus_num"    />
@@ -20,18 +20,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectTWarehouseSurplusVo">
-        select surplus_id, product_id, product_code, batch_code, warehouse_id, surplus_num, create_time, update_time, version from t_warehouse_surplus
+        select surplus_id, product_id, sn, batch_code, warehouse_id, surplus_num, create_time, update_time, version from t_warehouse_surplus
     </sql>
 
     <select id="selectTWarehouseSurplusList" parameterType="TWarehouseSurplus" resultMap="TWarehouseSurplusResult">
-        select s.surplus_id, s.product_id, s.product_code, s.batch_code, s.warehouse_id, s.surplus_num,p.product_name, w.warehouse_name,ws.warn_num from t_warehouse_surplus s
+        select s.surplus_id, s.product_id, s.sn, s.batch_code, s.warehouse_id, s.surplus_num,p.product_name, w.warehouse_name,ws.warn_num from t_warehouse_surplus s
         left join t_product p on s.product_id=p.id left join t_warehouse w on s.warehouse_id=w.id
         left join t_warehouse_surpluswarn ws on s.product_id=ws.product_id and s.warehouse_id=ws.warehouse_id
         left join sys_user u on u.user_id= w.sys_user_id
         left join sys_dept d on u.dept_id = d.dept_id
         where u.del_flag = '0'
         <if test="productId != null "> and product_id = #{productId}</if>
-        <if test="productCode != null "> and product_code = #{productCode}</if>
+        <if test="sn != null "> and sn = #{sn}</if>
         <if test="batchCode != null "> and batch_code = #{batchCode}</if>
         <if test="warehouseId != null "> and warehouse_id = #{warehouseId}</if>
         <if test="surplusNum != null "> and surplus_num = #{surplusNum}</if>
@@ -48,7 +48,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         insert into t_warehouse_surplus
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="productId != null">product_id,</if>
-            <if test="productCode != null">product_code,</if>
+            <if test="sn != null">sn,</if>
             <if test="batchCode != null">batch_code,</if>
             <if test="warehouseId != null">warehouse_id,</if>
             <if test="surplusNum != null">surplus_num,</if>
@@ -58,7 +58,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="productId != null">#{productId},</if>
-            <if test="productCode != null">#{productCode},</if>
+            <if test="sn != null">#{sn},</if>
             <if test="batchCode != null">#{batchCode},</if>
             <if test="warehouseId != null">#{warehouseId},</if>
             <if test="surplusNum != null">#{surplusNum},</if>
@@ -72,7 +72,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update t_warehouse_surplus
         <trim prefix="SET" suffixOverrides=",">
             <if test="productId != null">product_id = #{productId},</if>
-            <if test="productCode != null">product_code = #{productCode},</if>
+            <if test="sn != null">sn = #{sn},</if>
             <if test="batchCode != null">batch_code = #{batchCode},</if>
             <if test="warehouseId != null">warehouse_id = #{warehouseId},</if>
             <if test="surplusNum != null">surplus_num = #{surplusNum},</if>
@@ -93,4 +93,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{surplusId}
         </foreach>
     </delete>
+
+    <select id="selectSumSurplus" parameterType="TWarehouseSurplus" resultType="int">
+        select sum(surplus_num) from t_warehouse_surplus where product_id = #{productId} and warehouse_id = #{warehouseId} and sn = #{sn} and batch_code = #{batchCode}
+    </select>
 </mapper>

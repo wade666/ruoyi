@@ -1,10 +1,8 @@
 package com.ruoyi.goods.domain;
 
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.core.annotation.Excel;
@@ -16,6 +14,7 @@ import com.ruoyi.common.core.web.domain.BaseEntity;
  * @author ruoyi
  * @date 2022-03-10
  */
+@Data
 public class TWarehousePurchase extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
@@ -71,156 +70,13 @@ public class TWarehousePurchase extends BaseEntity
     @Excel(name = "预付款,元")
     private BigDecimal deposit;
 
+    /** 订单状态（1未到货 2部分到货 3已完成） */
+    @Excel(name = "订单状态", readConverterExp = "1=未到货,2=部分到货,3=已完成")
+    private Integer intoState;
+    private String intoStateName;
+
     /** 采购详情 */
     private List<TWarehousePurchasedetail> detailList;
-
-    public List<TWarehousePurchasedetail> getDetailList() {
-        return detailList;
-    }
-
-    public void setDetailList(List<TWarehousePurchasedetail> detailList) {
-        this.detailList = detailList;
-    }
-
-    public BigDecimal getDeposit() {
-        return deposit;
-    }
-
-    public void setDeposit(BigDecimal deposit) {
-        this.deposit = deposit;
-    }
-
-    public Integer getDelFlag() {
-        return delFlag;
-    }
-    public void setDelFlag(Integer delFlag) {
-        this.delFlag = delFlag;
-    }
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getCheckIds() {
-        return checkIds;
-    }
-
-    public void setCheckIds(String checkIds) {
-        this.checkIds = checkIds;
-    }
-
-    public Integer getCheckIndex() {
-        return checkIndex;
-    }
-
-    public void setCheckIndex(Integer checkIndex) {
-        this.checkIndex = checkIndex;
-    }
-
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
-
-    public Long getId()
-    {
-        return id;
-    }
-    public Long getWarehouseId()
-    {
-        return warehouseId;
-    }
-    public void setSupplierId(Long supplierId)
-    {
-        this.supplierId = supplierId;
-    }
-
-    public Integer getApplyState()
-    {
-        return applyState;
-    }
-    public void setSysUserId(Long sysUserId)
-    {
-        this.sysUserId = sysUserId;
-    }
-
-    public Long getSysUserId()
-    {
-        return sysUserId;
-    }
-    public void setVersion(Integer version)
-    {
-        this.version = version;
-    }
-
-    public Integer getVersion()
-    {
-        return version;
-    }
-
-    public String getApplyStateName() {
-        return applyStateName;
-    }
-
-    public void setApplyStateName(String applyStateName) {
-        this.applyStateName = applyStateName;
-    }
-
-    public Integer getQueryType() {
-        return queryType;
-    }
-
-    public void setQueryType(Integer queryType) {
-        this.queryType = queryType;
-    }
-    @Override
-    public String getWarehouseName() {
-        return warehouseName;
-    }
-
-    @Override
-    public void setWarehouseName(String warehouseName) {
-        this.warehouseName = warehouseName;
-    }
-
-    public String getSupplierName() {
-        return supplierName;
-    }
-
-    public void setSupplierName(String supplierName) {
-        this.supplierName = supplierName;
-    }
-
-    public Long getNowCheckId() {
-        return nowCheckId;
-    }
-
-    public void setNowCheckId(Long nowCheckId) {
-        this.nowCheckId = nowCheckId;
-    }
-
-    public String getCheckStep() {
-        return checkStep;
-    }
-
-    public void setCheckStep(String checkStep) {
-        this.checkStep = checkStep;
-    }
-
-    public void setWarehouseId(Long warehouseId) {
-        this.warehouseId = warehouseId;
-    }
-
-    public Long getSupplierId() {
-        return supplierId;
-    }
-
-    public void setApplyState(Integer applyState) {
-        this.applyState = applyState;
-    }
 
     @Override
     public String toString() {

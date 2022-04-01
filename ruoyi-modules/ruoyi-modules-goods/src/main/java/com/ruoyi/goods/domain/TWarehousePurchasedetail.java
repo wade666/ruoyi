@@ -55,9 +55,9 @@ public class TWarehousePurchasedetail extends BaseEntity
     @Excel(name = "已入库数量")
     private Integer alreadyNum;
 
-    /** 货号 */
-    @Excel(name = "货号")
-    private String goodsCode;
+    /** 批次号 */
+    @Excel(name = "批次号")
+    private String batchCode;
 
     /** 版本号 */
     @Excel(name = "版本号")
@@ -69,7 +69,35 @@ public class TWarehousePurchasedetail extends BaseEntity
     /** 商品名 */
     private String productName;
 
-    public void setId(Long id) 
+    /** 税率% */
+    @Excel(name = "税率%")
+    private BigDecimal taxRate;
+
+    /** 含税单价(元) */
+    @Excel(name = "含税单价(元)")
+    private BigDecimal taxPrice;
+
+    /** 含税金额(元) */
+    @Excel(name = "含税金额(元)")
+    private BigDecimal taxAmount;
+
+    /** 采购金额(元) */
+    @Excel(name = "采购金额(元)")
+    private BigDecimal applyAmount;
+
+    /** 商品规格 */
+    @Excel(name = "商品规格")
+    private String specificationValues;
+
+    public String getSpecificationValues() {
+        return specificationValues;
+    }
+
+    public void setSpecificationValues(String specificationValues) {
+        this.specificationValues = specificationValues;
+    }
+
+    public void setId(Long id)
     {
         this.id = id;
     }
@@ -150,14 +178,14 @@ public class TWarehousePurchasedetail extends BaseEntity
     {
         return alreadyNum;
     }
-    public void setGoodsCode(String goodsCode) 
+    public void setBatchCode(String batchCode)
     {
-        this.goodsCode = goodsCode;
+        this.batchCode = batchCode;
     }
 
-    public String getGoodsCode() 
+    public String getBatchCode()
     {
-        return goodsCode;
+        return batchCode;
     }
     public void setVersion(Integer version) 
     {
@@ -188,6 +216,38 @@ public class TWarehousePurchasedetail extends BaseEntity
         this.productName = productName;
     }
 
+    public BigDecimal getTaxRate() {
+        return taxRate;
+    }
+
+    public void setTaxRate(BigDecimal taxRate) {
+        this.taxRate = taxRate;
+    }
+
+    public BigDecimal getTaxPrice() {
+        return taxPrice;
+    }
+
+    public void setTaxPrice(BigDecimal taxPrice) {
+        this.taxPrice = taxPrice;
+    }
+
+    public BigDecimal getTaxAmount() {
+        return taxAmount;
+    }
+
+    public void setTaxAmount(BigDecimal taxAmount) {
+        this.taxAmount = taxAmount;
+    }
+
+    public BigDecimal getApplyAmount() {
+        return applyAmount;
+    }
+
+    public void setApplyAmount(BigDecimal applyAmount) {
+        this.applyAmount = applyAmount;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -200,10 +260,15 @@ public class TWarehousePurchasedetail extends BaseEntity
             .append("arriveTime", getArriveTime())
             .append("realNum", getRealNum())
             .append("alreadyNum", getAlreadyNum())
-            .append("goodsCode", getGoodsCode())
+            .append("batchCode", getBatchCode())
             .append("version", getVersion())
             .append("remark", getRemark())
             .append("delFlag", getDelFlag())
+            .append("taxRate", getTaxRate())
+            .append("taxPrice", getTaxPrice())
+            .append("taxAmount", getTaxAmount())
+            .append("applyAmount", getApplyAmount())
+            .append("specificationValues", getSpecificationValues())
             .toString();
     }
 }

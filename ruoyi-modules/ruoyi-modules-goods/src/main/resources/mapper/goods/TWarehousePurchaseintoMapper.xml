@@ -2,63 +2,59 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.goods.mapper.TWarehousePurchaseMapper">
-
-    <resultMap type="TWarehousePurchase" id="TWarehousePurchaseResult">
+<mapper namespace="com.ruoyi.goods.mapper.TWarehousePurchaseintoMapper">
+    
+    <resultMap type="TWarehousePurchaseinto" id="TWarehousePurchaseintoResult">
         <result property="id"    column="id"    />
         <result property="warehouseId"    column="warehouse_id"    />
         <result property="supplierId"    column="supplier_id"    />
         <result property="applyState"    column="apply_state"    />
         <result property="sysUserId"    column="sys_user_id"    />
-        <result property="createBy"    column="create_by"    />
         <result property="nowCheckId"    column="now_check_id"    />
         <result property="checkStep"    column="check_step"    />
         <result property="checkIds"    column="check_ids"    />
         <result property="checkIndex"    column="check_index"    />
+        <result property="payMoney"    column="pay_money"    />
+        <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateTime"    column="update_time"    />
         <result property="version"    column="version"    />
         <result property="remark"    column="remark"    />
+        <result property="delFlag"    column="del_flag"    />
         <result property="warehouseName"    column="warehouse_name"    />
         <result property="supplierName"    column="supplier_name"    />
-        <result property="delFlag"    column="del_flag"    />
-        <result property="deposit"    column="deposit"    />
         <result property="applyStateName"    column="applyStateName"    />
-        <result property="intoState"    column="into_state"    />
-        <result property="intoStateName"    column="intoStateName"    />
-        <collection property="detailList" ofType="com.ruoyi.goods.domain.TWarehousePurchasedetail">
-            <result property="id"    column="de_id"    />
+        <collection property="detailList" ofType="com.ruoyi.goods.domain.TWarehousePurchaseintodetail">
+            <result property="id"    column="id"    />
+            <result property="purchaseintoId"    column="purchaseInto_id"    />
             <result property="purchaseId"    column="purchase_id"    />
-            <result property="productId"    column="product_id"    />
-            <result property="applyNum"    column="apply_num"    />
+            <result property="arriveNum"    column="arrive_num"    />
             <result property="applyPrice"    column="apply_price"    />
-            <result property="applyTime"    column="apply_time"    />
-            <result property="arriveTime"    column="arrive_time"    />
-            <result property="realNum"    column="real_num"    />
-            <result property="alreadyNum"    column="already_num"    />
             <result property="batchCode"    column="batch_code"    />
-            <result property="version"    column="version"    />
-            <result property="remark"    column="remark"    />
-            <result property="delFlag"    column="del_flag"    />
             <result property="taxRate"    column="tax_rate"    />
             <result property="taxPrice"    column="tax_price"    />
             <result property="taxAmount"    column="tax_amount"    />
             <result property="applyAmount"    column="apply_amount"    />
-            <result property="productName"    column="product_name"    />
             <result property="specificationValues"    column="specification_values"    />
+            <result property="version"    column="version"    />
+            <result property="remark"    column="remark"    />
+            <result property="delFlag"    column="del_flag"    />
+            <result property="productName"    column="product_name"    />
         </collection>
     </resultMap>
 
-    <sql id="selectTWarehousePurchaseVo">
-       select id, warehouse_id, supplier_id, apply_state, sys_user_id, create_by, now_check_id, check_step,check_ids,check_index, create_time, update_time, version, remark,del_flag,deposit, into_state from t_warehouse_purchase
+    <sql id="selectTWarehousePurchaseintoVo">
+        select id, warehouse_id, supplier_id, apply_state, sys_user_id, now_check_id, check_step, check_ids, check_index, pay_money, create_by, create_time, update_time, version, remark, del_flag from t_warehouse_purchaseinto
     </sql>
-    <sql id="selectTWarehousePurchaseVoTwo">
-       select wp.id, wp.warehouse_id,wp.supplier_id,wp.apply_state,(case wp.apply_state when 0 then '待提交' when 1 then '审核中' when 2 then '审核通过' when 3 then '审核拒绝' end) applyStateName, wp.remark, wp.sys_user_id, wp.create_by, wp.now_check_id, wp.check_step,wp.check_ids,wp.check_index,wp.del_flag,wp.deposit,(case wp.into_state when 1 then '未到货' when 2 then '部分到货' when 3 then '已完成' end) intoStateName, p.product_name, w.warehouse_name,ts.supplier_name,
-       pd.id de_id,pd.purchase_id,pd.product_id, pd.apply_num, pd.apply_price, pd.apply_time, pd.arrive_time, pd.real_num, pd.already_num, pd.batch_code, pd.tax_rate, pd.tax_price, pd.tax_amount, pd.apply_amount,pd.specification_values from t_warehouse_purchase wp
+
+    <sql id="selectTWarehousePurchaseIntoVoTwo">
+        SELECT wp.id, wp.warehouse_id, wp.supplier_id, wp.apply_state , CASE wp.apply_state WHEN 0 THEN '待提交' WHEN 1 THEN '审核中' WHEN 2 THEN '审核通过' WHEN 3 THEN '审核拒绝' END AS applyStateName, wp.remark, wp.sys_user_id, wp.create_by, wp.now_check_id , wp.check_step, wp.check_ids, wp.check_index, wp.del_flag, wp.pay_money , p.product_name, w.warehouse_name, ts.supplier_name, pd.id AS de_id, pd.purchaseInto_id, pd.purchase_id , pd.product_id, pd.arrive_num, pd.apply_price, pd.batch_code, pd.tax_rate , pd.tax_price, pd.tax_amount, pd.apply_amount, pd.specification_values
+        FROM t_warehouse_purchaseinto wp
     </sql>
-    <select id="selectTWarehousePurchaseList" parameterType="TWarehousePurchase" resultMap="TWarehousePurchaseResult">
-        <include refid="selectTWarehousePurchaseVoTwo"/>
-        LEFT JOIN t_warehouse_purchaseDetail pd ON wp.id = pd.purchase_id
+
+    <select id="selectTWarehousePurchaseIntoList" parameterType="TWarehousePurchaseinto" resultMap="TWarehousePurchaseintoResult">
+        <include refid="selectTWarehousePurchaseIntoVoTwo"/>
+        LEFT JOIN t_warehouse_purchaseintodetail pd ON wp.id = pd.purchase_id
         LEFT JOIN t_product p ON pd.product_id = p.id
         LEFT JOIN t_warehouse w ON wp.warehouse_id = w.id
         LEFT JOIN t_supplier ts ON wp.supplier_id = ts.id
@@ -72,9 +68,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         ${params.dataScope}
     </select>
 
-    <select id="selectTWarehousePurchaseListBySysUserId" parameterType="TWarehousePurchase" resultMap="TWarehousePurchaseResult">
-        <include refid="selectTWarehousePurchaseVoTwo"/>
-        LEFT JOIN t_warehouse_purchaseDetail pd ON wp.id = pd.purchase_id
+    <select id="selectTWarehousePurchaseIntoListBySysUserId" parameterType="TWarehousePurchaseinto" resultMap="TWarehousePurchaseintoResult">
+        <include refid="selectTWarehousePurchaseIntoVoTwo"/>
+        LEFT JOIN t_warehouse_purchaseintodetail pd ON wp.id = pd.purchase_id
         LEFT JOIN t_product p ON pd.product_id = p.id
         left join t_warehouse w on wp.warehouse_id=w.id
         left join t_supplier ts on wp.supplier_id=ts.id
@@ -88,112 +84,109 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         ${params.dataScope}
     </select>
 
-    <select id="checkList" parameterType="TWarehousePurchase" resultMap="TWarehousePurchaseResult">
-        <include refid="selectTWarehousePurchaseVoTwo"/>
-        LEFT JOIN t_warehouse_purchaseDetail pd ON wp.id = pd.purchase_id
+    <select id="purchaseintoCheckList" parameterType="TWarehousePurchaseinto" resultMap="TWarehousePurchaseintoResult">
+        <include refid="selectTWarehousePurchaseIntoVoTwo"/>
+        LEFT JOIN t_warehouse_purchaseintodetail pd ON wp.id = pd.purchase_id
         LEFT JOIN t_product p ON pd.product_id = p.id
         left join t_warehouse w on wp.warehouse_id=w.id
         left join t_supplier ts on wp.supplier_id=ts.id
         where wp.now_check_id= #{nowCheckId} and wp.apply_state=1 and wp.del_flag=1
     </select>
 
-    <select id="selectTWarehousePurchaseById" parameterType="Long" resultMap="TWarehousePurchaseResult">
-        <include refid="selectTWarehousePurchaseVo"/>
+    <select id="selectTWarehousePurchaseintoById" parameterType="Long" resultMap="TWarehousePurchaseintoResult">
+        <include refid="selectTWarehousePurchaseintoVo"/>
         where id = #{id}
     </select>
         
-    <insert id="insertTWarehousePurchase" parameterType="TWarehousePurchase" useGeneratedKeys="true" keyProperty="id">
-        insert into t_warehouse_purchase
+    <insert id="insertTWarehousePurchaseinto" parameterType="TWarehousePurchaseinto" useGeneratedKeys="true" keyProperty="id">
+        insert into t_warehouse_purchaseinto
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="warehouseId != null">warehouse_id,</if>
             <if test="supplierId != null">supplier_id,</if>
             <if test="applyState != null">apply_state,</if>
             <if test="sysUserId != null">sys_user_id,</if>
-            <if test="createBy != null">create_by,</if>
             <if test="nowCheckId != null">now_check_id,</if>
+            <if test="checkStep != null">check_step,</if>
             <if test="checkIds != null">check_ids,</if>
             <if test="checkIndex != null">check_index,</if>
-            <if test="checkStep != null">check_step,</if>
+            <if test="payMoney != null">pay_money,</if>
+            <if test="createBy != null">create_by,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="version != null">version,</if>
             <if test="remark != null">remark,</if>
             <if test="delFlag != null">del_flag,</if>
-            <if test="deposit != null">deposit,</if>
-            <if test="intoState != null">into_state,</if>
-        </trim>
+         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="warehouseId != null">#{warehouseId},</if>
             <if test="supplierId != null">#{supplierId},</if>
             <if test="applyState != null">#{applyState},</if>
             <if test="sysUserId != null">#{sysUserId},</if>
-            <if test="createBy != null">#{createBy},</if>
             <if test="nowCheckId != null">#{nowCheckId},</if>
+            <if test="checkStep != null">#{checkStep},</if>
             <if test="checkIds != null">#{checkIds},</if>
             <if test="checkIndex != null">#{checkIndex},</if>
-            <if test="checkStep != null">#{checkStep},</if>
+            <if test="payMoney != null">#{payMoney},</if>
+            <if test="createBy != null">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="version != null">#{version},</if>
             <if test="remark != null">#{remark},</if>
             <if test="delFlag != null">#{delFlag},</if>
-            <if test="deposit != null">#{deposit},</if>
-            <if test="intoState != null">#{intoState},</if>
-        </trim>
+         </trim>
     </insert>
 
-    <update id="updateTWarehousePurchase" parameterType="TWarehousePurchase">
-        update t_warehouse_purchase
+    <update id="updateTWarehousePurchaseinto" parameterType="TWarehousePurchaseinto">
+        update t_warehouse_purchaseinto
         <trim prefix="SET" suffixOverrides=",">
             <if test="warehouseId != null">warehouse_id = #{warehouseId},</if>
             <if test="supplierId != null">supplier_id = #{supplierId},</if>
             <if test="applyState != null">apply_state = #{applyState},</if>
             <if test="sysUserId != null">sys_user_id = #{sysUserId},</if>
-            <if test="createBy != null">create_by = #{createBy},</if>
             <if test="nowCheckId != null">now_check_id = #{nowCheckId},</if>
             <if test="checkStep != null">check_step = #{checkStep},</if>
             <if test="checkIds != null">check_ids = #{checkIds},</if>
             <if test="checkIndex != null">check_index = #{checkIndex},</if>
+            <if test="payMoney != null">pay_money = #{payMoney},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="version != null">version = #{version},</if>
             <if test="remark != null">remark = #{remark},</if>
             <if test="delFlag != null">del_flag = #{delFlag},</if>
-            <if test="deposit != null">deposit = #{deposit},</if>
-            <if test="intoState != null">into_state = #{intoState},</if>
         </trim>
         where id = #{id}
     </update>
 
-    <update id="deleteTWarehousePurchaseById" parameterType="Long">
-        update t_warehouse_purchase set del_flag = 2 where id = #{id}
+    <update id="deleteTWarehousePurchaseintoById" parameterType="Long">
+        update t_warehouse_purchaseinto set del_flag = 2 where id = #{id}
     </update>
 
-    <update id="deleteTWarehousePurchaseByIds" parameterType="String">
-        update t_warehouse_purchase set del_flag = 2 where id in
+    <update id="deleteTWarehousePurchaseintoByIds" parameterType="String">
+        update t_warehouse_purchaseinto set del_flag = 2 where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
     </update>
-    <update id="updateTWarehousePurchaseCheck" parameterType="TWarehousePurchase">
-        update t_warehouse_purchase
+
+    <update id="updateTWarehousePurchaseintoCheck" parameterType="TWarehousePurchaseinto">
+        update t_warehouse_purchaseinto
         <trim prefix="SET" suffixOverrides=",">
             now_check_id = #{nowCheckId},
             <if test="warehouseId != null">warehouse_id = #{warehouseId},</if>
             <if test="supplierId != null">supplier_id = #{supplierId},</if>
             <if test="applyState != null">apply_state = #{applyState},</if>
             <if test="sysUserId != null">sys_user_id = #{sysUserId},</if>
-            <if test="createBy != null">create_by = #{createBy},</if>
             <if test="checkStep != null">check_step = #{checkStep},</if>
             <if test="checkIds != null">check_ids = #{checkIds},</if>
             <if test="checkIndex != null">check_index = #{checkIndex},</if>
+            <if test="payMoney != null">pay_money = #{payMoney},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="version != null">version = #{version},</if>
             <if test="remark != null">remark = #{remark},</if>
             <if test="delFlag != null">del_flag = #{delFlag},</if>
-            <if test="deposit != null">deposit = #{deposit},</if>
-            <if test="intoState != null">into_state = #{intoState},</if>
         </trim>
         where id = #{id}
     </update>

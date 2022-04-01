@@ -13,13 +13,13 @@ import com.ruoyi.goods.domain.TWarehousePurchaserecord;
 import com.ruoyi.goods.domain.vo.DictType;
 import com.ruoyi.goods.mapper.*;
 import com.ruoyi.goods.mapper.TWarehousePurchaserecordMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.goods.domain.TWarehousePurchase;
 import com.ruoyi.goods.service.ITWarehousePurchaseService;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import javax.annotation.Resource;
 
 /**
  * 采购申请Service业务层处理
@@ -30,13 +30,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class TWarehousePurchaseServiceImpl implements ITWarehousePurchaseService 
 {
-    @Autowired
+    @Resource
     private TWarehousePurchaseMapper tWarehousePurchaseMapper;
-    @Autowired
+    @Resource
     private TWarehousePurchasedetailMapper tWarehousePurchasedetailMapper;
-    @Autowired
+    @Resource
     private TPurchaseReviewerMapper tPurchaseReviewerMapper;
-    @Autowired
+    @Resource
     private TWarehousePurchaserecordMapper tWarehousePurchaserecordMapper;
 
     /**
@@ -53,7 +53,6 @@ public class TWarehousePurchaseServiceImpl implements ITWarehousePurchaseService
 
     /**
      * 查询采购申请列表
-     * 
      * @param tWarehousePurchase 采购申请
      * @return 采购申请
      */
@@ -97,6 +96,7 @@ public class TWarehousePurchaseServiceImpl implements ITWarehousePurchaseService
         }
         return count;
     }
+
     public void setCheckStep(TWarehousePurchase tWarehousePurchase){
         TPurchaseReviewer reviewer = new TPurchaseReviewer();
         reviewer.setCheckType(DictType.CHECKTYPE_PURCHASE);
@@ -176,8 +176,22 @@ public class TWarehousePurchaseServiceImpl implements ITWarehousePurchaseService
         record.setSysUserId(SecurityUtils.getUserId());
         record.setCreateTime(DateUtils.getNowDate());
         record.setRemark(tWarehousePurchase.getRemark());
+        record.setCheckType(DictType.CHECKTYPE_IN_WAREHOUSE);
         tWarehousePurchaserecordMapper.insertTWarehousePurchaserecord(record);
-        return tWarehousePurchaseMapper.updateTWarehousePurchase(tWarehousePurchase);
+        return tWarehousePurchaseMapper.updateTWarehousePurchaseCheck(tWarehousePurchase);
+    }
+    /**
+     * 采购审核记录列表
+     */
+    @Override
+    public List<TWarehousePurchaserecord> selectTWarehousePurchaseCheckList(TWarehousePurchase tWarehousePurchase) {
+        if(tWarehousePurchase.getId() == null){
+            throw new ServiceException("采购申请id不能为空");
+        }
+        TWarehousePurchaserecord tWarehousePurchaserecord = new TWarehousePurchaserecord();
+        tWarehousePurchaserecord.setCheckType(DictType.CHECKTYPE_PURCHASE);
+        tWarehousePurchaserecord.setPurchaseId(tWarehousePurchase.getId());
+        return tWarehousePurchaserecordMapper.selectTWarehousePurchaserecordList(tWarehousePurchaserecord);
     }
 
     /**
