@@ -10,10 +10,10 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="商品编码id" prop="productCode">
+      <el-form-item label="商品sku" prop="sn">
         <el-input
-          v-model="queryParams.productCode"
-          placeholder="请输入商品编码id"
+          v-model="queryParams.sn"
+          placeholder="请输入商品sku"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
@@ -94,7 +94,7 @@
       <el-table-column label="库存id" align="center" prop="surplusId" />
       <el-table-column label="商品id" align="center" prop="productId" />
       <el-table-column label="商品名" align="center" prop="productName" />
-      <el-table-column label="商品编码id" align="center" prop="productCode" />
+      <el-table-column label="商品sku" align="center" prop="sn" />
       <el-table-column label="批次号" align="center" prop="batchCode" />
       <el-table-column label="仓库id" align="center" prop="warehouseId" />
       <el-table-column label="仓库名" align="center" prop="warehouseName" />
@@ -133,8 +133,8 @@
         <el-form-item label="商品id" prop="productId">
           <el-input v-model="form.productId" placeholder="请输入商品id" />
         </el-form-item>
-        <el-form-item label="商品编码id" prop="productCode">
-          <el-input v-model="form.productCode" placeholder="请输入商品编码id" />
+        <el-form-item label="商品sku" prop="sn">
+          <el-input v-model="form.sn" placeholder="请输入商品sku" />
         </el-form-item>
         <el-form-item label="批次号" prop="batchCode">
           <el-input v-model="form.batchCode" placeholder="请输入批次号" />
@@ -184,7 +184,7 @@ export default {
         pageNum: 1,
         pageSize: 10,
         productId: null,
-        productCode: null,
+        sn: null,
         batchCode: null,
         warehouseId: null,
         surplusNum: null,
@@ -197,8 +197,8 @@ export default {
         productId: [
           { required: true, message: "商品id不能为空", trigger: "blur" }
         ],
-        productCode: [
-          { required: true, message: "商品编码id不能为空", trigger: "blur" }
+        sn: [
+          { required: true, message: "商品sku不能为空", trigger: "blur" }
         ],
         batchCode: [
           { required: true, message: "批次号不能为空", trigger: "blur" }
@@ -235,7 +235,7 @@ export default {
       this.form = {
         surplusId: null,
         productId: null,
-        productCode: null,
+        sn: null,
         batchCode: null,
         warehouseId: null,
         surplusNum: null,

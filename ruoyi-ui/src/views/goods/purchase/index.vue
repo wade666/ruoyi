@@ -171,8 +171,8 @@
         <el-form-item label="已入库数量" prop="alreadyNum">
           <el-input v-model="form.alreadyNum" placeholder="请输入已入库数量" />
         </el-form-item>
-        <el-form-item label="批次号" prop="goodsCode">
-          <el-input v-model="form.goodsCode" placeholder="请输入批次号" />
+        <el-form-item label="批次号" prop="batchCode">
+          <el-input v-model="form.batchCode" placeholder="请输入批次号" />
         </el-form-item>
         <el-form-item label="审核状态" prop="applyState">
           <el-input v-model="form.applyState" placeholder="请输入审核状态" />
