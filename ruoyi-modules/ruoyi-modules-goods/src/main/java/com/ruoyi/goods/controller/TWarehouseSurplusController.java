@@ -3,6 +3,10 @@ package com.ruoyi.goods.controller;
 import java.util.List;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +25,7 @@ import com.ruoyi.common.core.web.controller.BaseController;
 import com.ruoyi.common.core.web.domain.AjaxResult;
 import com.ruoyi.common.core.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.web.page.TableDataInfo;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 库存Controller
@@ -28,6 +33,7 @@ import com.ruoyi.common.core.web.page.TableDataInfo;
  * @author ruoyi
  * @date 2022-03-08
  */
+@Api(description = "库存管理")
 @RestController
 @RequestMapping("/surplus")
 public class TWarehouseSurplusController extends BaseController
@@ -38,6 +44,7 @@ public class TWarehouseSurplusController extends BaseController
     /**
      * 查询库存列表
      */
+    @ApiOperation("查询库存列表")
     @RequiresPermissions("goods:surplus:list")
     @GetMapping("/list")
     public TableDataInfo list(TWarehouseSurplus tWarehouseSurplus)
@@ -50,6 +57,7 @@ public class TWarehouseSurplusController extends BaseController
     /**
      * 导出库存列表
      */
+    @ApiOperation("导出库存列表")
     @RequiresPermissions("goods:surplus:export")
     @Log(title = "库存", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -63,9 +71,10 @@ public class TWarehouseSurplusController extends BaseController
     /**
      * 获取库存详细信息
      */
+    @ApiOperation("获取库存详细信息")
     @RequiresPermissions("goods:surplus:query")
     @GetMapping(value = "/{surplusId}")
-    public AjaxResult getInfo(@PathVariable("surplusId") Long surplusId)
+    public AjaxResult getInfo(@ApiParam(value = "库存id", required = true) @PathVariable("surplusId") Long surplusId)
     {
         return AjaxResult.success(tWarehouseSurplusService.selectTWarehouseSurplusBySurplusId(surplusId));
     }
@@ -73,6 +82,7 @@ public class TWarehouseSurplusController extends BaseController
     /**
      * 新增库存
      */
+    @ApiOperation("新增库存")
     @RequiresPermissions("goods:surplus:add")
     @Log(title = "库存", businessType = BusinessType.INSERT)
     @PostMapping
@@ -84,6 +94,7 @@ public class TWarehouseSurplusController extends BaseController
     /**
      * 修改库存
      */
+    @ApiOperation("修改库存")
     @RequiresPermissions("goods:surplus:edit")
     @Log(title = "库存", businessType = BusinessType.UPDATE)
     @PutMapping
@@ -95,11 +106,24 @@ public class TWarehouseSurplusController extends BaseController
     /**
      * 删除库存
      */
+    @ApiIgnore
     @RequiresPermissions("goods:surplus:remove")
     @Log(title = "库存", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{surplusIds}")
     public AjaxResult remove(@PathVariable Long[] surplusIds)
     {
         return toAjax(tWarehouseSurplusService.deleteTWarehouseSurplusBySurplusIds(surplusIds));
+    }
+    /**
+     * 根据仓库id查询商品库存
+     */
+    @ApiOperation("根据仓库id查询商品库存")
+    @RequiresPermissions("goods:surplus:query")
+    @GetMapping(value = "/{warehouseId}")
+    public TableDataInfo getProductInfo(@ApiParam(value = "仓库id", required = true) @PathVariable("warehouseId") Long warehouseId)
+    {
+        startPage();
+        List<TWarehouseSurplus> list = tWarehouseSurplusService.selectTWarehouseSurplusByWarehouseId(warehouseId);
+        return getDataTable(list);
     }
 }

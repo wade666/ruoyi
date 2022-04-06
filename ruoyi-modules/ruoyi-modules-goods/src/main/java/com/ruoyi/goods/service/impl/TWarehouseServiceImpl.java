@@ -47,7 +47,14 @@ public class TWarehouseServiceImpl implements ITWarehouseService
         tWarehouse.setParentId(0L);
         return tWarehouseMapper.selectTWarehouseList(tWarehouse);
     }
-
+    /**
+     * 查询仓库列表-所有
+     */
+    @Override
+    public List<TWarehouse> selectTWarehouseListAll(TWarehouse tWarehouse)
+    {
+        return tWarehouseMapper.selectTWarehouseList(tWarehouse);
+    }
     /**
      * 新增仓库
      * 

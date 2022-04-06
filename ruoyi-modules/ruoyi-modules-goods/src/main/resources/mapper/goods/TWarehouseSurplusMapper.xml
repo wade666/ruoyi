@@ -17,6 +17,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="productName"    column="product_name"    />
         <result property="warehouseName"    column="warehouse_name"    />
         <result property="warnNum"    column="warn_num"    />
+        <result property="productName"    column="product_name"    />
+        <result property="specificationValues"    column="specification_values"    />
+        <result property="price"    column="price"    />
     </resultMap>
 
     <sql id="selectTWarehouseSurplusVo">
@@ -96,5 +99,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectSumSurplus" parameterType="TWarehouseSurplus" resultType="int">
         select sum(surplus_num) from t_warehouse_surplus where product_id = #{productId} and warehouse_id = #{warehouseId} and sn = #{sn} and batch_code = #{batchCode}
+    </select>
+
+    <select id="selectTWarehouseSurplusByWarehouseId" parameterType="Long" resultMap="TWarehouseSurplusResult">
+        select ws.surplus_id, ws.product_id, ws.sn, ws.batch_code, ws.warehouse_id, ws.surplus_num, ws.create_time, ws.update_time, ws.version,tp.product_name,ts.specification_values,ts.price from t_warehouse_surplus ws
+        left join t_sku ts on ws.sn = ts.sn
+        left join t_product tp on tp.id = ts.product_id
+        where ws.warehouse_id = #{warehouseId}
     </select>
 </mapper>

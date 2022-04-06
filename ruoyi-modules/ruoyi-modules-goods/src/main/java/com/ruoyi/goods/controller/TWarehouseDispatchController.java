@@ -32,7 +32,7 @@ import com.ruoyi.common.core.web.page.TableDataInfo;
  * @author ruoyi
  * @date 2022-03-30
  */
-@Api("调拨单")
+@Api(description = "调拨单")
 @RestController
 @RequestMapping("/dispatch")
 public class TWarehouseDispatchController extends BaseController

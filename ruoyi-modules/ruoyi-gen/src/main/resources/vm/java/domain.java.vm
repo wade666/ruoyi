@@ -18,6 +18,7 @@ import com.ruoyi.common.core.web.domain.TreeEntity;
  * @author ${author}
  * @date ${datetime}
  */
+@ApiModel(value = "${functionName}对象")
 #if($table.crud || $table.sub)
 #set($Entity="BaseEntity")
 #elseif($table.tree)

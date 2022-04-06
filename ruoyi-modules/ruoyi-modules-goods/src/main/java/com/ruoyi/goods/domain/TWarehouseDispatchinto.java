@@ -1,5 +1,7 @@
 package com.ruoyi.goods.domain;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -14,6 +16,7 @@ import java.util.List;
  * @author ruoyi
  * @date 2022-03-30
  */
+@ApiModel(value = "调拨出入库单对象")
 @Data
 public class TWarehouseDispatchinto extends BaseEntity
 {
@@ -27,15 +30,18 @@ public class TWarehouseDispatchinto extends BaseEntity
     private Long dispatchintoNo;
 
     /** 关联调拨单号 */
+    @ApiModelProperty(value = "关联调拨单号",required = true)
     @Excel(name = "关联调拨单号")
     private Long dispatchNo;
 
     /** 仓库id */
+    @ApiModelProperty(value = "仓库id",required = true)
     @Excel(name = "仓库id")
     private Long warehouseId;
     private String warehouseName;
 
     /** 调拨类型 1调拨入库 2调拨出库 */
+    @ApiModelProperty(value = "调拨类型 1调拨入库 2调拨出库", required = true, allowableValues = "1,2")
     @Excel(name = "调拨类型 1调拨入库 2调拨出库")
     private Integer intoType;
     private String intoTypeName;
@@ -48,6 +54,7 @@ public class TWarehouseDispatchinto extends BaseEntity
     private Integer delFlag;
 
     /** 调拨单详情 */
+    @ApiModelProperty(value = "调拨单详情",required = true)
     private List<TWarehouseDispatchdetail> detailList;
 
     @Override

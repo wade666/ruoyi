@@ -3,6 +3,9 @@ package com.ruoyi.goods.controller;
 import java.util.List;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,6 +31,7 @@ import com.ruoyi.common.core.web.page.TableDataInfo;
  * @author ruoyi
  * @date 2022-03-30
  */
+@Api(description = "调拨出入库单")
 @RestController
 @RequestMapping("/dispatchinto")
 public class TWarehouseDispatchintoController extends BaseController
@@ -38,6 +42,7 @@ public class TWarehouseDispatchintoController extends BaseController
     /**
      * 查询调拨出入库单列表
      */
+    @ApiOperation("查询调拨出入库单列表")
     @RequiresPermissions("goods:dispatchinto:list")
     @GetMapping("/list")
     public TableDataInfo list(TWarehouseDispatchinto tWarehouseDispatchinto)
@@ -50,6 +55,7 @@ public class TWarehouseDispatchintoController extends BaseController
     /**
      * 导出调拨出入库单列表
      */
+    @ApiOperation("导出调拨出入库单列表")
     @RequiresPermissions("goods:dispatchinto:export")
     @Log(title = "调拨出入库单", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -63,6 +69,7 @@ public class TWarehouseDispatchintoController extends BaseController
     /**
      * 获取调拨出入库单详细信息
      */
+    @ApiOperation("获取调拨出入库单详细信息")
     @RequiresPermissions("goods:dispatchinto:query")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
@@ -73,6 +80,7 @@ public class TWarehouseDispatchintoController extends BaseController
     /**
      * 新增调拨出入库单
      */
+    @ApiOperation("新增调拨出入库单")
     @RequiresPermissions("goods:dispatchinto:add")
     @Log(title = "调拨出入库单", businessType = BusinessType.INSERT)
     @PostMapping
@@ -84,6 +92,7 @@ public class TWarehouseDispatchintoController extends BaseController
     /**
      * 修改调拨出入库单
      */
+    @ApiOperation("修改调拨出入库单")
     @RequiresPermissions("goods:dispatchinto:edit")
     @Log(title = "调拨出入库单", businessType = BusinessType.UPDATE)
     @PutMapping
@@ -95,6 +104,7 @@ public class TWarehouseDispatchintoController extends BaseController
     /**
      * 删除调拨出入库单
      */
+    @ApiOperation("删除调拨出入库单")
     @RequiresPermissions("goods:dispatchinto:remove")
     @Log(title = "调拨出入库单", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")

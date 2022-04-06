@@ -1,6 +1,9 @@
 package com.ruoyi.goods.domain;
 
 import java.math.BigDecimal;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.core.annotation.Excel;
@@ -12,6 +15,8 @@ import com.ruoyi.common.core.web.domain.BaseEntity;
  * @author ruoyi
  * @date 2022-03-08
  */
+@ApiModel(value = "仓库对象")
+@Data
 public class TWarehouse extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
@@ -20,34 +25,42 @@ public class TWarehouse extends BaseEntity
     private Long id;
 
     /** 仓库名 */
+    @ApiModelProperty(value = "仓库名",required = true)
     @Excel(name = "仓库名")
     private String warehouseName;
 
     /** 仓库管理员 */
+    @ApiModelProperty(value = "仓库管理员",required = true)
     @Excel(name = "仓库管理员")
     private Long sysUserId;
 
     /** 联系人 */
+    @ApiModelProperty(value = "联系人")
     @Excel(name = "联系人")
     private String contact;
 
     /** 地址省市县以及详细地址暂时不区分，可能存在退货使用此地址 */
+    @ApiModelProperty(value = "地址")
     @Excel(name = "地址省市县以及详细地址暂时不区分，可能存在退货使用此地址")
     private String address;
 
     /** 手机 */
+    @ApiModelProperty(value = "手机")
     @Excel(name = "手机")
     private String phone;
 
     /** 备注 */
+    @ApiModelProperty(value = "备注")
     @Excel(name = "备注")
     private String memo;
 
     /** 是否默认 0是1否 */
+    @ApiModelProperty(value = "是否默认 0是1否",allowableValues = "0,1")
     @Excel(name = "是否默认 0是1否")
     private Integer isDefault;
 
     /** 状态 0禁用 1正常 */
+    @ApiModelProperty(value = "状态 0禁用 1正常",allowableValues = "0,1")
     @Excel(name = "状态 0禁用 1正常")
     private Integer state;
 
@@ -60,18 +73,22 @@ public class TWarehouse extends BaseEntity
     private String appSecret;
 
     /** 面积（平方米） */
+    @ApiModelProperty(value = "面积（平方米）")
     @Excel(name = "面积", readConverterExp = "平=方米")
     private BigDecimal space;
 
     /** 仓库所属公司id */
+    @ApiModelProperty(value = "仓库所属公司id",required = true)
     @Excel(name = "仓库所属公司id")
     private Long companyId;
 
     /** 仓库类型（1真实，2虚拟） */
+    @ApiModelProperty(value = "仓库类型（1真实，2虚拟）")
     @Excel(name = "仓库类型", readConverterExp = "1=真实，2虚拟")
     private Integer warehouseType;
 
     /** 仓库父id */
+    @ApiModelProperty(value = "仓库父id")
     private Long parentId;
 
     /** 仓库所属公司名 */
@@ -82,175 +99,6 @@ public class TWarehouse extends BaseEntity
     private String stateName;
     /** 用户昵称*/
     private String nickName;
-
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
-
-    public Long getId()
-    {
-        return id;
-    }
-    public void setWarehouseName(String warehouseName)
-    {
-        this.warehouseName = warehouseName;
-    }
-
-    public String getWarehouseName()
-    {
-        return warehouseName;
-    }
-    public void setSysUserId(Long sysUserId)
-    {
-        this.sysUserId = sysUserId;
-    }
-
-    public Long getSysUserId()
-    {
-        return sysUserId;
-    }
-    public void setContact(String contact)
-    {
-        this.contact = contact;
-    }
-
-    public String getContact()
-    {
-        return contact;
-    }
-    public void setAddress(String address)
-    {
-        this.address = address;
-    }
-
-    public String getAddress()
-    {
-        return address;
-    }
-    public void setPhone(String phone)
-    {
-        this.phone = phone;
-    }
-
-    public String getPhone()
-    {
-        return phone;
-    }
-    public void setMemo(String memo)
-    {
-        this.memo = memo;
-    }
-
-    public String getMemo()
-    {
-        return memo;
-    }
-    public void setIsDefault(Integer isDefault)
-    {
-        this.isDefault = isDefault;
-    }
-
-    public Integer getIsDefault()
-    {
-        return isDefault;
-    }
-    public void setState(Integer state)
-    {
-        this.state = state;
-    }
-
-    public Integer getState()
-    {
-        return state;
-    }
-    public void setAppKey(String appKey)
-    {
-        this.appKey = appKey;
-    }
-
-    public String getAppKey()
-    {
-        return appKey;
-    }
-    public void setAppSecret(String appSecret)
-    {
-        this.appSecret = appSecret;
-    }
-
-    public String getAppSecret()
-    {
-        return appSecret;
-    }
-
-    public void setSpace(BigDecimal space)
-    {
-        this.space = space;
-    }
-
-    public BigDecimal getSpace()
-    {
-        return space;
-    }
-    public void setCompanyId(Long companyId)
-    {
-        this.companyId = companyId;
-    }
-
-    public Long getCompanyId()
-    {
-        return companyId;
-    }
-    public void setWarehouseType(Integer warehouseType)
-    {
-        this.warehouseType = warehouseType;
-    }
-
-    public Integer getWarehouseType()
-    {
-        return warehouseType;
-    }
-    public void setParentId(Long parentId)
-    {
-        this.parentId = parentId;
-    }
-
-    public Long getParentId()
-    {
-        return parentId;
-    }
-
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
-
-    public String getIsDefaultName() {
-        return isDefaultName;
-    }
-
-    public void setIsDefaultName(String isDefaultName) {
-        this.isDefaultName = isDefaultName;
-    }
-
-    public String getStateName() {
-        return stateName;
-    }
-
-    public void setStateName(String stateName) {
-        this.stateName = stateName;
-    }
-
-    public String getNickName() {
-        return nickName;
-    }
-
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
-    }
 
     @Override
     public String toString() {

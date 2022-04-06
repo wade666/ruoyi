@@ -26,7 +26,10 @@ public interface ITWarehouseService
      * @return 仓库集合
      */
     public List<TWarehouse> selectTWarehouseList(TWarehouse tWarehouse);
-
+    /**
+     * 查询仓库列表-所有
+     */
+    public List<TWarehouse> selectTWarehouseListAll(TWarehouse tWarehouse);
     /**
      * 新增仓库
      * 

@@ -58,4 +58,9 @@ public interface ITWarehouseSurplusService
      * @return 结果
      */
     public int deleteTWarehouseSurplusBySurplusId(Long surplusId);
+    /**
+     * 根据仓库id查询商品库存
+     */
+    public List<TWarehouseSurplus> selectTWarehouseSurplusByWarehouseId(Long warehouseId);
+
 }

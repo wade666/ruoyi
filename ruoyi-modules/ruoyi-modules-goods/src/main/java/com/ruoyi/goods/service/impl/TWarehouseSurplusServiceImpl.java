@@ -102,4 +102,9 @@ public class TWarehouseSurplusServiceImpl implements ITWarehouseSurplusService
     {
         return tWarehouseSurplusMapper.deleteTWarehouseSurplusBySurplusId(surplusId);
     }
+
+    @Override
+    public List<TWarehouseSurplus> selectTWarehouseSurplusByWarehouseId(Long warehouseId) {
+        return tWarehouseSurplusMapper.selectTWarehouseSurplusByWarehouseId(warehouseId);
+    }
 }

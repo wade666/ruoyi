@@ -3,6 +3,8 @@ package com.ruoyi.goods.controller;
 import java.util.List;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
+
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +23,7 @@ import com.ruoyi.common.core.web.controller.BaseController;
 import com.ruoyi.common.core.web.domain.AjaxResult;
 import com.ruoyi.common.core.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.web.page.TableDataInfo;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 仓库Controller
@@ -28,6 +31,7 @@ import com.ruoyi.common.core.web.page.TableDataInfo;
  * @author ruoyi
  * @date 2022-02-12
  */
+@Api(description = "仓库管理")
 @RestController
 @RequestMapping("/warehouse")
 public class TWarehouseController extends BaseController
@@ -36,24 +40,47 @@ public class TWarehouseController extends BaseController
     private ITWarehouseService tWarehouseService;
 
     /**
-     * 查询仓库列表
+     * 查询仓库列表-真实
      */
+    @ApiOperation("查询仓库列表-真实")
+    @ApiImplicitParams({@ApiImplicitParam(name = "warehouseName",value = "仓库名",dataType = "String",paramType = "query"),
+            @ApiImplicitParam(name = "pageNum",value = "页码",dataType = "Integer",paramType = "query"),
+            @ApiImplicitParam(name = "pageSize",value = "每页条数",dataType = "Integer",paramType = "query")})
     @RequiresPermissions("goods:warehouse:list")
     @GetMapping("/list")
-    public TableDataInfo list(TWarehouse tWarehouse)
+    public TableDataInfo list(@ApiIgnore TWarehouse tWarehouse)
     {
         startPage();
         List<TWarehouse> list = tWarehouseService.selectTWarehouseList(tWarehouse);
         return getDataTable(list);
     }
-
+    /**
+     * 查询仓库列表-所有
+     */
+    @ApiOperation("查询仓库列表-所有")
+    @ApiImplicitParams({@ApiImplicitParam(name = "warehouseName",value = "仓库名",dataType = "String",paramType = "query"),
+            @ApiImplicitParam(name = "pageNum",value = "页码",dataType = "Integer",paramType = "query"),
+            @ApiImplicitParam(name = "pageSize",value = "每页条数",dataType = "Integer",paramType = "query")})
+    @RequiresPermissions("goods:warehouse:list")
+    @GetMapping("/listAll")
+    public TableDataInfo listAll(@ApiIgnore TWarehouse tWarehouse)
+    {
+        startPage();
+        List<TWarehouse> list = tWarehouseService.selectTWarehouseListAll(tWarehouse);
+        return getDataTable(list);
+    }
     /**
      * 导出仓库列表
      */
+    @ApiOperation("导出仓库列表")
+
     @RequiresPermissions("goods:warehouse:export")
+    @ApiImplicitParams({@ApiImplicitParam(name = "warehouseName",value = "仓库名",dataType = "String",paramType = "query"),
+            @ApiImplicitParam(name = "pageNum",value = "页码",dataType = "Integer",paramType = "query"),
+            @ApiImplicitParam(name = "pageSize",value = "每页条数",dataType = "Integer",paramType = "query")})
     @Log(title = "仓库", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, TWarehouse tWarehouse)
+    public void export(HttpServletResponse response,@ApiIgnore TWarehouse tWarehouse)
     {
         List<TWarehouse> list = tWarehouseService.selectTWarehouseList(tWarehouse);
         ExcelUtil<TWarehouse> util = new ExcelUtil<TWarehouse>(TWarehouse.class);
@@ -63,9 +90,10 @@ public class TWarehouseController extends BaseController
     /**
      * 获取仓库详细信息
      */
+    @ApiOperation("获取仓库详细信息")
     @RequiresPermissions("goods:warehouse:query")
     @GetMapping(value = "/{id}")
-    public AjaxResult getInfo(@PathVariable("id") Long id)
+    public AjaxResult getInfo(@ApiParam(value = "主键id", required = true) @PathVariable("id") Long id)
     {
         return AjaxResult.success(tWarehouseService.selectTWarehouseById(id));
     }
@@ -73,8 +101,9 @@ public class TWarehouseController extends BaseController
     /**
      * 新增仓库
      */
-    @RequiresPermissions("goods:warehouse:add")
+    @ApiOperation("新增仓库")
     @Log(title = "仓库", businessType = BusinessType.INSERT)
+    @RequiresPermissions("goods:warehouse:add")
     @PostMapping
     public AjaxResult add(@RequestBody TWarehouse tWarehouse)
     {
@@ -84,6 +113,7 @@ public class TWarehouseController extends BaseController
     /**
      * 修改仓库
      */
+    @ApiOperation("修改仓库")
     @RequiresPermissions("goods:warehouse:edit")
     @Log(title = "仓库", businessType = BusinessType.UPDATE)
     @PutMapping
@@ -95,6 +125,7 @@ public class TWarehouseController extends BaseController
     /**
      * 删除仓库
      */
+    @ApiIgnore
     @RequiresPermissions("goods:warehouse:remove")
     @Log(title = "仓库", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
@@ -105,6 +136,7 @@ public class TWarehouseController extends BaseController
     /**
      * 新增子仓库
      */
+    @ApiOperation("新增子仓库")
     @RequiresPermissions("goods:warehouse:add")
     @Log(title = "仓库", businessType = BusinessType.INSERT)
     @PostMapping("addChild")
@@ -116,6 +148,7 @@ public class TWarehouseController extends BaseController
     /**
      * 修改子仓库
      */
+    @ApiOperation("修改子仓库")
     @RequiresPermissions("goods:warehouse:edit")
     @Log(title = "仓库", businessType = BusinessType.UPDATE)
     @PutMapping("editChild")
@@ -126,6 +159,7 @@ public class TWarehouseController extends BaseController
     /**
      * 查询子仓库列表
      */
+    @ApiOperation("查询子仓库列表")
     @RequiresPermissions("goods:warehouse:list")
     @GetMapping("/listChild")
     public List<TWarehouse> listChild(TWarehouse tWarehouse)

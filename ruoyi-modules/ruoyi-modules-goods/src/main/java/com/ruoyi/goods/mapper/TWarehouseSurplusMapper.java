@@ -62,4 +62,8 @@ public interface TWarehouseSurplusMapper
      * 查询累计入库数
      */
     int selectSumSurplus(TWarehouseSurplus tWarehouseSurplus);
+    /**
+     * 根据仓库id查询商品库存
+     */
+    public List<TWarehouseSurplus> selectTWarehouseSurplusByWarehouseId(Long warehouseId);
 }
