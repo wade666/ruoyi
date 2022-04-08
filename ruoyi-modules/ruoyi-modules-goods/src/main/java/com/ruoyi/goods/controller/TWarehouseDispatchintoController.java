@@ -5,6 +5,8 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +26,7 @@ import com.ruoyi.common.core.web.controller.BaseController;
 import com.ruoyi.common.core.web.domain.AjaxResult;
 import com.ruoyi.common.core.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.web.page.TableDataInfo;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 调拨出入库单Controller
@@ -43,9 +46,13 @@ public class TWarehouseDispatchintoController extends BaseController
      * 查询调拨出入库单列表
      */
     @ApiOperation("查询调拨出入库单列表")
+    @ApiImplicitParams({@ApiImplicitParam(name = "dispatchintoNo",value = "出入库单号",dataType = "Long",paramType = "query"),
+            @ApiImplicitParam(name = "intoType",value = "调拨类型 1调拨入库 2调拨出库",dataType = "Integer",paramType = "query"),
+            @ApiImplicitParam(name = "pageNum",value = "页码",dataType = "Integer",paramType = "query"),
+            @ApiImplicitParam(name = "pageSize",value = "每页条数",dataType = "Integer",paramType = "query")})
     @RequiresPermissions("goods:dispatchinto:list")
     @GetMapping("/list")
-    public TableDataInfo list(TWarehouseDispatchinto tWarehouseDispatchinto)
+    public TableDataInfo<TWarehouseDispatchinto> list(@ApiIgnore TWarehouseDispatchinto tWarehouseDispatchinto)
     {
         startPage();
         List<TWarehouseDispatchinto> list = tWarehouseDispatchintoService.selectTWarehouseDispatchintoList(tWarehouseDispatchinto);
@@ -56,10 +63,14 @@ public class TWarehouseDispatchintoController extends BaseController
      * 导出调拨出入库单列表
      */
     @ApiOperation("导出调拨出入库单列表")
+    @ApiImplicitParams({@ApiImplicitParam(name = "dispatchintoNo",value = "出入库单号",dataType = "Long",paramType = "query"),
+            @ApiImplicitParam(name = "intoType",value = "调拨类型 1调拨入库 2调拨出库",dataType = "Integer",paramType = "query"),
+            @ApiImplicitParam(name = "pageNum",value = "页码",dataType = "Integer",paramType = "query"),
+            @ApiImplicitParam(name = "pageSize",value = "每页条数",dataType = "Integer",paramType = "query")})
     @RequiresPermissions("goods:dispatchinto:export")
     @Log(title = "调拨出入库单", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, TWarehouseDispatchinto tWarehouseDispatchinto)
+    public void export(HttpServletResponse response, @ApiIgnore TWarehouseDispatchinto tWarehouseDispatchinto)
     {
         List<TWarehouseDispatchinto> list = tWarehouseDispatchintoService.selectTWarehouseDispatchintoList(tWarehouseDispatchinto);
         ExcelUtil<TWarehouseDispatchinto> util = new ExcelUtil<TWarehouseDispatchinto>(TWarehouseDispatchinto.class);

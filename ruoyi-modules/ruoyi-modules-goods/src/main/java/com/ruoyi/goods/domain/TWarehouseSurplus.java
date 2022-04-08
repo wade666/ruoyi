@@ -69,6 +69,22 @@ public class TWarehouseSurplus extends BaseEntity
     @ApiModelProperty(value = "销售价")
     private BigDecimal price;
 
+    /** 分类id */
+    @ApiModelProperty(value = "分类id")
+    private Long categoryId;
+
+    /** 商品规格图片 */
+    @ApiModelProperty(value = "商品规格图片")
+    private String image;
+
+    /** 成本价 */
+    @ApiModelProperty(value = "成本价")
+    private BigDecimal cost;
+
+    /** 重量 */
+    @ApiModelProperty(value = "重量(kg)")
+    private BigDecimal weight;
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)

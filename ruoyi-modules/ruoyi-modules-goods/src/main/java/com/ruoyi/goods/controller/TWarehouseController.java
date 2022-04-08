@@ -44,11 +44,13 @@ public class TWarehouseController extends BaseController
      */
     @ApiOperation("查询仓库列表-真实")
     @ApiImplicitParams({@ApiImplicitParam(name = "warehouseName",value = "仓库名",dataType = "String",paramType = "query"),
+            @ApiImplicitParam(name = "contact",value = "联系人",dataType = "String",paramType = "query"),
+            @ApiImplicitParam(name = "phone",value = "手机",dataType = "String",paramType = "query"),
             @ApiImplicitParam(name = "pageNum",value = "页码",dataType = "Integer",paramType = "query"),
             @ApiImplicitParam(name = "pageSize",value = "每页条数",dataType = "Integer",paramType = "query")})
     @RequiresPermissions("goods:warehouse:list")
     @GetMapping("/list")
-    public TableDataInfo list(@ApiIgnore TWarehouse tWarehouse)
+    public TableDataInfo<TWarehouse> list(@ApiIgnore TWarehouse tWarehouse)
     {
         startPage();
         List<TWarehouse> list = tWarehouseService.selectTWarehouseList(tWarehouse);
@@ -59,11 +61,13 @@ public class TWarehouseController extends BaseController
      */
     @ApiOperation("查询仓库列表-所有")
     @ApiImplicitParams({@ApiImplicitParam(name = "warehouseName",value = "仓库名",dataType = "String",paramType = "query"),
+            @ApiImplicitParam(name = "contact",value = "联系人",dataType = "String",paramType = "query"),
+            @ApiImplicitParam(name = "phone",value = "手机",dataType = "String",paramType = "query"),
             @ApiImplicitParam(name = "pageNum",value = "页码",dataType = "Integer",paramType = "query"),
             @ApiImplicitParam(name = "pageSize",value = "每页条数",dataType = "Integer",paramType = "query")})
     @RequiresPermissions("goods:warehouse:list")
     @GetMapping("/listAll")
-    public TableDataInfo listAll(@ApiIgnore TWarehouse tWarehouse)
+    public TableDataInfo<TWarehouse> listAll(@ApiIgnore TWarehouse tWarehouse)
     {
         startPage();
         List<TWarehouse> list = tWarehouseService.selectTWarehouseListAll(tWarehouse);
@@ -73,11 +77,12 @@ public class TWarehouseController extends BaseController
      * 导出仓库列表
      */
     @ApiOperation("导出仓库列表")
-
-    @RequiresPermissions("goods:warehouse:export")
     @ApiImplicitParams({@ApiImplicitParam(name = "warehouseName",value = "仓库名",dataType = "String",paramType = "query"),
+            @ApiImplicitParam(name = "contact",value = "联系人",dataType = "String",paramType = "query"),
+            @ApiImplicitParam(name = "phone",value = "手机",dataType = "String",paramType = "query"),
             @ApiImplicitParam(name = "pageNum",value = "页码",dataType = "Integer",paramType = "query"),
             @ApiImplicitParam(name = "pageSize",value = "每页条数",dataType = "Integer",paramType = "query")})
+    @RequiresPermissions("goods:warehouse:export")
     @Log(title = "仓库", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response,@ApiIgnore TWarehouse tWarehouse)
@@ -93,7 +98,7 @@ public class TWarehouseController extends BaseController
     @ApiOperation("获取仓库详细信息")
     @RequiresPermissions("goods:warehouse:query")
     @GetMapping(value = "/{id}")
-    public AjaxResult getInfo(@ApiParam(value = "主键id", required = true) @PathVariable("id") Long id)
+    public AjaxResult getInfo(@PathVariable("id") Long id)
     {
         return AjaxResult.success(tWarehouseService.selectTWarehouseById(id));
     }
@@ -160,9 +165,10 @@ public class TWarehouseController extends BaseController
      * 查询子仓库列表
      */
     @ApiOperation("查询子仓库列表")
+    @ApiImplicitParam(name = "parentId",value = "仓库父id",dataType = "Long",paramType = "query",required = true)
     @RequiresPermissions("goods:warehouse:list")
     @GetMapping("/listChild")
-    public List<TWarehouse> listChild(TWarehouse tWarehouse)
+    public List<TWarehouse> listChild(@ApiIgnore TWarehouse tWarehouse)
     {
         List<TWarehouse> list = tWarehouseService.selectTWarehouseListChild(tWarehouse);
         return list;

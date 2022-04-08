@@ -77,4 +77,9 @@ public interface TProductCategoryMapper {
      * @return 子分类数
      */
     public int selectNormalChildrenCategoryById(Long categoryId);
+
+    /**
+     * 查询仓库商品的所有分类
+     */
+    public List<TProductCategory> getCategoryByWarehouseId(Long warehouseId);
 }

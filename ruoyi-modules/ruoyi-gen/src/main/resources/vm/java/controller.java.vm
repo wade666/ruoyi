@@ -27,11 +27,10 @@ import com.ruoyi.common.core.web.page.TableDataInfo;
 
 /**
  * ${functionName}Controller
- * 
  * @author ${author}
  * @date ${datetime}
  */
-@Api(description = "${businessName}")
+@Api(description = "${functionName}")
 @RestController
 @RequestMapping("/${businessName}")
 public class ${ClassName}Controller extends BaseController
@@ -42,12 +41,13 @@ public class ${ClassName}Controller extends BaseController
     /**
      * 查询${functionName}列表
      */
-@ApiImplicitParams({@ApiImplicitParam(name = "pageNum",value = "页码",dataType = "Integer",paramType = "query"),
+    @ApiOperation(value = "查询${functionName}列表")
+    @ApiImplicitParams({@ApiImplicitParam(name = "pageNum",value = "页码",dataType = "Integer",paramType = "query"),
         @ApiImplicitParam(name = "pageSize",value = "每页条数",dataType = "Integer",paramType = "query")})
     @RequiresPermissions("${permissionPrefix}:list")
     @GetMapping("/list")
 #if($table.crud || $table.sub)
-    public TableDataInfo list(${ClassName} ${className})
+    public TableDataInfo<${ClassName}> list(@ApiIgnore ${ClassName} ${className})
     {
         startPage();
         List<${ClassName}> list = ${className}Service.select${ClassName}List(${className});
@@ -64,12 +64,13 @@ public class ${ClassName}Controller extends BaseController
     /**
      * 导出${functionName}列表
      */
+    @ApiOperation(value = "导出${functionName}列表")
     @ApiImplicitParams({@ApiImplicitParam(name = "pageNum",value = "页码",dataType = "Integer",paramType = "query"),
             @ApiImplicitParam(name = "pageSize",value = "每页条数",dataType = "Integer",paramType = "query")})
     @RequiresPermissions("${permissionPrefix}:export")
     @Log(title = "${functionName}", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, ${ClassName} ${className})
+    public void export(HttpServletResponse response, @ApiIgnore ${ClassName} ${className})
     {
         List<${ClassName}> list = ${className}Service.select${ClassName}List(${className});
         ExcelUtil<${ClassName}> util = new ExcelUtil<${ClassName}>(${ClassName}.class);

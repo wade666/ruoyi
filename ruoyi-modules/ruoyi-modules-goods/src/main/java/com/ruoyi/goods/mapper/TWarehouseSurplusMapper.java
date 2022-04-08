@@ -65,5 +65,5 @@ public interface TWarehouseSurplusMapper
     /**
      * 根据仓库id查询商品库存
      */
-    public List<TWarehouseSurplus> selectTWarehouseSurplusByWarehouseId(Long warehouseId);
+    public List<TWarehouseSurplus> selectTWarehouseSurplusByWarehouseId(TWarehouseSurplus tWarehouseSurplus);
 }

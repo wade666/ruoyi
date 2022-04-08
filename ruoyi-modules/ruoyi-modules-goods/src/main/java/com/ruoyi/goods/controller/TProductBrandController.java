@@ -88,7 +88,7 @@ public class TProductBrandController extends BaseController {
     }
 
     /**
-     * 获取部门下拉树列表
+     * 获取商品品牌下拉树列表
      */
     @GetMapping("/treeselect")
     public AjaxResult treeselect(TProductBrand tProductBrand) {
@@ -97,7 +97,7 @@ public class TProductBrandController extends BaseController {
     }
 
     /**
-     * 加载对应角色部门列表树
+     * 加载对应商品品牌列表树
      */
     @GetMapping(value = "/roleTProductBrandTreeselect/{roleId}")
     public AjaxResult roleTProductBrandTreeselect(@PathVariable("roleId") Long roleId) {

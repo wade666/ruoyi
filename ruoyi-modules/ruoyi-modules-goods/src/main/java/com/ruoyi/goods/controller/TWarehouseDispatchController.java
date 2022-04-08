@@ -4,9 +4,7 @@ import java.util.List;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,6 +23,7 @@ import com.ruoyi.common.core.web.controller.BaseController;
 import com.ruoyi.common.core.web.domain.AjaxResult;
 import com.ruoyi.common.core.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.web.page.TableDataInfo;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 调拨单Controller
@@ -44,9 +43,13 @@ public class TWarehouseDispatchController extends BaseController
      * 查询调拨单列表
      */
     @ApiOperation("查询调拨单列表")
+    @ApiImplicitParams({@ApiImplicitParam(name = "dispatchNo",value = "调拨单号",dataType = "Long",paramType = "query"),
+            @ApiImplicitParam(name = "dispatchState",value = "调拨状态 1待处理 2处理中 3已完成",dataType = "Integer",paramType = "query"),
+            @ApiImplicitParam(name = "pageNum",value = "页码",dataType = "Integer",paramType = "query"),
+            @ApiImplicitParam(name = "pageSize",value = "每页条数",dataType = "Integer",paramType = "query")})
     @RequiresPermissions("goods:dispatch:list")
     @GetMapping("/list")
-    public TableDataInfo list(TWarehouseDispatch tWarehouseDispatch)
+    public TableDataInfo<TWarehouseDispatch> list(@ApiIgnore TWarehouseDispatch tWarehouseDispatch)
     {
         startPage();
         List<TWarehouseDispatch> list = tWarehouseDispatchService.selectTWarehouseDispatchList(tWarehouseDispatch);
@@ -57,10 +60,14 @@ public class TWarehouseDispatchController extends BaseController
      * 导出调拨单列表
      */
     @ApiOperation("导出调拨单列表")
+    @ApiImplicitParams({@ApiImplicitParam(name = "dispatchNo",value = "调拨单号",dataType = "Long",paramType = "query"),
+            @ApiImplicitParam(name = "dispatchState",value = "调拨状态 1待处理 2处理中 3已完成",dataType = "Integer",paramType = "query"),
+            @ApiImplicitParam(name = "pageNum",value = "页码",dataType = "Integer",paramType = "query"),
+            @ApiImplicitParam(name = "pageSize",value = "每页条数",dataType = "Integer",paramType = "query")})
     @RequiresPermissions("goods:dispatch:export")
     @Log(title = "调拨单", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, TWarehouseDispatch tWarehouseDispatch)
+    public void export(HttpServletResponse response, @ApiIgnore TWarehouseDispatch tWarehouseDispatch)
     {
         List<TWarehouseDispatch> list = tWarehouseDispatchService.selectTWarehouseDispatchList(tWarehouseDispatch);
         ExcelUtil<TWarehouseDispatch> util = new ExcelUtil<TWarehouseDispatch>(TWarehouseDispatch.class);
@@ -85,7 +92,7 @@ public class TWarehouseDispatchController extends BaseController
     @RequiresPermissions("goods:dispatch:add")
     @Log(title = "调拨单", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@ApiParam(value = "新增调拨单", required = true) @RequestBody TWarehouseDispatch tWarehouseDispatch)
+    public AjaxResult add(@RequestBody TWarehouseDispatch tWarehouseDispatch)
     {
         return toAjax(tWarehouseDispatchService.insertTWarehouseDispatch(tWarehouseDispatch));
     }

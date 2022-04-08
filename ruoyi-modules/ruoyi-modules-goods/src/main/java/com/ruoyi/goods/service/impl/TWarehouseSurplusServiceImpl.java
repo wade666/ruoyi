@@ -9,6 +9,8 @@ import com.ruoyi.goods.mapper.TWarehouseSurplusMapper;
 import com.ruoyi.goods.domain.TWarehouseSurplus;
 import com.ruoyi.goods.service.ITWarehouseSurplusService;
 
+import javax.annotation.Resource;
+
 /**
  * 库存Service业务层处理
  * 
@@ -18,7 +20,7 @@ import com.ruoyi.goods.service.ITWarehouseSurplusService;
 @Service
 public class TWarehouseSurplusServiceImpl implements ITWarehouseSurplusService 
 {
-    @Autowired
+    @Resource
     private TWarehouseSurplusMapper tWarehouseSurplusMapper;
 
     /**
@@ -104,7 +106,7 @@ public class TWarehouseSurplusServiceImpl implements ITWarehouseSurplusService
     }
 
     @Override
-    public List<TWarehouseSurplus> selectTWarehouseSurplusByWarehouseId(Long warehouseId) {
-        return tWarehouseSurplusMapper.selectTWarehouseSurplusByWarehouseId(warehouseId);
+    public List<TWarehouseSurplus> selectTWarehouseSurplusByWarehouseId(TWarehouseSurplus tWarehouseSurplus) {
+        return tWarehouseSurplusMapper.selectTWarehouseSurplusByWarehouseId(tWarehouseSurplus);
     }
 }

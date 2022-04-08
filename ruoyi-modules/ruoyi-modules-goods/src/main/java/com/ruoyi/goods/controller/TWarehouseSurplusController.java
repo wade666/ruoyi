@@ -4,9 +4,7 @@ import java.util.List;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,9 +43,15 @@ public class TWarehouseSurplusController extends BaseController
      * 查询库存列表
      */
     @ApiOperation("查询库存列表")
+    @ApiImplicitParams({@ApiImplicitParam(name = "productId",value = "商品id",dataType = "Long",paramType = "query"),
+            @ApiImplicitParam(name = "sn",value = "商品sku",dataType = "Long",paramType = "query"),
+            @ApiImplicitParam(name = "batchCode",value = "批次号",dataType = "String",paramType = "query"),
+            @ApiImplicitParam(name = "warehouseId",value = "仓库id",dataType = "Long",paramType = "query"),
+            @ApiImplicitParam(name = "pageNum",value = "页码",dataType = "Integer",paramType = "query"),
+            @ApiImplicitParam(name = "pageSize",value = "每页条数",dataType = "Integer",paramType = "query")})
     @RequiresPermissions("goods:surplus:list")
     @GetMapping("/list")
-    public TableDataInfo list(TWarehouseSurplus tWarehouseSurplus)
+    public TableDataInfo<TWarehouseSurplus> list(@ApiIgnore TWarehouseSurplus tWarehouseSurplus)
     {
         startPage();
         List<TWarehouseSurplus> list = tWarehouseSurplusService.selectTWarehouseSurplusList(tWarehouseSurplus);
@@ -58,10 +62,16 @@ public class TWarehouseSurplusController extends BaseController
      * 导出库存列表
      */
     @ApiOperation("导出库存列表")
+    @ApiImplicitParams({@ApiImplicitParam(name = "productId",value = "商品id",dataType = "Long",paramType = "query"),
+            @ApiImplicitParam(name = "sn",value = "商品sku",dataType = "Long",paramType = "query"),
+            @ApiImplicitParam(name = "batchCode",value = "批次号",dataType = "String",paramType = "query"),
+            @ApiImplicitParam(name = "warehouseId",value = "仓库id",dataType = "Long",paramType = "query"),
+            @ApiImplicitParam(name = "pageNum",value = "页码",dataType = "Integer",paramType = "query"),
+            @ApiImplicitParam(name = "pageSize",value = "每页条数",dataType = "Integer",paramType = "query")})
     @RequiresPermissions("goods:surplus:export")
     @Log(title = "库存", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, TWarehouseSurplus tWarehouseSurplus)
+    public void export(HttpServletResponse response, @ApiIgnore TWarehouseSurplus tWarehouseSurplus)
     {
         List<TWarehouseSurplus> list = tWarehouseSurplusService.selectTWarehouseSurplusList(tWarehouseSurplus);
         ExcelUtil<TWarehouseSurplus> util = new ExcelUtil<TWarehouseSurplus>(TWarehouseSurplus.class);
@@ -74,7 +84,7 @@ public class TWarehouseSurplusController extends BaseController
     @ApiOperation("获取库存详细信息")
     @RequiresPermissions("goods:surplus:query")
     @GetMapping(value = "/{surplusId}")
-    public AjaxResult getInfo(@ApiParam(value = "库存id", required = true) @PathVariable("surplusId") Long surplusId)
+    public AjaxResult getInfo(@PathVariable("surplusId") Long surplusId)
     {
         return AjaxResult.success(tWarehouseSurplusService.selectTWarehouseSurplusBySurplusId(surplusId));
     }
@@ -115,15 +125,19 @@ public class TWarehouseSurplusController extends BaseController
         return toAjax(tWarehouseSurplusService.deleteTWarehouseSurplusBySurplusIds(surplusIds));
     }
     /**
-     * 根据仓库id查询商品库存
+     * 根据仓库id和分类id查询商品库存
      */
-    @ApiOperation("根据仓库id查询商品库存")
+    @ApiOperation(value = "根据仓库id和分类id查询商品库存")
+    @ApiImplicitParams({@ApiImplicitParam(name = "warehouseId",value = "仓库id",dataType = "Long",paramType = "query",required = true),
+            @ApiImplicitParam(name = "categoryId",value = "分类id",dataType = "Long",paramType = "query"),
+            @ApiImplicitParam(name = "pageNum",value = "页码",dataType = "Integer",paramType = "query"),
+            @ApiImplicitParam(name = "pageSize",value = "每页条数",dataType = "Integer",paramType = "query")})
     @RequiresPermissions("goods:surplus:query")
-    @GetMapping(value = "/{warehouseId}")
-    public TableDataInfo getProductInfo(@ApiParam(value = "仓库id", required = true) @PathVariable("warehouseId") Long warehouseId)
+    @GetMapping(value = "/getProductInfo")
+    public TableDataInfo<TWarehouseSurplus> getProductInfo(@ApiIgnore TWarehouseSurplus tWarehouseSurplus)
     {
         startPage();
-        List<TWarehouseSurplus> list = tWarehouseSurplusService.selectTWarehouseSurplusByWarehouseId(warehouseId);
+        List<TWarehouseSurplus> list = tWarehouseSurplusService.selectTWarehouseSurplusByWarehouseId(tWarehouseSurplus);
         return getDataTable(list);
     }
 }

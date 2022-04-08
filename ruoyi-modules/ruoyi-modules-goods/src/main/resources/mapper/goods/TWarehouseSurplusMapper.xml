@@ -20,6 +20,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="productName"    column="product_name"    />
         <result property="specificationValues"    column="specification_values"    />
         <result property="price"    column="price"    />
+        <result property="image"    column="image"    />
+        <result property="cost"    column="cost"    />
+        <result property="weight"    column="weight"    />
     </resultMap>
 
     <sql id="selectTWarehouseSurplusVo">
@@ -101,10 +104,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select sum(surplus_num) from t_warehouse_surplus where product_id = #{productId} and warehouse_id = #{warehouseId} and sn = #{sn} and batch_code = #{batchCode}
     </select>
 
-    <select id="selectTWarehouseSurplusByWarehouseId" parameterType="Long" resultMap="TWarehouseSurplusResult">
-        select ws.surplus_id, ws.product_id, ws.sn, ws.batch_code, ws.warehouse_id, ws.surplus_num, ws.create_time, ws.update_time, ws.version,tp.product_name,ts.specification_values,ts.price from t_warehouse_surplus ws
+    <select id="selectTWarehouseSurplusByWarehouseId" parameterType="TWarehouseSurplus" resultMap="TWarehouseSurplusResult">
+        select ws.surplus_id, ws.product_id, ws.sn, ws.batch_code, ws.warehouse_id, ws.surplus_num, ws.create_time, ws.update_time, ws.version,tp.product_name,ts.specification_values,ts.price,ts.image,ts.cost,ts.weight from t_warehouse_surplus ws
         left join t_sku ts on ws.sn = ts.sn
         left join t_product tp on tp.id = ts.product_id
-        where ws.warehouse_id = #{warehouseId}
+        where ws.warehouse_id = #{warehouseId} and ws.surplus_num>0
+        <if test="categoryId != null">and tp.product_category_id = #{categoryId}</if>
     </select>
 </mapper>

@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.alibaba.fastjson.JSON;
 import com.ruoyi.common.core.constant.UserConstants;
 import com.ruoyi.common.core.utils.DateUtils;
 import com.ruoyi.common.core.utils.StringUtils;
@@ -15,6 +16,8 @@ import com.ruoyi.goods.mapper.TProductCategoryMapper;
 import com.ruoyi.goods.domain.TProductCategory;
 import com.ruoyi.goods.service.ITProductCategoryService;
 
+import javax.annotation.Resource;
+
 /**
  * 商品分类Service业务层处理
  *
@@ -23,7 +26,7 @@ import com.ruoyi.goods.service.ITProductCategoryService;
  */
 @Service
 public class TProductCategoryServiceImpl implements ITProductCategoryService {
-    @Autowired
+    @Resource
     private TProductCategoryMapper tProductCategoryMapper;
 
     @Override
@@ -180,5 +183,12 @@ public class TProductCategoryServiceImpl implements ITProductCategoryService {
      */
     private boolean hasChild(List<TProductCategory> list, TProductCategory t) {
         return getChildList(list, t).size() > 0 ? true : false;
+    }
+    /**
+     * 查询仓库商品的所有分类
+     */
+    @Override
+    public List<TProductCategory> getCategoryByWarehouseId(Long warehouseId) {
+        return tProductCategoryMapper.getCategoryByWarehouseId(warehouseId);
     }
 }
